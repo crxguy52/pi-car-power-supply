@@ -1,0 +1,4 @@
+(fp_lib_table
+	(version 7)
+	(lib (name "pipwr")(type "KiCad")(uri "${KIPRJMOD}/lib/pi_power_board.pretty")(options "")(descr "Pi power HAT project footprints (tools/build_lib.py)"))
+)

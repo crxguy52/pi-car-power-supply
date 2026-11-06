@@ -1,0 +1,57 @@
+* Pi power HAT: SPICE models of the board's semiconductors (KiCad 10 simulator / ngspice).
+* Used through the Sim.Library / Sim.Name fields of the parts on pi_power_board.kicad_sch (tools/post_sch/12_kicad_sim.py).
+*
+* No vendor SPICE model could be obtained (2026-11-05, tried again in the staff review the same day with browser
+* headers through Windows curl.exe): Vishay lists none for SQD50P04-13L (product page 65157, no SPICE document),
+* Nexperia's CDN refuses scripted downloads (Akamai "Access Denied", HTTP 403), and none of 1N4148W, BAS116LT1G, BZT52C5V1, SMBJ16A,
+* LTST-C150KRKT is in the KiCad or LTspice libraries on this machine. The parameters below are the datasheet-derived
+* stand-ins of the LTspice deck ltspice/delay_off_counter.cir (same values, same corner parameters), so the two sims
+* compare like with like.
+*
+* Corner parameters (global, defined by .param on simulation.kicad_sch; tools/run_sim.py overrides them per corner):
+*   IS_D   saturation current of the signal diodes (drop at microamps)
+*   BVZ    D7 zener voltage at its 5 mA test current
+*   VTO_N  2N7002BK V_GS(th) as the datasheet defines it (I_D 250 uA at V_DS = V_GS); IDSS_N its drain leakage
+*   VTO_P  SQD50P04-13L V_GS(th) (negative, I_D -250 uA); IDSS_P its off-state leakage into the drain
+*   CGD_FAC factor on both FETs' gate-drain capacitance (1 = the typical curves; the hot-plug runs use the maximum)
+
+* D4, D5 1N4148W (Vishay), D6 BAS116LT1G (onsemi): one fit to the BAS116 VF maxima, as the LTspice deck
+.model D1N4148W_PIPWR D(Is={IS_D} N=1.68 Rs=0.88 Cjo=2p BV=75 Ibv=100n)
+.model BAS116_PIPWR D(Is={IS_D} N=1.68 Rs=0.88 Cjo=2p BV=75 Ibv=100n)
+
+* D7 BZT52C5V1 (Vishay 86342): VZ at 5 mA per corner, N_BV 10 (inside the 480 / 60 ohm limits at 1 / 5 mA)
+.model BZT52C5V1_PIPWR D(Is=1e-14 N=1 Rs=5 Cjo=100p BV={BVZ} Ibv=5m Nbv=10)
+
+* TVS1, TVS2 SMBJ16A (Bourns): breakdown inside V_BR 17.8-19.7 V
+.model SMBJ16A_PIPWR D(Is=1e-12 N=1.5 Rs=50m BV=18.8 Ibv=1m)
+
+* D3 LTST-C150KRKT red LED: knee about 1.7 V at a few mA
+.model LTST_C150KRKT_PIPWR D(Is=1e-22 N=1.6 Rs=5)
+
+* ---- FETs: ngspice VDMOS. I_D = Kp / 2 (V_ov)^2 above V_to, with the sub-threshold smoothing
+*      V_ov = KS ln(1 + exp((V_GS - V_to) / KS)) (ksubthres). The datasheets give V_GS(th) at 250 uA, not V_to: the
+*      model sets V_to = V_GS(th) - dV with dV the overdrive of 250 uA, so VTO_N / VTO_P are the datasheet figures.
+*      Q1: KS 30 mV = 69 mV/decade below threshold, near silicon (the ngspice default 0.1 V is 230 mV/decade:
+*      microamps far below threshold at Kp 40, which a parked Q1 does not have). 2N7002BK: the default 0.1 V (more
+*      sub-threshold current than silicon: conservative for a parked Q5; 30 mV made the key-on stall the solver in
+*      the CD4541B tap switches). I_DSS is the separate leakage source on both.
+*      Checked in ngspice against the datasheets (typical): Q1 R_DS(on) 16.4 mOhm at -4.5 V (16 typ, 22 max),
+*      9.2 mOhm at -10 V (10 / 13); 2N7002BK 1.19 Ohm at 5 V (1.3 / 2); C_iss 2.85 nF / 34 pF (2.87 nF / 33 pF typ);
+*      C_rss at 1 / 5 / 12 / 25 V: model 0.92 / 0.49 / 0.41 / 0.38 nF, Vishay curve about 1.25 / 0.70 / 0.45 / 0.33 nF.
+
+* Q5, Q6 2N7002BK (Nexperia): VDMOS, V_GS(th) per corner, drain leakage current source
+.subckt Q2N7002BK_PIPWR D G S params: KP=0.5 KS=0.1 ITH=250u
+M1 D G S NFET_2N7002BK
+ILK D S {IDSS_N}
+.model NFET_2N7002BK VDMOS(Vto={VTO_N - KS*ln(exp(sqrt(2*ITH/KP)/KS) - 1)} Kp={KP} Rd=0.3 Rs=0.3
++ Cgdmax={20p*CGD_FAC} Cgdmin={4p*CGD_FAC} Cgs=30p Cjo=7p Is=1e-12 ksubthres={KS})
+.ends Q2N7002BK_PIPWR
+
+* Q1 SQD50P04-13L (Vishay): P-channel VDMOS, V_GS(th) per corner, off-state leakage source -> drain.
+* KS 30 mV: 10 mV made the key-on at 16 V (hot corner) stall the solver
+.subckt SQD50P04_PIPWR D G S params: KP=40 KS=30m ITH=250u
+M1 D G S PFET_SQD50P04
+ILK S D {IDSS_P}
+.model PFET_SQD50P04 VDMOS(pchan Vto={VTO_P + KS*ln(exp(sqrt(2*ITH/KP)/KS) - 1)} Kp={KP} Rd=4m Rs=2m Rb=5m
++ Cgdmax={2.2n*CGD_FAC} Cgdmin={0.35n*CGD_FAC} Cgs=2.5n Cjo=1n Is=1e-12 ksubthres={KS})
+.ends SQD50P04_PIPWR

@@ -1,0 +1,136 @@
+# TODO: Pi power HAT
+
+Open work only. Design facts live in [SPEC.md](SPEC.md), reasons in [DECISIONS.md](DECISIONS.md). Delete an item when it is done.
+
+2026-11-05: **counter timer on paper** (project lead: clock + counter on `+5V1`, no LDO, no HOLD line; SPEC 1–4, 6, 7; 36 parts; `reports/timer_survey.md`, `reports/sim_delay_off_counter.md`). Items that only applied to the LM2903B RC timer (C5 insulation / DC bias / aging, R24 pulse rating, U1 parked drain, `C5_T` cranking) are closed by it; the previous list is in `pi_power_board-backups/TODO_2026-11-05_092301.md`.
+
+2026-11-05 (later): **hold ≥ 25 s (project lead), timer re-tuned and staff-reviewed (A12):** R27 39.2 kΩ, C29 10 nF C0G ±1 %, R28 78.7 kΩ; 26.2 / 29.5 / 32.5 s; 1.25 kHz at the short corner. Previous list: `pi_power_board-backups/TODO_2026-11-05_100802.md`.
+
+2026-11-05 (later): **lead decisions a–c implemented (A12):** D7 BAT43W + C8 10 µF on `VDD_TMR` (37 parts), C22–C24 47 µF 10 V X7R 1210, nothing below 0805; schematic redrawn by `tools/post_sch/08_cd4541_timer.py` (verify-sch PASS). Previous list: `pi_power_board-backups/TODO_2026-11-05_110035.md`.
+
+2026-11-05 (later): **U5 from `VOUT` (project lead decision, implemented by A13):** R30 1.3 kΩ + D7 BZT52C5V1 zener + R31 10 kΩ + C8 1 µF on `VDD_TMR` (39 parts); the USB-overload stuck-on is closed (sim OVL: the hold ends on time in every step); schematic by `tools/post_sch/09_u5_vout_supply.py` (verify-sch PASS). Previous list: `pi_power_board-backups/TODO_2026-11-05_115852.md`.
+
+## Project lead
+
+- **[lead]** Review the counter-timer redesign (SPEC 1–4, 6, 7; `reports/timer_survey.md`; `reports/sim_delay_off_counter.md`) before the schematic is redrawn. Points to confirm:
+  - **U5 = CD4541BM96** (survey top 3: CD4541B, ATtiny402 (firmware), LTC6995-1 (0 stock)); the LTC6994 you named tops out at 33.6 s;
+  - **delay (re-tuned for your ≥ 25 s): 29.5 s nominal, 26.2 s worst short, 32.5 s long** (calc = sim); RTC 39.2 kΩ, CTC 10 nF C0G ±1 %, RS 78.7 kΩ; 1.11 kHz nominal, 1.25 kHz short corner, 1.008 kHz long corner (inside the 1–100 kHz formula range at every corner, the long one by 0.8 %);
+  - **36 parts (was 35):** out U1, R4, R5, R9, R23, R24, C5, C27, C28; in U5, Q5, Q6, R25–R29, C29, C30;
+  - **C30 100 nF Q1 G-S added**: without it, a battery hot-plug at 16 V with a hot Q1 starts U8 and U5 holds a full delay with the key off (sim). It adds ≈ 7 ms to key-on and ≈ 28 ms to the turn-off;
+  - **U5 auto reset on** (every power-up is a bounded hold); the open point is its behaviour on a slowly falling `+5V1` (bench item below);
+  - parked drain from `BATT` now ≤ 3 µA (was ≈ 0.44 mA);
+  - `+5V1` brownout / USB overload: no longer reaches U5 (U5 from `VOUT`, 2026-11-05);
+  - **buck stays TPS54336A** (TPS54302 runs TJ ≈ 152 °C at 3 A / 85 °C); or TPS54302 with a lower USB current / ambient (saves 2–3 parts).
+- **[lead] Review (A13, 2026-11-05): U5 from `VOUT`** (your decision; SPEC 2–4, DECISIONS). Points to confirm:
+  - **R31 10 kΩ bleed added beyond your brief (+1 part, 39); staff review 2026-11-05: needed, kept (DECISIONS).** Q1's off-state leakage (≤ 10.5 µA at 85 °C, ≤ 50 µA at 125 °C) would otherwise lift a parked `VOUT` to the LED knee (≈ 1.4–1.6 V, assumption) with nothing else sinking it; that is above Q5's hot threshold, and Q5 needs only ≈ 6 µA to start turning Q1 on: if U5 sits with its output high there, the loop latches a full hold. R31 holds `VDD_TMR` ≤ 0.1 V. To drop it: accept that risk, remove R31 from SPEC 6 / 7 and in a new `tools/post_sch/` script;
+  - **power while on:** 67 mW at 12 V, 139 mW at 16 V (R30 98 mW at 16 V, 1206);
+  - **zener 5.1 V (U5 at 4.45–5.71 V), not a higher zener with `VDD_TMR` following `VOUT`:** the MR input would fail at a 9 V battery;
+  - delay unchanged: 26.1 / 29.5 / 32.5 s (no re-tune).
+- **[lead] Note (staff review A12): the LTC6994 rejection no longer holds on range.** Its 33.6 s maximum (ADI model) clears the new 25 s target. CD4541B is kept: datasheet in hand, stocked, $0.51, SOIC; the LTC6994 has no PDF here, a TSOT-23 0.95 mm pitch, ≈ $4 and no tolerance figure read.
+- **[lead] Question (staff review): key back on during the delay.** Once the Pi has started shutting down (J5 released at key-off), a key-on within the delay keeps `VOUT` on and the Pi stays halted for the whole drive (SPEC 2, Pi-side). Options, no hardware change: (a) Pi software waits N s of continuous "ACC off" before `shutdown` (N < 25 s minus the Pi's shutdown time); (b) wake from halt (assumption: Pi 5 GPIO3 wake and its 1.8 kΩ pull-up, Pi docs not in `ref/`; check before choosing): needs J5 on GPIO3, whose 1.8 kΩ pull-up makes R21 1.5 kΩ too large (≈ 1.5 V low): R21 would have to drop to ≤ about 150 Ω and loses most of its J5-miswire protection. Which?
+- **[lead] Review (BOM staff review, 2026-11-05): LED D3 swapped to Stanley VFR1105W-6C9-TR** (−40 to +100 °C, red, 3216 / 1206 dome lens, same footprint; `tools/post_sch/15_bom_review.py`; DECISIONS). R3 5.1 kΩ kept (V_F 1.9 vs 2.0 V typ). Points: (a) it is ≈ 9–18× brighter than the LTST-C150KRKT at the same current (rank window 470–1 000 mcd, Digi-Key 985, vs 54 mcd at 20 mA): raise R3 if it glares; (b) 1.85 mm tall (dome); (c) **assumption:** the datasheet is Stanley's series sheet (V□□1105W-TR) and "6C9" is a rank code inside it; the part-specific PDF redirects to Stanley's home page. To revert: SPEC 4 / 6 / 7 rows + a new `tools/post_sch/` script.
+- **[lead]** Fit the **7.5 A slow-blow inline fuse** in the car harness (project lead, 2026-11-04). There is no onboard fuse; reverse battery and the TVS short-circuit failure mode (load dump) rely on it. Load 5.0 A at a 9 V battery (SPEC 4); AWG 18 or heavier.
+- **[lead] Decision (schematic staff review, 2026-11-05): D4 restored** (1N4148W, the D5 part, SW1 → D4 → `ACC_S`; 33 parts). Without it, SW1 closed with `BATT` dead (blown harness fuse, or a bench supply on ACC only) runs the whole load from the ACC line through D5 (300 mA) and SW1 (100 mA) (DECISIONS). To revert: accept that failure mode, drop D4 from SPEC 2/6/7 and remove it in a new `tools/post_sch/` script. **(assumption: the conservative choice while the lead was away)**
+- **[lead]** Delete the stale `pi_power_board - Copy.kicad_sch`.
+- **[lead/Pi software] Check the `ACC_N` level at boot, not only edges** (SPEC 2 "Pi-side"). A rapid key cycle boots the Pi with ACC already off; `gpio-shutdown` acts on edges, so the Pi would never see the key-off and lose power mid-run after the ≥ 25 s hold. E.g. a boot-time service that reads the GPIO and shuts down if it is high. **Verify on the Pi 5** what `gpio-shutdown` does with the level already high at boot.
+
+## 3 Schematic
+
+- **[agent]** Staff review of the A12 re-tune (the A11 design review is done, 2026-11-05): `design_calc.py` `_osc_k()` / `counter_timer()` / `q1_switching()`, `ltspice/cd4541_osc_counter.cir` (CASE step, CTC stage from the internal node, buffered gate delay), `ltspice/delay_off_counter.cir` (U8 current limit + hiccup, OVL run), SPEC 2–3: a separate agent with the files and the datasheets. The calc side was cross-checked in the 08 / 09 staff review (2026-11-05): an independent fig. 2 model (RS 2·RTC, input clamps 0.5 V, threshold 0.3–0.7·VDD) gives k 2.16–2.31, inside the 2.104–2.450 bound; delay corners 26.1 / 29.5 / 32.5 s and 1.25 / 1.11 / 1.008 kHz reproduced. The LTspice files were not re-run.
+- **[agent]** Datasheets not obtainable on 2026-11-05 (download refused): ADI LTC6993 / LTC6994 / LTC6995, onsemi MC14541B (the second source for U5: confirm the pinout before ordering it), Nexperia 74HC4060. The survey marks their figures "(no PDF)"; none enters the design. (C29's KEMET C0G datasheet is in `ref/` since the BOM phase.)
+- **[lead]** Schematic gate (`reports/schematic.pdf`): the counter-timer sheet (`tools/post_sch/08` + `09` + `10`, 2026-11-05); `pdm run verify-sch` PASS (ERC 0 / 0, netlist 0 errors, selftest 24/24, PDF overlap 0). Staff review of 08 / 09 done (2026-11-05): no electrical defect; U5 value text moved by `10`; R31 kept (DECISIONS).
+- **[agent] Assumptions (schematic, 2026-11-05):** paper A4 (was A3); every board part has Manufacturer / MPN / Digi-Key PN / Datasheet since `tools/post_sch/14` (BOM phase); J2 Datasheet = Molex product page (no PDF in `ref/`: the download timed out again on 2026-11-05); US resistor symbols (`Device:R_US`) kept as on the old sheet. Since `tools/post_sch/08`: U5 drawn with its own VDD / VSS pins (stock `Timer:CD4541BM`, ERC clean), VDD wired to the supply block (09: C8, D7, R31, R30 on one rail); a PWR_FLAG on `VDD_TMR` (fed through R30, no power-output pin); D7 symbol `Device:D_Zener` (09); the project symbol `pipwr:LM2903` is unused (library file kept).
+- **[agent]** Board: rebuild from the new schematic; `tools/post_route/01`–`03` reference removed parts (README). J1, J2, J4, J5 positions are fixed (`tools/check_fixed.py`). New footprints since 08: C8 0805 (09; 1206 in 08), C22–C24 C_1210 (were 1206), D7 SOD-123 (zener since 09), R30 R_1206 and R31 R_0805 (09).
+- **[agent]** `pipwr:L_Bourns_SRP1038A` has no 3D model; J2 / SW1 3D models are not shipped with KiCad 10.0.7.
+- **[agent/lead]** J2 Molex 48406-0001: no Molex drawing in `ref/datasheets/` (download blocked; retried 2026-11-05 evening with `curl.exe` + browser headers, HTTP/2 and 1.1: reset / timeout). A manual browser download into `ref/datasheets/` would close it. The KiCad footprint is self-consistent with the USB 3.0 Std-A pinout; check against the Molex drawing when it is downloaded.
+
+- **[agent] Closed by the counter timer:** the staff reviews of `tools/post_sch/05` (U1 power block) and `06` (C27, C28, R9 4.7 MΩ). Those parts are being removed, so review `08` instead (above).
+
+## 4 Placement
+
+Done 2026-11-05 (agent A15): `tools/post_route/05_sync_cd4541.py` (board = frozen netlist snapshot, J1/J4/J5 rotated 180 deg) and `06_placement.py`; DRC 0 errors (1 warning, below), parity 0, check_fixed PASS. Renders `reports/placement_top.png`, `reports/assembly_top.png`. Staff-reviewed 2026-11-05 (A16): `07_placement_review.py` (D4 Path re-linked, R30/D4/R3 turned, C18 0.5 mm down; DECISIONS "Placement staff review"); DRC 0 errors / 1 warning (J4 silk), parity 0, check_fixed PASS + selftest 48/48; `reports/placement_fab_silk.png` re-made (was the 64-part board). Awaiting the lead's placement review.
+
+- **[lead]** Placement review (phase gate): renders above, KiCad 3D view.
+- **[lead]** TVS2 sits ~27 mm from J1 (by D5, outside the BATT -> Q1 -> VOUT -> J4 loop), TVS1 ~8 mm: SPEC 2 "Input" says "both at J1". Staff review: harmless (the trace is ahead of the clamp and of D5 / R8, nothing branches before TVS2; ≈ 2 V of L·di/dt at pulse 2a) and no spot by J1 exists: kept (DECISIONS "Placement staff review"). Accept and reword SPEC 2 ("TVS1 at J1, TVS2 at D5, first on ACC_IN"), or say no?
+- **[lead] Q1 thermal:** the tab gets ≈ 0.2–0.4 in² of `VOUT` copper (top pour + a bottom island with thermal vias), not 1 in²: TJ ≈ 145–162 °C at 5 A / 9 V / 85 °C (assumption: 70–90 °C/W), 114–123 °C at 3.5 A; rated 175 °C. Accept, or lower the 5 A / 85 °C corner (DECISIONS "Q1 tab copper")?
+- **[lead]** J4's pin-1 silk triangle overhangs the Waveshare-notch edge by 0.19 mm (the only DRC warning; the fab clips it). Accept (DRC exclusion in the project), or a `pipwr` copy of MKDS-1-2 without it (needs J4's schematic Footprint field: one schematic edit)?
+- **[lead]** J1's wire entry now faces the BACK HEADER KEEPOUT strip (x 185-192): the wires run over it. J4's entry faces the Waveshare-IO notch (0.6 mm from the edge), J5's the GPIO-header notch. OK for the stack? No terminal body overhangs the board (F.Fab check). Mechanics (staff review): J1's wire face is at x ≈ 183, so three wires (5 mm strip; MKDS 1/3-3,81 takes ≤ AWG 16 / 1.0 mm² stranded, 1.5 mm² solid) cross the whole 7 mm BACK HEADER strip within the terminal's 8.5 mm height and leave over the right edge with their bend radius: whatever that strip keeps clear (a header or stack part above it) must clear the wires too.
+- **[agent, routing]** From the placement: ACC_IN from J1 pin 2 on the bottom (>= 0.5 mm: TVS2 pulse current); one bottom jumper for Q1_G (C30 -> R15) under the BATT down-segment and VOUT up-run; one for SW1's BATT feed; J2 VBUS pins need a neck (~0.4-0.5 mm between the SuperSpeed pins); buck PH through vias under C17 (TI layout); the VSENSE trace is ~12 mm (R16/R17 below J5): keep it away from PH/L1. Freerouting trial (GND as bottom pour, power 1.0 mm, +5V1 0.5 mm): 0 unrouted, 0 violations, but 171 mm of bottom tracks: re-route by hand to keep the GND pour whole. Staff review trial after 07 (GND left out = pour + vias; BATT/VOUT 1.0 mm, +5V1/PH 0.5 mm, rest 0.25 mm; scratch copy): 0 unrouted, 0 violations, bottom 50 mm / 8 vias (same rules on the 06 board: 76 mm / 10 vias). Routing rules from the review: PH on the bottom ≥ 1.5 mm, ≤ 12 mm, nothing parallel to it; VSENSE on top left of U8 with GND alongside; ACC_IN with no branch before TVS2 (TVS2 pad, then D5); a B.Cu `VOUT` island with thermal vias under the Q1 tab.
+- **[agent, BOM]** 3D models missing: SW1 (Nidec CAS-120A not in the KiCad 10 library), J2 (Molex 48406-0001 STEP not in the library), L1 (project footprint, no model). Vendor STEPs, verified per the lessons doc.
+- **[agent]** SPEC line 20 ("the board still shows the LM2903B design") is stale since 05 / 06: coordinator to update.
+
+## 5 Routing
+
+Done 2026-11-05 (agent A16): `tools/post_route/08`-`11` (DECISIONS "Lead layout adopted", "Routing"). `pdm run drc`: 0 errors, 0 unconnected, 1 warning (J4 silk), parity 0 since `tools/post_route/15` (fields synced, 2026-11-05). check_fixed PASS + selftest 48/48. Renders `reports/routed_top.png`, `routed_bottom.png` (4:1 at 200 dpi), `routed_3d_top.png`, `placement_top.png` / `assembly_top.png` (re-made).
+
+- ~~**[agent]** Staff review of 08-11~~ **done 2026-11-05** (staff review agent; own pcbnew measurements + SLVSCD5D 10.1): no copper change needed but the fab rules (`tools/post_route/12_osh_rules.py`, reviewed by a second agent); DECISIONS "Routing staff review", "Fab = OSH Park". DRC after 12: 0 errors, 0 unconnected, 1 warning (J4 silk), 26 Sim-field parity notes; check_fixed PASS + selftest 48/48. Renders re-made (command in `tools/post_route/README.md`).
+- **[lead]** Right-edge notch (A17; top edge moved under J2 by A19, `tools/post_route/14`, 2026-11-05): check that the CAN HAT back header fits within **y 85.000–102.000** (cut x 185.166–192.024; the straight part of the inner edge x 185.166 runs y 86.524–100.476, inner fillets r 1.524). The board is under J2 again: whatever of the header sits at y 70.45–85.0 is covered (lead: header not used there). J1's wires run over the cut. J2's DRC silk warning is gone (only J4's remains).
+- **[lead]** Routing gate (renders above, KiCad 3D view). Points to confirm:
+  - the six parts moved from your layout (R16, D3, R3, R15, Q5, C19; DECISIONS) and why;
+  - ~~copper-to-edge 0.3 mm~~ now 0.4 mm for OSH Park (fab 0.381): the `+5V1` sense line moved 0.1 mm off the GPIO notch (12);
+  - **silk line width:** the KiCad library footprints draw silk at 0.12 mm, below OSH Park's 0.127 mm line floor (text is fine); DRC can't check line width. Accept (prints thin or broken in places), or ask for `pipwr` copies at 0.127 mm (changes the schematic Footprint fields)?
+  - mask expansion 0.0762 mm (= the fab's alignment) and the stackup's mask Er 3.3 / tan δ 0.02 are agent choices (assumption): OK?
+  - Q1 tab: B.Mask opening + 2 × 1.0 mm feed vias on the bottom (review: the opening exposes only `VOUT` copper); θJA 60–80 °C/W at ≈ 0.64 in² over 2 layers (review estimate; A16 had 55–70; assumption): TJ 136–153 °C at 5 A / 9 V / 85 °C;
+  - PH on two layers by vias: kept. SLVSCD5D 10.1 prescribes it (PH sits between VIN and GND); 2 vias at pin 3 (≈ 1.5 A each at 3 A, ≈ 3 mW each);
+  - J2 VBUS: 0.375 mm necks on both layers, ≈ 2 mm long: ≈ 0.4 K rise at 3 A, 1.5 K at U8's 6.1 A maximum current limit (review calc); kept;
+  - bottom GND pour cut by 121 mm of signal tracks (SW1's BATT feed 25 mm, ACC_IN 21 mm: trial had ≈ 50 mm): pour stays one piece, minor, not re-routed. Hand re-route of those two if you want it whole;
+  - refs of 12 parts moved to F.Fab (over pads / silk); `reports/assembly_top.png` shows all.
+- **[agent]** `reports/placement_top.png` is now the assembly-style drawing (render_assembly.py) of the adopted layout; the old image style was not reproducible (no recorded command).
+
+## 6 BOM
+
+Done 2026-11-05 (agent A18): every board part has a final MPN and cut-tape Digi-Key PN (SPEC 6; DECISIONS "Resistors: Vishay Dale CRCW e3", "C15", "U8 tube", "Spares"); `tools/post_sch/14_bom_fields.py` wrote the fields and J5's Value; `pdm run dk-check` PASS (35 rows); `pdm run dk-bom` → `bom/PIPWR_BOM.md` + `bom/PIPWR_BOM_digikey.csv` ($136.64 for 2 boards + spares, Digi-Key prices 2026-11-05); `bom/assembly_checklist.md`; `pdm run verify-sch` PASS. Not yet staff-reviewed.
+
+- ~~**[agent]** Staff review of phase 6~~ **done 2026-11-05** (BOM staff review agent): D3 → Stanley VFR1105W-6C9-TR and C29 → Murata GCM21B5C2E103FX0AL (`tools/post_sch/15_bom_review.py`), CSV ASCII fix in `tools/digikey_lookup.py`, assembly checklist (D3 polarity, C29 vs C19, SW1 seal tape), J1/J4/J5 current text; DECISIONS "BOM staff review". `dk-check` PASS 35 rows, `dk-selftest` PASS, `verify-sch` PASS; **$116.48** (was $136.64).
+- ~~**[agent]** Staff review of the BOM staff review's own changes~~ **done 2026-11-05** (second staff agent): no defect; three text corrections (pad gap, rank, brightness 9–18×); DECISIONS "Review of the BOM staff review".
+- **[lead]** Order: upload `bom/PIPWR_BOM_digikey.csv` to the Digi-Key BOM Manager (Quantity = total incl. spares, build quantity 1). Re-run `pdm run dk-check` on the day you order (stock moves; the cache lasts one day). Lowest stock margins: D3 cut tape 1 601, C29 2 089, Q1 2 722, C22–C24 2 849 (all far above the order).
+- **[lead]** Optional: some lines are cheaper at the 10-piece break than at the order quantity (the 0805 resistors $0.44 for 10 vs $0.70 for 7). Not optimised (DECISIONS "Spares").
+- **[lead]** Parts not AEC-qualified (fine for the bench, noted for a car): 1N4148W-E3-08 (the `-HE3_A-08` variant is AEC-Q101), BZT52C5V1-E3-08, the KEMET / Cal-Chip commercial capacitors, CD4541BM96, TPS54336ADDA (Digi-Key: −40 to 85 °C TA), J2 (−20 to 85 °C; also 1.8 A per VBUS contact: one port can see more than that only in a fault, up to U8's 3.5–6.1 A current limit before hiccup), SW1 (−40 to 85 °C). LED D3 now −40 to 100 °C and C29 AEC-Q200 (BOM staff review).
+- **[agent]** **DC bias** (carried over): C22–C24, C32 GMC32X7R476K10NT (≥ 8.7 µF each at 5.07 V for eq 22; 25–60 % retention assumed, 35 % margin at 25 %), C8 GMC21X7R105K50NT (≥ 0.7 µF at 5.7 V assumed), C15, C31 GMC31X7R106K50NT (≥ 5 µF each at 16 V assumed for the 227 mV input ripple): the Cal-Chip datasheet has no curve; measure on the bench (below) or swap to a part with a published curve when one is stocked, then re-run the loop check if lower.
+- **[agent]** U5 second source: if the onsemi MC14541BDR2G is ever substituted, check its oscillator and auto-reset text against SCHS085E first (no PDF in `ref/`).
+- **[agent]** 2N7002BK `,215` is Nexperia's 7" reel packaging code (the packaging document is not in `ref/`); the cut tape is cut from it. No functional meaning (assumption).
+
+## Bench
+
+- **[bench] BOM phase:** C22–C24, C32 / C15, C31 effective capacitance at bias, if an LCR meter with DC bias is available (or the buck output ripple at 3 A against `reports/buck_design.md`).
+- **[agent/lead]** Bench tests (counter timer):
+  - **delay calibration:** U5 runs at 1.11 kHz (inside the formula range). Measure f at `U5_CTC` (or the key-off delay) at room temperature, hot (85 °C) and cold. Expect about 28–32 s with nominal parts (k 2.15–2.40). If the worst case could fall below 25 s, raise RTC (R27);
+  - **no second hold after the collapse (SPEC 3 risk, auto reset on a falling VDD):** 10 key-off cycles with the Pi in deep power-off (slowest `VOUT` decay), hot and cold; scope `VOUT`, `VDD_TMR`, U5 OUT and `HOLD_G` for 5 min after each turn-off. If U5 re-latches, the fallback is AR to `VDD_TMR` (auto reset off; every start is then an MR reset);
+  - key-off and SW1-off at 9 V and 16 V: scope `VOUT`, `+5V1`, `HOLD_G`, `DRV` and J5; one clean turn-off; key on mid-count restarts the full delay;
+  - short ACC blips (1, 5, 20, 50 ms) from cold: either nothing or a full hold, never a short hold;
+  - battery hot-plug through a real harness, warm board, key off: `VOUT` and `+5V1` stay at 0 (C30);
+  - key-on with the real Pi regulator on J4 (the calc assumes 674 µF): Q1 delay ≈ 2–12 ms, ramp 1–3 ms, inrush;
+  - parked current from `BATT` (expect a few µA);
+  - a phone overloading `+5V1` (or a 3 A+ load step) during the count: the hold should be unaffected (U5 on `VOUT`);
+  - **USB overload during the key-off count** (electronic load, ≈ 0.5 Ω hard and ≈ 1 Ω soft on `+5V1`, U8 hiccuping), Pi halted and in deep power-off: the hold must end on time (sim: it does, U5 on `VOUT`); scope `VDD_TMR` (expect 4.5–5.7 V throughout);
+  - parked, hot (85 °C): `VOUT` and `VDD_TMR` stay near 0 V (R31 against Q1's leakage; calc ≤ 0.12 / 0.10 V); `VDD_TMR` at 9 / 16 V (calc 4.45–5.71 V while counting);
+  - buck temperature at 3 A on the 2-layer board; a phone plugged into one port while the other charges (VBUS dip, no reset);
+  - J5 low level with the real Pi pull-up (assumed 50 kΩ) and the Pi 5 GPIO VIL; does `gpio-shutdown` act on an "ACC off" level present at boot? (the boot-time level check is required: lead item above)
+  - the target car's ACC line when "off": does it float or leak (R8 + R25 49 kΩ hold `ACC_S` ≤ 0.5 V, `ACC_G` ≤ 0.27 V at 10 µA)?
+  - cranking: many cars drop ACC while cranking, so the Pi sees "ACC off" briefly on J5: the Pi side should debounce (software).
+  - cranking dip to 6 V with ACC held (bench supply): `HOLD_G` stays high (U5 OUT on `VDD_TMR` ≥ 3.98 V from a 6 V `VOUT`; D6 alone gives only ≈ 2.1 V), Q1 V_GS ≈ 3.3 V: Q1 temperature and `VOUT` during the dip, and that it recovers;
+  - Pi powered from elsewhere, battery connected, key off: `VOUT` back-fed level; at ≈ 4.3 V it powers U5 directly (`VDD_TMR` 3.2–3.7 V, calc): its auto reset may give one hold (Q1 on for one count, SPEC 2): acceptable, but record it.
+
+## Tooling
+
+- **[lead]** Delete the leftover `Z:\My Drive\fastboi\pi_power_board\` folder (project moved to `C:\git-personal\pi-car-power-supply` 2026-11-04; the agent's delete was blocked by a safety check after a partial removal; everything is in the new repo, checksum-verified).
+
+## KiCad-native simulation (project lead, 2026-11-05)
+- ~~**[agent]** Move the timer sim into the schematic~~ **done 2026-11-05 (agent A14, `tools/post_sch/12_kicad_sim.py`); staff-reviewed and fixed 2026-11-05 (`tools/post_sch/13_sim_fast_review.py`, `lib/spice/`, `tools/run_sim.py`; [reports/sim_kicad.md](../reports/sim_kicad.md) "Staff review").** `pdm run sim`: all 14 scenarios in fast mode (U5 count / 256, hold extrapolated), ≈ 1.5 min; `--selftest` (6 broken decks, in `verify-sch`); `--full`: real time.
+- **[lead]** Open Eeschema → Inspect → Simulator once and run the sheet's default: now the **fast** nominal key cycle (6 s transient, U5 counts 128 clocks; the hold appears ≈ 0.14 s after the key-off; `.meas hold_est` in the log ≈ 29.6 s). Only the headless path was run by the agents. Real time on the sheet: `U5_TAPDIV=1`, `T_PIOFF=8`, `T_CW1=20`, `.tran 1m 50 0 1m uic`, `.options method=gear interp` (20+ min).
+- **[lead]** Vendor SPICE models: still none (staff review retry with browser headers through `curl.exe`: Nexperia CDN Akamai "Access Denied" 403; Vishay product page 65157 lists no SPICE document). A manual download of Nexperia `2N7002BK` and a Vishay SQD50P04 model into `lib/spice/` would let an agent switch Q1 / Q5 / Q6 (untrusted text: read, not executed).
+- **[bench]** **The k bound is not proven by the sim** (DECISIONS): U5's model is fitted to design_calc's k. On both boards measure the oscillator (CTC pin 2, or time one hold): nominal 1.11 kHz / 29.5 s; the ≥ 25 s guarantee needs ≤ 1.31 kHz. Hot / cold if possible.
+
+## Q1 if it runs hot (project lead, 2026-11-05)
+- **[note]** Realistic load is ~1–2 A at 12 V (0.13 W in Q1 at 2 A); the 5 A design point is the SPEC worst case (Pi 5 25 W + full 3 A USB at a 9 V battery). If bench tests show Q1 hot: drop-in DPAK P-FET with lower R_DS(on), same criteria as SQD50P04-13L (|V_DS| ≥ 40 V, R_DS(on) specified at V_GS = −4.5 V, DPAK, AEC-Q101, stocked). Re-check C30 / the gate timing for the higher gate charge. No PWM here, so only conduction loss matters.
+
+## Lead review (all agent phases done, 2026-11-05)
+Final state: board = schematic (`tools/post_route/15_sync_fields.py`); `pdm run drc` 0 errors / 0 unconnected / 0 parity, 1 accepted warning (J4 `silk_edge_clearance`); `check_fixed` PASS, selftest 48/48; `verify-sch` PASS; `dk-check` PASS. Gates left: yours.
+- **[lead]** Routed board: `reports/routed_top.png`, `routed_bottom.png`, `routed_3d_top.png`, `assembly_top.png`, KiCad 3D view; the routing points in "5 Routing" above.
+- **[lead]** KiCad GUI sim: Eeschema → Inspect → Simulator, the sheet default (see "KiCad-native simulation" above); `pdm run sim --full` for all 14 scenarios.
+- **[lead]** BOM order: `bom/PIPWR_BOM_digikey.csv` to the Digi-Key BOM Manager; re-run `pdm run dk-check` that day ("6 BOM" above).
+- **[lead]** IC report: `reports/ic_review.md`. **U8 flags fixed 2026-11-06 (A22, closed):** K_IND 0.34 → 0.23 (L1 15 µH), Cin ripple 441 → 227 mV (C31), Cout margin 1 → 35 % (C32), worst VOUT 5.252 → 5.238 V (R16 / R17 73.2 k / 13.7 k), compensation R18 7.32 k (PM ≥ 51° at fsw typ, ≥ 45.8° over fsw 272–408 kHz: staff review R22), layout per SLVSCD5D 10.1 (FB divider at pin 5, COMP / SS on F.Cu at pins 6 / 8, analog ground to the PowerPAD). Review: `tools/post_sch/16`, `tools/post_route/16`, DECISIONS 2026-11-06.
+- **[lead]** Buck re-layout to approve (2026-11-06): the U8 power block moved down below J5, D3's silk reference moved to F.Fab, a keep-out `AGND_KEEPOUT` added; parts 39 → 41, BOM $116.48 → $121.32 (2 boards).
+- **[lead]** U8 staff review R22 (2026-11-06) assumptions, conservative choice = no hardware change: (a) eq 22 with fsw at its 272 kHz minimum needs 43.5 µF: 8 % margin at 25 % retention, below the 20 % asked; the loop-based step ΔI / (2π fc Co) gives ≤ 155 mV vs 254 mV in every corner, taken as the criterion (a fifth 47 µF would restore 20 % on eq 22: lead decides); (b) PM ≥ 45.8° only at the stacked corner 25 % retention + 0.1 A + sampling Q 0.3 + fsw min (gm_ea / gm_ps typ only: the datasheet gives no limits); (c) analog ground = two traces landing at the two ends of pad 9, not one junction (no loop; accepted); (d) PH leaves pin 3 through two 0.3 mm vias (≈ 1.5 A each at 3 A; no room for a third next to C17): check U8 / via temperature on the bench.
+- **[bench]** U8 after the fixes: VBUS at no load (≤ 5.25 V; nominal 5.074 V), input ripple at 3 A (≈ 0.23 V p-p calc), a 1.5 A load step (≤ 5 %).
+- **[lead]** Bench items: the "Bench" list above, once boards are built.

@@ -1,0 +1,6 @@
+(version 1)
+# OSH Park 2-layer (project lead 2026-11-05): minimum slot width; KiCad has no native setting.
+# hole_size checks the smaller dimension of an oval hole.
+(rule "osh_min_slot_width"
+	(condition "A.Type == 'Pad' && A.Hole_Size_X != A.Hole_Size_Y")
+	(constraint hole_size (min 0.508mm)))

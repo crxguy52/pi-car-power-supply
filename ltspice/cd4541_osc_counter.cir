@@ -1,0 +1,127 @@
+* CD4541B (U5) oscillator and counter logic check (SPEC 3; system sim: delay_off_counter.cir).
+* No LTspice model of the CD4541B exists. This netlist builds the datasheet structure (TI SCHS085E fig. 1, 2):
+*   RC oscillator: RS input (pin 3) -> inverter -> NOR with the reset -> output stages driving RTC (pin 1) and
+*   CTC (pin 2); RTC, CTC and RS meet at one node. Inverters are behavioural (threshold VT x VDD, output
+*   resistance from the 125 C sink rating; all stages share one threshold VT, as on one die), the RS pin has the CMOS protection diodes and an input capacitance.
+*   Counter: 16 rising-edge D flip-flops in a ripple chain (LTspice digital primitives), cleared by MR; the output
+*   latch is set when stage 16 first goes high (after 2^15 clocks: "after 2^(N-1) counts", p. 1) and drives the
+*   output low (Q-bar select, single-transition mode).
+* Run 1 (SCALE=1, real RTC / CTC / RS): oscillator period / (RTC CTC) over VT, VDD and CASE (the stack's K_RC bound).
+*   CASE 1 = fast: no driver resistance, no input current, hot protection diodes (largest RS-pin clamp current)
+*   CASE 2 / 3 = slow: driver resistance at the 125 C sink rating on both drivers, RS-pin input current at the
+*                85 / 125 C limit, out of / into the pin; CASE 4 = typical: 25 C typical driver resistance
+*   2026-11-05 re-tune (A12): RTC / RS / CTC for about 1.1 kHz (inside the 1-100 kHz formula range).
+* Run 2 (SCALE=1000: CTC and the pin capacitance divided by SCALE, so the oscillator runs SCALE times faster with
+*   the same period / RC): reset, count, single transition, restart by an MR pulse mid-count, MR held = no count.
+*   sed -e 's/^.param SCALE=1$/.param SCALE=1000/' -e 's/^.step param VT list.*/.step param VT list 0.3 0.7/'
+*       -e 's/^.step param VDD list.*//' -e 's/^.step param CASE list.*//' cd4541_osc_counter.cir > cd4541_counter_x1000.cir
+* Real delay = 2^15 x the run-1 period (tools/design_calc.py counter_timer()).
+
+.param SCALE=1
+.param VDD=5.09
+.param VT=0.5
+.step param VT list 0.3 0.4 0.5 0.6 0.7
+.step param VDD list 4.45 5.1 5.71
+.step param CASE list 1 2 3 4
+.param CASE=4
+.param RTC=39.2e3
+.param RS=78.7e3
+.param CTC0=10n
+.param CTC={CTC0/SCALE}
+.param CIN={5p/SCALE}
+* driver resistance: VOL 0.4 V / IOL at VDD 5 V (SCHS085E): 1.08 mA min at 125 C, 3.1 mA typ at 25 C
+.param ROUT=if(CASE==1, 1, if(CASE==4, 129, 370))
+* RS-pin input current: 1 uA limit (85 / 125 C columns); + = out of the pin node to ground
+.param ILK=if(CASE==2, 1u, if(CASE==3, -1u, 0))
+.param IS_CL=if(CASE==1, 1e-9, 1e-14)
+* propagation delay through the oscillator gate chain (no datasheet figure; assumption): short in CASE 1, a
+* bound in CASE 2 / 3. Also keeps the behavioural gates off an algebraic loop at the switching instant.
+.param TGATE=if(CASE==1, 50n, if(CASE==4, 200n, 1u))
+.param NCNT=32768
+* MR (pin 6): high 0 .. T_MR1 (reset at start), a pulse at T_MR2 mid-count (restart), then low
+.param T_TICK={2.3*RTC*CTC0/SCALE}
+.param T_MR1={20*T_TICK}
+.param T_MR2={T_MR1+20000*T_TICK}
+.param T_MRW={10*T_TICK}
+.param T_STOP=if(SCALE==1, 0.045, T_MR2+T_MRW+40000*T_TICK)
+
+VSUP vdd 0 {VDD}
+VMR mr 0 PWL(0 {VDD} {T_MR1} {VDD} {T_MR1+1u/SCALE} 0 {T_MR2} 0 {T_MR2+1u/SCALE} {VDD} {T_MR2+T_MRW} {VDD}
++ {T_MR2+T_MRW+1u/SCALE} 0)
+
+* ---- RC oscillator (fig. 2). In SCALE=1 runs MR is ignored so the oscillator free-runs from the start.
+.param MR_USED=if(SCALE==1, 0, 1)
+RSX j p3 {RS}
+CIN3 p3 0 {CIN}
+DC1 p3 vdd DCL
+DC2 0 p3 DCL
+.model DCL D(Is={IS_CL} N=1 Rs=10)
+* applied after the oscillator has started (a DC source at t = 0 holds the node on the threshold)
+ILKP p3 0 PWL(0 0 {2*T_TICK} 0 {3*T_TICK} {ILK})
+* inverter 1 + NOR with the reset: output y high while p3 is low and no reset (reset holds y low: osc stopped)
+* buffered copy of the pin voltage, delayed by an RC (does not load the pin)
+BP3 p3b 0 V=V(p3)
+RDL p3b p3d 1k
+CDL p3d 0 {TGATE/1k/SCALE}
+By yi 0 V=V(vdd)*(1 - 0.5*(1+tanh((V(p3d)-VT*V(vdd))/10m)))*(1 - MR_USED*0.5*(1+tanh((V(mr)-0.5*V(vdd))/10m)))
+ROY yi y {ROUT}
+* RTC driven in phase with y, CTC driven inverted (the classic two-inverter astable)
+RTCX y j {RTC}
+* CTC stage fed from the internal node (fig. 2: both pin drivers hang off the internal chain), not from the
+* RTC pin: an RS-pin input current offsets the RTC pin from the threshold, which would otherwise saturate this
+* stage and park the model on its DC point (a model artefact, not the silicon)
+Bz zi 0 V=V(vdd) - V(yi)
+ROZ zi z {ROUT}
+CTCX z j {CTC}
+
+* ---- counter: clock = rising edge of z (one count per oscillator period); ripple chain, cleared by MR
+Bclk clk 0 V=if(V(z) > 0.5*V(vdd), 1, 0)
+Brs rsd 0 V=if(MR_USED*V(mr) > 0.5*V(vdd), 1, 0)
+A1  q1b  0 clk  0 rsd q1b  q1  0 DFLOP Vhigh=1 Vlow=0 Td=10n
+A2  q2b  0 q1b  0 rsd q2b  q2  0 DFLOP Vhigh=1 Vlow=0 Td=10n
+A3  q3b  0 q2b  0 rsd q3b  q3  0 DFLOP Vhigh=1 Vlow=0 Td=10n
+A4  q4b  0 q3b  0 rsd q4b  q4  0 DFLOP Vhigh=1 Vlow=0 Td=10n
+A5  q5b  0 q4b  0 rsd q5b  q5  0 DFLOP Vhigh=1 Vlow=0 Td=10n
+A6  q6b  0 q5b  0 rsd q6b  q6  0 DFLOP Vhigh=1 Vlow=0 Td=10n
+A7  q7b  0 q6b  0 rsd q7b  q7  0 DFLOP Vhigh=1 Vlow=0 Td=10n
+A8  q8b  0 q7b  0 rsd q8b  q8  0 DFLOP Vhigh=1 Vlow=0 Td=10n
+A9  q9b  0 q8b  0 rsd q9b  q9  0 DFLOP Vhigh=1 Vlow=0 Td=10n
+A10 q10b 0 q9b  0 rsd q10b q10 0 DFLOP Vhigh=1 Vlow=0 Td=10n
+A11 q11b 0 q10b 0 rsd q11b q11 0 DFLOP Vhigh=1 Vlow=0 Td=10n
+A12 q12b 0 q11b 0 rsd q12b q12 0 DFLOP Vhigh=1 Vlow=0 Td=10n
+A13 q13b 0 q12b 0 rsd q13b q13 0 DFLOP Vhigh=1 Vlow=0 Td=10n
+A14 q14b 0 q13b 0 rsd q14b q14 0 DFLOP Vhigh=1 Vlow=0 Td=10n
+A15 q15b 0 q14b 0 rsd q15b q15 0 DFLOP Vhigh=1 Vlow=0 Td=10n
+A16 q16b 0 q15b 0 rsd q16b q16 0 DFLOP Vhigh=1 Vlow=0 Td=10n
+* output latch (single transition): set by stage 16, cleared by MR; OUT = VDD while not set (Q-bar select)
+VHI dhi 0 1
+A17 dhi 0 q16 0 rsd dnb dn 0 DFLOP Vhigh=1 Vlow=0 Td=10n
+Bout out 0 V=V(vdd)*(1 - V(dn))
+
+.options method=gear
+* start from empty capacitors (the DC operating point sits on the threshold)
+.ic V(j)=0 V(p3)=0 V(z)=0
+.param TMAX=if(SCALE==1, T_TICK/200, T_TICK/40)
+.tran 0 {T_STOP} 0 {TMAX} uic
+.save V(z) V(j) V(y) V(out) V(q16) V(cnt_probe) V(mr) I(DC1)
+
+* ---- run 1: period from the 5th to the 15th rising edge of z (after start-up)
+.meas TRAN t5 FIND time WHEN V(z)={VDD/2} RISE=5
+.meas TRAN t15 FIND time WHEN V(z)={VDD/2} RISE=15
+.meas TRAN period PARAM (t15-t5)/10
+.meas TRAN k_rc PARAM period*SCALE/(RTC*CTC0)
+.meas TRAN f_hz PARAM 1/period/SCALE
+.meas TRAN t_delay_real PARAM NCNT*period*SCALE
+.meas TRAN vj_max MAX V(j)
+.meas TRAN vj_min MIN V(j)
+.meas TRAN ip3_max MAX I(DC1)
+* ---- run 2: no clock while MR is high; output transition time after the last MR release, in clock periods
+.meas TRAN clk_during_mr FIND V(cnt_probe) AT {T_MR1/2}
+.meas TRAN t_out_low FIND time WHEN V(out)={VDD/2} FALL=1
+.meas TRAN counts_to_out PARAM (t_out_low-(T_MR2+T_MRW))/period
+.meas TRAN q16_at_mr2 FIND V(q16) AT {T_MR2-T_TICK}
+.meas TRAN out_at_mr2 FIND V(out) AT {T_MR2-T_TICK}
+.meas TRAN out_end FIND V(out) AT {T_STOP*0.999}
+.meas TRAN nfall_out FIND time WHEN V(out)={VDD/2} FALL=2
+Bprobe cnt_probe 0 V=V(q1)+V(q2)+V(q3)
+.end

@@ -1,0 +1,1640 @@
+{
+ "edge_cuts": [
+  {
+   "class": "PCB_SHAPE",
+   "layer": "Edge.Cuts",
+   "shape": "Line",
+   "width": 50800,
+   "start": [
+    127000000,
+    61468000
+   ],
+   "end": [
+    127000000,
+    111252000
+   ]
+  },
+  {
+   "class": "PCB_SHAPE",
+   "layer": "Edge.Cuts",
+   "shape": "Arc",
+   "width": 50800,
+   "start": [
+    127000000,
+    61468000
+   ],
+   "mid": [
+    127892739,
+    59312739
+   ],
+   "end": [
+    130048000,
+    58420000
+   ]
+  },
+  {
+   "class": "PCB_SHAPE",
+   "layer": "Edge.Cuts",
+   "shape": "Arc",
+   "width": 50800,
+   "start": [
+    130048000,
+    114300000
+   ],
+   "mid": [
+    127892739,
+    113407261
+   ],
+   "end": [
+    127000000,
+    111252000
+   ]
+  },
+  {
+   "class": "PCB_SHAPE",
+   "layer": "Edge.Cuts",
+   "shape": "Line",
+   "width": 50000,
+   "start": [
+    130048000,
+    114300000
+   ],
+   "end": [
+    133096000,
+    114300000
+   ]
+  },
+  {
+   "class": "PCB_SHAPE",
+   "layer": "Edge.Cuts",
+   "shape": "Line",
+   "width": 50800,
+   "start": [
+    133096000,
+    58420000
+   ],
+   "end": [
+    130048000,
+    58420000
+   ]
+  },
+  {
+   "class": "PCB_SHAPE",
+   "layer": "Edge.Cuts",
+   "shape": "Arc",
+   "width": 50000,
+   "start": [
+    133096000,
+    58420000
+   ],
+   "mid": [
+    133634815,
+    58643185
+   ],
+   "end": [
+    133858000,
+    59182000
+   ]
+  },
+  {
+   "class": "PCB_SHAPE",
+   "layer": "Edge.Cuts",
+   "shape": "Line",
+   "width": 50800,
+   "start": [
+    133858000,
+    64516000
+   ],
+   "end": [
+    133858000,
+    59182000
+   ]
+  },
+  {
+   "class": "PCB_SHAPE",
+   "layer": "Edge.Cuts",
+   "shape": "Line",
+   "width": 50800,
+   "start": [
+    133858000,
+    107950000
+   ],
+   "end": [
+    133858000,
+    113538000
+   ]
+  },
+  {
+   "class": "PCB_SHAPE",
+   "layer": "Edge.Cuts",
+   "shape": "Arc",
+   "width": 50000,
+   "start": [
+    133858000,
+    107950000
+   ],
+   "mid": [
+    134304369,
+    106872369
+   ],
+   "end": [
+    135382000,
+    106426000
+   ]
+  },
+  {
+   "class": "PCB_SHAPE",
+   "layer": "Edge.Cuts",
+   "shape": "Arc",
+   "width": 50000,
+   "start": [
+    133858000,
+    113538000
+   ],
+   "mid": [
+    133634815,
+    114076815
+   ],
+   "end": [
+    133096000,
+    114300000
+   ]
+  },
+  {
+   "class": "PCB_SHAPE",
+   "layer": "Edge.Cuts",
+   "shape": "Arc",
+   "width": 50000,
+   "start": [
+    135382000,
+    66040000
+   ],
+   "mid": [
+    134304369,
+    65593631
+   ],
+   "end": [
+    133858000,
+    64516000
+   ]
+  },
+  {
+   "class": "PCB_SHAPE",
+   "layer": "Edge.Cuts",
+   "shape": "Line",
+   "width": 50800,
+   "start": [
+    135382000,
+    106426000
+   ],
+   "end": [
+    183642000,
+    106426000
+   ]
+  },
+  {
+   "class": "PCB_SHAPE",
+   "layer": "Edge.Cuts",
+   "shape": "Line",
+   "width": 50800,
+   "start": [
+    183642000,
+    66040000
+   ],
+   "end": [
+    135382000,
+    66040000
+   ]
+  },
+  {
+   "class": "PCB_SHAPE",
+   "layer": "Edge.Cuts",
+   "shape": "Arc",
+   "width": 50000,
+   "start": [
+    183642000,
+    106426000
+   ],
+   "mid": [
+    184719631,
+    106872369
+   ],
+   "end": [
+    185166000,
+    107950000
+   ]
+  },
+  {
+   "class": "PCB_SHAPE",
+   "layer": "Edge.Cuts",
+   "shape": "Arc",
+   "width": 50000,
+   "start": [
+    185166000,
+    59182000
+   ],
+   "mid": [
+    185389185,
+    58643186
+   ],
+   "end": [
+    185927999,
+    58420001
+   ]
+  },
+  {
+   "class": "PCB_SHAPE",
+   "layer": "Edge.Cuts",
+   "shape": "Arc",
+   "width": 50000,
+   "start": [
+    185166000,
+    64516000
+   ],
+   "mid": [
+    184719631,
+    65593631
+   ],
+   "end": [
+    183642000,
+    66040000
+   ]
+  },
+  {
+   "class": "PCB_SHAPE",
+   "layer": "Edge.Cuts",
+   "shape": "Line",
+   "width": 50800,
+   "start": [
+    185166000,
+    64516000
+   ],
+   "end": [
+    185166000,
+    59182000
+   ]
+  },
+  {
+   "class": "PCB_SHAPE",
+   "layer": "Edge.Cuts",
+   "shape": "Line",
+   "width": 50800,
+   "start": [
+    185166000,
+    107950000
+   ],
+   "end": [
+    185166000,
+    113538000
+   ]
+  },
+  {
+   "class": "PCB_SHAPE",
+   "layer": "Edge.Cuts",
+   "shape": "Arc",
+   "width": 50000,
+   "start": [
+    185928000,
+    114300000
+   ],
+   "mid": [
+    185389185,
+    114076815
+   ],
+   "end": [
+    185166000,
+    113538000
+   ]
+  },
+  {
+   "class": "PCB_SHAPE",
+   "layer": "Edge.Cuts",
+   "shape": "Line",
+   "width": 50800,
+   "start": [
+    188976000,
+    58420000
+   ],
+   "end": [
+    185928000,
+    58420001
+   ]
+  },
+  {
+   "class": "PCB_SHAPE",
+   "layer": "Edge.Cuts",
+   "shape": "Arc",
+   "width": 50800,
+   "start": [
+    188976000,
+    58420000
+   ],
+   "mid": [
+    191131261,
+    59312739
+   ],
+   "end": [
+    192024000,
+    61468000
+   ]
+  },
+  {
+   "class": "PCB_SHAPE",
+   "layer": "Edge.Cuts",
+   "shape": "Line",
+   "width": 50800,
+   "start": [
+    188976000,
+    114300000
+   ],
+   "end": [
+    185928000,
+    114300000
+   ]
+  },
+  {
+   "class": "PCB_SHAPE",
+   "layer": "Edge.Cuts",
+   "shape": "Arc",
+   "width": 50800,
+   "start": [
+    192024000,
+    111252000
+   ],
+   "mid": [
+    191131261,
+    113407261
+   ],
+   "end": [
+    188976000,
+    114300000
+   ]
+  },
+  {
+   "class": "PCB_SHAPE",
+   "layer": "Edge.Cuts",
+   "shape": "Arc",
+   "width": 50800,
+   "start": [
+    186690000,
+    102000000
+   ],
+   "mid": [
+    185612369,
+    101553631
+   ],
+   "end": [
+    185166000,
+    100476000
+   ]
+  },
+  {
+   "class": "PCB_SHAPE",
+   "layer": "Edge.Cuts",
+   "shape": "Line",
+   "width": 50800,
+   "start": [
+    186690000,
+    102000000
+   ],
+   "end": [
+    191262000,
+    102000000
+   ]
+  },
+  {
+   "class": "PCB_SHAPE",
+   "layer": "Edge.Cuts",
+   "shape": "Arc",
+   "width": 50800,
+   "start": [
+    191262000,
+    102000000
+   ],
+   "mid": [
+    191800815,
+    102223185
+   ],
+   "end": [
+    192024000,
+    102762000
+   ]
+  },
+  {
+   "class": "PCB_SHAPE",
+   "layer": "Edge.Cuts",
+   "shape": "Line",
+   "width": 50800,
+   "start": [
+    192024000,
+    102762000
+   ],
+   "end": [
+    192024000,
+    111252000
+   ]
+  },
+  {
+   "class": "PCB_SHAPE",
+   "layer": "Edge.Cuts",
+   "shape": "Line",
+   "width": 50800,
+   "start": [
+    192024000,
+    61468000
+   ],
+   "end": [
+    192024000,
+    84238000
+   ]
+  },
+  {
+   "class": "PCB_SHAPE",
+   "layer": "Edge.Cuts",
+   "shape": "Arc",
+   "width": 50800,
+   "start": [
+    192024000,
+    84238000
+   ],
+   "mid": [
+    191800815,
+    84776815
+   ],
+   "end": [
+    191262000,
+    85000000
+   ]
+  },
+  {
+   "class": "PCB_SHAPE",
+   "layer": "Edge.Cuts",
+   "shape": "Line",
+   "width": 50800,
+   "start": [
+    191262000,
+    85000000
+   ],
+   "end": [
+    186690000,
+    85000000
+   ]
+  },
+  {
+   "class": "PCB_SHAPE",
+   "layer": "Edge.Cuts",
+   "shape": "Arc",
+   "width": 50800,
+   "start": [
+    185166000,
+    86524000
+   ],
+   "mid": [
+    185612369,
+    85446369
+   ],
+   "end": [
+    186690000,
+    85000000
+   ]
+  },
+  {
+   "class": "PCB_SHAPE",
+   "layer": "Edge.Cuts",
+   "shape": "Line",
+   "width": 50800,
+   "start": [
+    185166000,
+    86524000
+   ],
+   "end": [
+    185166000,
+    100476000
+   ]
+  }
+ ],
+ "drawings": [
+  {
+   "class": "PCB_SHAPE",
+   "layer": "User.Drawings",
+   "shape": "Line",
+   "width": 100000,
+   "start": [
+    127048000,
+    61300000
+   ],
+   "end": [
+    127048000,
+    60800000
+   ]
+  },
+  {
+   "class": "PCB_SHAPE",
+   "layer": "User.Drawings",
+   "shape": "Line",
+   "width": 100000,
+   "start": [
+    127048000,
+    61300000
+   ],
+   "end": [
+    127048000,
+    77300000
+   ]
+  },
+  {
+   "class": "PCB_SHAPE",
+   "layer": "User.Drawings",
+   "shape": "Line",
+   "width": 100000,
+   "start": [
+    127048000,
+    77300000
+   ],
+   "end": [
+    127048000,
+    95300000
+   ]
+  },
+  {
+   "class": "PCB_SHAPE",
+   "layer": "User.Drawings",
+   "shape": "Line",
+   "width": 100000,
+   "start": [
+    127048000,
+    95300000
+   ],
+   "end": [
+    127048000,
+    111300000
+   ]
+  },
+  {
+   "class": "PCB_SHAPE",
+   "layer": "User.Drawings",
+   "shape": "Arc",
+   "width": 100000,
+   "start": [
+    127088819,
+    60806803
+   ],
+   "mid": [
+    127089388,
+    60803401
+   ],
+   "end": [
+    127089961,
+    60800000
+   ]
+  },
+  {
+   "class": "PCB_SHAPE",
+   "layer": "User.Drawings",
+   "shape": "Line",
+   "width": 50800,
+   "start": [
+    185166000,
+    107950000
+   ],
+   "end": [
+    185166000,
+    64516000
+   ]
+  },
+  {
+   "class": "PCB_SHAPE",
+   "layer": "User.Drawings",
+   "shape": "Line",
+   "width": 100000,
+   "start": [
+    192048000,
+    61300000
+   ],
+   "end": [
+    192048000,
+    60800000
+   ]
+  },
+  {
+   "class": "PCB_SHAPE",
+   "layer": "User.Drawings",
+   "shape": "Line",
+   "width": 100000,
+   "start": [
+    192048000,
+    111300000
+   ],
+   "end": [
+    192048000,
+    61300000
+   ]
+  },
+  {
+   "class": "PCB_SHAPE",
+   "layer": "User.Drawings",
+   "shape": "Rect",
+   "width": 100000,
+   "start": [
+    193048000,
+    96125000
+   ],
+   "end": [
+    214048000,
+    111975000
+   ]
+  },
+  {
+   "class": "PCB_SHAPE",
+   "layer": "User.Drawings",
+   "shape": "Rect",
+   "width": 100000,
+   "start": [
+    196948000,
+    60655925
+   ],
+   "end": [
+    214048000,
+    73755925
+   ]
+  },
+  {
+   "class": "PCB_SHAPE",
+   "layer": "User.Drawings",
+   "shape": "Rect",
+   "width": 100000,
+   "start": [
+    196948000,
+    78750000
+   ],
+   "end": [
+    214048000,
+    91850000
+   ]
+  },
+  {
+   "class": "PCB_TEXT",
+   "layer": "User.Drawings",
+   "text": "GPIO HEADER",
+   "pos": [
+    159519532,
+    61785985
+   ],
+   "angle": 0.0,
+   "size": [
+    1000000,
+    1000000
+   ]
+  },
+  {
+   "class": "PCB_TEXT",
+   "layer": "User.Drawings",
+   "text": "WAVESHARE IO",
+   "pos": [
+    159575500,
+    110998000
+   ],
+   "angle": 0.0,
+   "size": [
+    1000000,
+    1000000
+   ]
+  },
+  {
+   "class": "PCB_TEXT",
+   "layer": "User.Drawings",
+   "text": "PoE",
+   "pos": [
+    188548000,
+    67940000
+   ],
+   "angle": 0.0,
+   "size": [
+    1000000,
+    1000000
+   ]
+  },
+  {
+   "class": "PCB_TEXT",
+   "layer": "User.Drawings",
+   "text": "BACK HEADER KEEPOUT",
+   "pos": [
+    188722000,
+    86265884
+   ],
+   "angle": 90.0,
+   "size": [
+    1000000,
+    1000000
+   ]
+  },
+  {
+   "class": "PCB_TEXT",
+   "layer": "User.Drawings",
+   "text": "RJ45",
+   "pos": [
+    203248000,
+    104140000
+   ],
+   "angle": 0.0,
+   "size": [
+    2000000,
+    2000000
+   ]
+  },
+  {
+   "class": "PCB_TEXT",
+   "layer": "User.Drawings",
+   "text": "USB",
+   "pos": [
+    204772000,
+    85852000
+   ],
+   "angle": 0.0,
+   "size": [
+    2000000,
+    2000000
+   ]
+  },
+  {
+   "class": "PCB_TEXT",
+   "layer": "User.Drawings",
+   "text": "USB",
+   "pos": [
+    205280000,
+    66548000
+   ],
+   "angle": 0.0,
+   "size": [
+    2000000,
+    2000000
+   ]
+  },
+  {
+   "class": "PCB_DIM_ORTHOGONAL",
+   "layer": "User.Drawings",
+   "text": "55.88",
+   "start": [
+    132334000,
+    58420000
+   ],
+   "end": [
+    132334000,
+    114300000
+   ]
+  },
+  {
+   "class": "PCB_DIM_ORTHOGONAL",
+   "layer": "User.Drawings",
+   "text": "65.024",
+   "start": [
+    192024000,
+    63500000
+   ],
+   "end": [
+    127000000,
+    63500000
+   ]
+  }
+ ],
+ "rule_areas": [
+  {
+   "name": "PoE",
+   "layers": [
+    "B.Cu"
+   ],
+   "points": [
+    [
+     191048000,
+     70440000
+    ],
+    [
+     186048000,
+     70440000
+    ],
+    [
+     186048000,
+     65440000
+    ],
+    [
+     191048000,
+     65440000
+    ]
+   ],
+   "no_footprints": true,
+   "no_tracks": false,
+   "no_vias": false,
+   "no_pads": false,
+   "no_zones": false
+  }
+ ],
+ "footprints": {
+  "MH1": {
+   "fpid": "MountingHole:MountingHole_2.7mm_M2.5",
+   "pos": [
+    130548000,
+    61800000
+   ],
+   "angle": 0.0,
+   "flipped": false,
+   "pads": [
+    [
+     "",
+     130548000,
+     61800000
+    ]
+   ]
+  },
+  "MH2": {
+   "fpid": "MountingHole:MountingHole_2.7mm_M2.5",
+   "pos": [
+    188548000,
+    61800000
+   ],
+   "angle": 0.0,
+   "flipped": false,
+   "pads": [
+    [
+     "",
+     188548000,
+     61800000
+    ]
+   ]
+  },
+  "MH3": {
+   "fpid": "MountingHole:MountingHole_2.7mm_M2.5",
+   "pos": [
+    130548000,
+    110800000
+   ],
+   "angle": 0.0,
+   "flipped": false,
+   "pads": [
+    [
+     "",
+     130548000,
+     110800000
+    ]
+   ]
+  },
+  "MH4": {
+   "fpid": "MountingHole:MountingHole_2.7mm_M2.5",
+   "pos": [
+    188548000,
+    110800000
+   ],
+   "angle": 0.0,
+   "flipped": false,
+   "pads": [
+    [
+     "",
+     188548000,
+     110800000
+    ]
+   ]
+  },
+  "J1": {
+   "fpid": "TerminalBlock_MetzConnect:TerminalBlock_MetzConnect_Type086_RT03403HBLC_1x03_P3.81mm_Horizontal",
+   "pos": [
+    179406500,
+    95250000
+   ],
+   "angle": 90.0,
+   "flipped": false,
+   "pads": [
+    [
+     "1",
+     179406500,
+     95250000
+    ],
+    [
+     "2",
+     179406500,
+     91440000
+    ],
+    [
+     "3",
+     179406500,
+     87630000
+    ]
+   ]
+  },
+  "J2": {
+   "fpid": "Connector_USB:USB3_A_Molex_48406-0001_Horizontal_Stacked",
+   "pos": [
+    180043000,
+    79192001
+   ],
+   "angle": 90.0,
+   "flipped": false,
+   "pads": [
+    [
+     "1",
+     180043000,
+     79192001
+    ],
+    [
+     "10",
+     176843000,
+     79192001
+    ],
+    [
+     "11",
+     176843000,
+     76692001
+    ],
+    [
+     "12",
+     176843000,
+     74692001
+    ],
+    [
+     "13",
+     176843000,
+     72192001
+    ],
+    [
+     "14",
+     175343000,
+     71692001
+    ],
+    [
+     "15",
+     175343000,
+     73692001
+    ],
+    [
+     "16",
+     175343000,
+     75692001
+    ],
+    [
+     "17",
+     175343000,
+     77692001
+    ],
+    [
+     "18",
+     175343000,
+     79692001
+    ],
+    [
+     "2",
+     180043000,
+     76692001
+    ],
+    [
+     "3",
+     180043000,
+     74692001
+    ],
+    [
+     "4",
+     180043000,
+     72192001
+    ],
+    [
+     "5",
+     178543000,
+     71692001
+    ],
+    [
+     "6",
+     178543000,
+     73692001
+    ],
+    [
+     "7",
+     178543000,
+     75692001
+    ],
+    [
+     "8",
+     178543000,
+     77692001
+    ],
+    [
+     "9",
+     178543000,
+     79692001
+    ],
+    [
+     "SH",
+     176363000,
+     69122001
+    ],
+    [
+     "SH",
+     176363000,
+     82262001
+    ],
+    [
+     "SH",
+     182043000,
+     69122001
+    ],
+    [
+     "SH",
+     182043000,
+     82262001
+    ]
+   ]
+  },
+  "J4": {
+   "fpid": "TerminalBlock_MetzConnect:TerminalBlock_MetzConnect_Type086_RT03402HBLC_1x02_P3.81mm_Horizontal",
+   "pos": [
+    177419000,
+    102235000
+   ],
+   "angle": 0.0,
+   "flipped": false,
+   "pads": [
+    [
+     "1",
+     177419000,
+     102235000
+    ],
+    [
+     "2",
+     181229000,
+     102235000
+    ]
+   ]
+  },
+  "J5": {
+   "fpid": "TerminalBlock_MetzConnect:TerminalBlock_MetzConnect_Type086_RT03402HBLC_1x02_P3.81mm_Horizontal",
+   "pos": [
+    140208000,
+    71456500
+   ],
+   "angle": 180.0,
+   "flipped": false,
+   "pads": [
+    [
+     "1",
+     140208000,
+     71456500
+    ],
+    [
+     "2",
+     136398000,
+     71456500
+    ]
+   ]
+  }
+ },
+ "lead_changes": [
+  {
+   "date": "2026-11-05",
+   "refs": "J1,J4,J5",
+   "record": "J1, J4, J5 rotated 180 deg about the centre of each pad row (lead decision, SPEC 5 \"Fixed positions\"; tools/post_route/05_sync_cd4541.py): wire entries face outward; pad-location set unchanged, pin order reversed, origin (pad 1) at the old last-pad location",
+   "before": {
+    "J1": {
+     "pos": [
+      179406500,
+      87630000
+     ],
+     "angle": -90.0,
+     "pads": [
+      [
+       "1",
+       179406500,
+       87630000
+      ],
+      [
+       "2",
+       179406500,
+       91440000
+      ],
+      [
+       "3",
+       179406500,
+       95250000
+      ]
+     ]
+    },
+    "J4": {
+     "pos": [
+      181229000,
+      102235000
+     ],
+     "angle": 180.0,
+     "pads": [
+      [
+       "1",
+       181229000,
+       102235000
+      ],
+      [
+       "2",
+       177419000,
+       102235000
+      ]
+     ]
+    },
+    "J5": {
+     "pos": [
+      138938000,
+      71418500
+     ],
+     "angle": 0.0,
+     "pads": [
+      [
+       "1",
+       138938000,
+       71418500
+      ],
+      [
+       "2",
+       142748000,
+       71418500
+      ]
+     ]
+    }
+   }
+  },
+  {
+   "date": "2026-11-05",
+   "refs": "J2,J5",
+   "record": "J2 and J5 moved by the project lead in the layout copy (tools/post_route/lead_layout_2026-11-05.json, applied by tools/post_route/08_lead_layout.py): pure translations, J2 -0.635 mm x, J5 -2.54 mm x / +0.038 mm y; orientation, side and footprint unchanged",
+   "before": {
+    "J2": {
+     "pos": [
+      180678000,
+      79192001
+     ],
+     "angle": 90.0,
+     "pads": [
+      [
+       "1",
+       180678000,
+       79192001
+      ],
+      [
+       "10",
+       177478000,
+       79192001
+      ],
+      [
+       "11",
+       177478000,
+       76692001
+      ],
+      [
+       "12",
+       177478000,
+       74692001
+      ],
+      [
+       "13",
+       177478000,
+       72192001
+      ],
+      [
+       "14",
+       175978000,
+       71692001
+      ],
+      [
+       "15",
+       175978000,
+       73692001
+      ],
+      [
+       "16",
+       175978000,
+       75692001
+      ],
+      [
+       "17",
+       175978000,
+       77692001
+      ],
+      [
+       "18",
+       175978000,
+       79692001
+      ],
+      [
+       "19",
+       176998000,
+       69122001
+      ],
+      [
+       "19",
+       176998000,
+       82262001
+      ],
+      [
+       "19",
+       182678000,
+       69122001
+      ],
+      [
+       "19",
+       182678000,
+       82262001
+      ],
+      [
+       "2",
+       180678000,
+       76692001
+      ],
+      [
+       "3",
+       180678000,
+       74692001
+      ],
+      [
+       "4",
+       180678000,
+       72192001
+      ],
+      [
+       "5",
+       179178000,
+       71692001
+      ],
+      [
+       "6",
+       179178000,
+       73692001
+      ],
+      [
+       "7",
+       179178000,
+       75692001
+      ],
+      [
+       "8",
+       179178000,
+       77692001
+      ],
+      [
+       "9",
+       179178000,
+       79692001
+      ]
+     ]
+    },
+    "J5": {
+     "pos": [
+      142748000,
+      71418500
+     ],
+     "angle": 180.0,
+     "pads": [
+      [
+       "1",
+       142748000,
+       71418500
+      ],
+      [
+       "2",
+       138938000,
+       71418500
+      ]
+     ]
+    }
+   }
+  },
+  {
+   "date": "2026-11-05",
+   "refs": "EDGE_RIGHT_NOTCH",
+   "record": "right edge notch (project lead, approved geometry; tools/post_route/13_right_notch.py): the right edge line x 192.024 is replaced by a cut-out of the BACK HEADER KEEPOUT strip, x 185.166-192.024, y 70.450-102.000, inner corners r 1.524, outer r 0.762; top cut edge 10 um below the approved 70.440 so the MH2 neck is >= 5 mm",
+   "before": {
+    "edge_cuts_removed": [
+     {
+      "class": "PCB_SHAPE",
+      "layer": "Edge.Cuts",
+      "shape": "Line",
+      "width": 50800,
+      "start": [
+       192024000,
+       111252000
+      ],
+      "end": [
+       192024000,
+       61468000
+      ]
+     }
+    ]
+   },
+   "after": {
+    "edge_cuts_added": [
+     {
+      "class": "PCB_SHAPE",
+      "layer": "Edge.Cuts",
+      "shape": "Line",
+      "width": 50800,
+      "start": [
+       192024000,
+       61468000
+      ],
+      "end": [
+       192024000,
+       69688000
+      ]
+     },
+     {
+      "class": "PCB_SHAPE",
+      "layer": "Edge.Cuts",
+      "shape": "Arc",
+      "width": 50800,
+      "start": [
+       192024000,
+       69688000
+      ],
+      "mid": [
+       191800815,
+       70226815
+      ],
+      "end": [
+       191262000,
+       70450000
+      ]
+     },
+     {
+      "class": "PCB_SHAPE",
+      "layer": "Edge.Cuts",
+      "shape": "Line",
+      "width": 50800,
+      "start": [
+       191262000,
+       70450000
+      ],
+      "end": [
+       186690000,
+       70450000
+      ]
+     },
+     {
+      "class": "PCB_SHAPE",
+      "layer": "Edge.Cuts",
+      "shape": "Arc",
+      "width": 50800,
+      "start": [
+       185166000,
+       71974000
+      ],
+      "mid": [
+       185612369,
+       70896369
+      ],
+      "end": [
+       186690000,
+       70450000
+      ]
+     },
+     {
+      "class": "PCB_SHAPE",
+      "layer": "Edge.Cuts",
+      "shape": "Line",
+      "width": 50800,
+      "start": [
+       185166000,
+       71974000
+      ],
+      "end": [
+       185166000,
+       100476000
+      ]
+     },
+     {
+      "class": "PCB_SHAPE",
+      "layer": "Edge.Cuts",
+      "shape": "Arc",
+      "width": 50800,
+      "start": [
+       186690000,
+       102000000
+      ],
+      "mid": [
+       185612369,
+       101553631
+      ],
+      "end": [
+       185166000,
+       100476000
+      ]
+     },
+     {
+      "class": "PCB_SHAPE",
+      "layer": "Edge.Cuts",
+      "shape": "Line",
+      "width": 50800,
+      "start": [
+       186690000,
+       102000000
+      ],
+      "end": [
+       191262000,
+       102000000
+      ]
+     },
+     {
+      "class": "PCB_SHAPE",
+      "layer": "Edge.Cuts",
+      "shape": "Arc",
+      "width": 50800,
+      "start": [
+       191262000,
+       102000000
+      ],
+      "mid": [
+       191800815,
+       102223185
+      ],
+      "end": [
+       192024000,
+       102762000
+      ]
+     },
+     {
+      "class": "PCB_SHAPE",
+      "layer": "Edge.Cuts",
+      "shape": "Line",
+      "width": 50800,
+      "start": [
+       192024000,
+       102762000
+      ],
+      "end": [
+       192024000,
+       111252000
+      ]
+     }
+    ]
+   }
+  },
+  {
+   "date": "2026-11-05",
+   "refs": "EDGE_RIGHT_NOTCH_UNDER_USB",
+   "record": "right edge notch top edge moved down to y 85.000, just below the J2 (USB) courtyard (project lead: \"Keep board under the USB port (J2) ... I'm not using the header it covers\"; tools/post_route/14_notch_under_usb.py): notch now x 185.166-192.024, y 85.000-102.000, same corner radii; the five top items of the EDGE_RIGHT_NOTCH path replaced, bottom edge unchanged",
+   "before": {
+    "edge_cuts_removed": [
+     {
+      "class": "PCB_SHAPE",
+      "layer": "Edge.Cuts",
+      "shape": "Line",
+      "width": 50800,
+      "start": [
+       192024000,
+       61468000
+      ],
+      "end": [
+       192024000,
+       69688000
+      ]
+     },
+     {
+      "class": "PCB_SHAPE",
+      "layer": "Edge.Cuts",
+      "shape": "Arc",
+      "width": 50800,
+      "start": [
+       192024000,
+       69688000
+      ],
+      "mid": [
+       191800815,
+       70226815
+      ],
+      "end": [
+       191262000,
+       70450000
+      ]
+     },
+     {
+      "class": "PCB_SHAPE",
+      "layer": "Edge.Cuts",
+      "shape": "Line",
+      "width": 50800,
+      "start": [
+       191262000,
+       70450000
+      ],
+      "end": [
+       186690000,
+       70450000
+      ]
+     },
+     {
+      "class": "PCB_SHAPE",
+      "layer": "Edge.Cuts",
+      "shape": "Arc",
+      "width": 50800,
+      "start": [
+       185166000,
+       71974000
+      ],
+      "mid": [
+       185612369,
+       70896369
+      ],
+      "end": [
+       186690000,
+       70450000
+      ]
+     },
+     {
+      "class": "PCB_SHAPE",
+      "layer": "Edge.Cuts",
+      "shape": "Line",
+      "width": 50800,
+      "start": [
+       185166000,
+       71974000
+      ],
+      "end": [
+       185166000,
+       100476000
+      ]
+     }
+    ]
+   },
+   "after": {
+    "edge_cuts_added": [
+     {
+      "class": "PCB_SHAPE",
+      "layer": "Edge.Cuts",
+      "shape": "Line",
+      "width": 50800,
+      "start": [
+       192024000,
+       61468000
+      ],
+      "end": [
+       192024000,
+       84238000
+      ]
+     },
+     {
+      "class": "PCB_SHAPE",
+      "layer": "Edge.Cuts",
+      "shape": "Arc",
+      "width": 50800,
+      "start": [
+       192024000,
+       84238000
+      ],
+      "mid": [
+       191800815,
+       84776815
+      ],
+      "end": [
+       191262000,
+       85000000
+      ]
+     },
+     {
+      "class": "PCB_SHAPE",
+      "layer": "Edge.Cuts",
+      "shape": "Line",
+      "width": 50800,
+      "start": [
+       191262000,
+       85000000
+      ],
+      "end": [
+       186690000,
+       85000000
+      ]
+     },
+     {
+      "class": "PCB_SHAPE",
+      "layer": "Edge.Cuts",
+      "shape": "Arc",
+      "width": 50800,
+      "start": [
+       185166000,
+       86524000
+      ],
+      "mid": [
+       185612369,
+       85446369
+      ],
+      "end": [
+       186690000,
+       85000000
+      ]
+     },
+     {
+      "class": "PCB_SHAPE",
+      "layer": "Edge.Cuts",
+      "shape": "Line",
+      "width": 50800,
+      "start": [
+       185166000,
+       86524000
+      ],
+      "end": [
+       185166000,
+       100476000
+      ]
+     }
+    ]
+   }
+  }
+ ]
+}

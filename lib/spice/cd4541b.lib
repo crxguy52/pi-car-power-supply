@@ -1,0 +1,173 @@
+* CD4541B programmable timer (TI SCHS085E): behavioural model for ngspice (KiCad 10 simulator), U5 on pi_power_board.
+* Not a vendor model (TI publishes none). Written for this project, 2026-11-05 (tools/post_sch/12_kicad_sim.py).
+*
+* Pins (symbol Timer:CD4541BM): 1 RTC, 2 CTC, 3 RS, 5 AR, 6 MR, 7 VSS, 8 OUT, 9 Q/Q-bar SELECT, 10 MODE, 12 A, 13 B,
+* 14 VDD; 4 and 11 NC (not in the subcircuit).
+*
+* What it covers:
+* - RC oscillator, SCHS085E fig. 2: the RS input decides; the CTC driver is in phase with it, the RTC driver inverted;
+*   the external RTC / CTC / RS network sets the frequency (real values, real time). Input threshold VT (fraction of
+*   VDD), hysteresis band HYS (a fraction of VNOM, in volts; 0 = the single threshold of fig. 2), driver resistance
+*   RDRV on RTC and CTC. HYS and RDRV are the calibration knobs that place k = period / (RTC CTC) on the corner bounds
+*   of tools/design_calc.py (reports/sim_kicad.md).
+* - "AUTO or MASTER RESET disables the oscillator during reset": reset forces the RS decision low (CTC low, RTC high).
+* - Counter: counts clock cycles (in phase with CTC) as charge, one count = 1 mV on node cnt (a switched-capacitor
+*   charge counter: exact by charge conservation). That is the 16-stage ripple counter's count (one count per clock
+*   period; the count lands on the falling clock edge instead of the rising one: half a period, 0.5 ms). Counts only
+*   with VDD >= VDD_MIN (3 V operating minimum), keeps the count while VDD falls (retention), reset clears it.
+* - Tap select A / B (frequency select table: 00 -> stage 13, 01 -> 10, 10 -> 8, 11 -> 16): the output changes after
+*   2^(N-1) counts. TAPDIV (sim speed knob, default 1 = the real part): every tap counts 2^(N-1) / TAPDIV instead,
+*   with the real oscillator; tools/run_sim.py's fast mode extrapolates the delay with the measured period.
+* - MODE 0 = single transition: the output changes at 2^(N-1) counts and stays until the next reset (the count only
+*   grows). MODE 1 (recycle) is NOT modelled: the pin is read but ignored (this board ties it to VSS).
+* - Q/Q-bar SELECT 1 = output high after reset, 0 = low after reset.
+* - MASTER RESET (pin 6, high = reset) and AUTO RESET (pin 5 low = on): a power-on reset pulse TPOR long when VDD rises
+*   through VPOR_ON, re-armed below VPOR_OFF (assumption: rising VDD only; the datasheet gives no figure).
+* - Inputs switch at 0.5 VDD (between the VIL 0.3 VDD and VIH 0.7 VDD limits). CMOS protection diodes on RS, MR and
+*   OUT (the pins this board can drive past a rail).
+* - Output: VDD or VSS through ROUT.
+* - Supply current IDD, drawn only above 1.5 V (CMOS: nothing of its own when nearly unpowered), full above 5 V.
+*
+* Numerics (ngspice): the logic is built from voltage-controlled switches and linear sources (B-sources are an order
+* slower per time step). Every logic node has 1 kOhm / 10 pF, so a switch never sees a control that jumps in zero time
+* (ngspice cannot locate such a crossing: "timestep too small"). The oscillator decision is a switch pair plus a time-step guard: a Lorentzian of the
+* distance to each switching point across a capacitor, whose curvature makes the solver shorten the step in
+* proportion to that distance, so each edge lands on its threshold. Without the guard the period depends on the time
+* step by percents; with it (WGUARD) it is within about 0.5 % of a 2 us fixed-step run at a 1 ms maximum step.
+
+.subckt CD4541B RTC CTC RS AR MR VSS OUT QSEL MODE A B VDD
++ params: VT=0.5 HYS=0.054 RDRV=129 ROUT=370 IDD=0.3m VDD_MIN=3 VPOR_ON=2 VPOR_OFF=1 TPOR=1m VNOM=5.1
++ WGUARD=1m VLOGIC_OFS=50m TAPDIV=1
+
+* ---- references: logic 1 V (logic nodes switch at 0.5 V); input switching point hv = VDD / 2 plus VLOGIC_OFS (inputs read low while VDD
+*      is nearly 0, so no decision chatters on millivolts); supply current; MODE input path (pin read, not used)
+VONE one VSS 1
+RMODE MODE VSS 1e12
+EHV hvx VSS VDD VSS 0.5
+VHVO hv hvx {VLOGIC_OFS}
+BIDD VDD VSS I={IDD}*min(max(V(VDD,VSS)-1.5, 0)/3.5, 1)
+
+* ---- input protection (CMOS network) and pin capacitance
+.model DPROT_CD4541 D(Is=1e-14 N=1 Rs=10)
+DRS1 RS VDD DPROT_CD4541
+DRS2 VSS RS DPROT_CD4541
+CRS RS VSS 5p
+DMR1 MR VDD DPROT_CD4541
+DMR2 VSS MR DPROT_CD4541
+
+* ---- switch models
+.model SWL_CD4541 SW(Vt=0 Vh=5m Ron=1m Roff=1e12)
+.model SWL_HI_CD4541 SW(Vt=0.5 Vh=5m Ron=1m Roff=1e12)
+.model SWL_LO_CD4541 SW(Vt=-0.5 Vh=5m Ron=1m Roff=1e12)
+.model SWOSC_CD4541 SW(Vt=0 Vh={max(HYS*VNOM/2, 1m)} Ron=1 Roff=1e9)
+.model SWCK_CD4541 SW(Vt=0 Vh={max(HYS*VNOM/2, 1m)} Ron=1m Roff=1e12)
+.model SWVMIN_CD4541 SW(Vt={VDD_MIN} Vh=10m Ron=1m Roff=1e12)
+.model SWPOR_CD4541 SW(Vt={(VPOR_ON+VPOR_OFF)/2} Vh={(VPOR_ON-VPOR_OFF)/2} Ron=1m Roff=1e12)
+.model SWRST_HI_CD4541 SW(Vt=0.5 Vh=5m Ron=100 Roff=1e12)
+
+* ---- power-on reset: pok = VDD above VPOR_ON (released below VPOR_OFF); pulse = pok and not its TPOR-delayed copy,
+*      only with AR low
+SPOK one pok VDD VSS SWPOR_CD4541
+RPOK pok VSS 1k
+CLPOK pok VSS 10p
+RPD pok pokd {TPOR/10n}
+CPD pokd VSS 10n
+SPR1 one pr1 pok VSS SWL_HI_CD4541
+SPR2 pr1 pr2 VSS pokd SWL_LO_CD4541
+SPR3 pr2 porh hv AR SWL_CD4541
+RPR1 pr1 VSS 1k
+CLPR1 pr1 VSS 10p
+RPR2 pr2 VSS 1k
+CLPR2 pr2 VSS 10p
+RPR porh VSS 1k
+CLPR porh VSS 10p
+* reset (0 / 1 V) = MR above VDD / 2, or the power-on pulse
+SRM one rsta MR hv SWL_CD4541
+SRP one rsta porh VSS SWL_HI_CD4541
+RRST rsta VSS 1k
+CLRST rsta VSS 10p
+
+* ---- oscillator: oc = V(RS) - VT VDD (reset pushes it far negative); switches with the hysteresis band
+EOC1 oc oc1 RS VSS 1
+EOC2 oc1 oc2 VDD VSS {-VT}
+EOC3 oc2 VSS rsta VSS -10
+EOCN ocn VSS oc VSS -1
+* the guard watches ocg = V(RS) - VT VDD (oc without the reset term: the reset edge would sweep it through both
+* switching points in nanoseconds) and is off during reset (the oscillator is stopped; at key-on VDD and RS move fast)
+EOG1 ocg ocg1 RS VSS 1
+EOG2 ocg1 VSS VDD VSS {-VT}
+BGD gd VSS V=(1 - V(rsta,VSS))*(1/(1+((V(ocg,VSS)-{max(HYS*VNOM/2, 1m)})/{WGUARD*VNOM})**2)
++ + 1/(1+((V(ocg,VSS)+{max(HYS*VNOM/2, 1m)})/{WGUARD*VNOM})**2))
+CGD gd VSS 1
+SCH VDD ctci oc VSS SWOSC_CD4541
+SCL ctci VSS ocn VSS SWOSC_CD4541
+SRH VDD rtci ocn VSS SWOSC_CD4541
+SRL rtci VSS oc VSS SWOSC_CD4541
+RCT ctci CTC {max(RDRV, 1m)}
+RRT rtci RTC {max(RDRV, 1m)}
+* clock (0 / 1 V within 1 ppm): in phase with CTC, gated by VDD >= VDD_MIN
+SCK one ck1 oc VSS SWCK_CD4541
+SVM ck1 clka VDD VSS SWVMIN_CD4541
+RCK1 ck1 VSS 1k
+CLCK1 ck1 VSS 10p
+RCK clka VSS 1k
+CLCK clka VSS 10p
+
+* ---- counter: a switched-capacitor charge counter. CSC charges to 1 V while the clock is high and dumps that charge
+*      into an ideal integrator (CINT on an op-amp virtual ground) while it is low: one count = 1 nC = 1 mV on cnt,
+*      exact by charge conservation (independent of the integration method). Reset shorts CINT.
+.model SWSC_HI_CD4541 SW(Vt=0.6 Vh=0.05 Ron=1k Roff=1e12)
+.model SWSC_LO_CD4541 SW(Vt=-0.4 Vh=0.05 Ron=1k Roff=1e12)
+SSCA one sct clka VSS SWSC_HI_CD4541
+SSCB sct nvg VSS clka SWSC_LO_CD4541
+CSC sct VSS 1n
+EINT nint VSS VSS nvg 1e6
+CINT nvg nint 1u
+RINT nvg VSS 1e15
+SCLR nvg nint rsta VSS SWRST_HI_CD4541
+ECNT cnt VSS VSS nint 1
+* ---- tap 2^(N-1) / TAPDIV counts (in mV, minus half a count), selected by A / B
+VT11 t11 VSS {(32768/TAPDIV - 0.5)*1m}
+VT10 t10 VSS {(128/TAPDIV - 0.5)*1m}
+VT01 t01 VSS {(512/TAPDIV - 0.5)*1m}
+VT00 t00 VSS {(4096/TAPDIV - 0.5)*1m}
+ST11A t11 s11 A hv SWL_CD4541
+ST11B s11 ntap B hv SWL_CD4541
+ST10A t10 s10 A hv SWL_CD4541
+ST10B s10 ntap hv B SWL_CD4541
+ST01A t01 s01 hv A SWL_CD4541
+ST01B s01 ntap B hv SWL_CD4541
+ST00A t00 s00 hv A SWL_CD4541
+ST00B s00 ntap hv B SWL_CD4541
+RS11 s11 VSS 1e12
+RS10 s10 VSS 1e12
+RS01 s01 VSS 1e12
+RS00 s00 VSS 1e12
+RNT ntap VSS 1e12
+
+* ---- single transition: done = count reached the tap; output high = done XOR Q-select. The done switch has a
+*      hysteresis well below one count (1 mV): with the 5 mV of SWL_CD4541 it fired 5 counts late (staff review)
+.model SWDN_CD4541 SW(Vt=0 Vh=0.2m Ron=1m Roff=1e12)
+SDN one dnh cnt ntap SWDN_CD4541
+RDN dnh VSS 1k
+CLDN dnh VSS 10p
+SOH1 one m1 QSEL hv SWL_CD4541
+SOH2 m1 oh VSS dnh SWL_LO_CD4541
+SOH3 one m2 hv QSEL SWL_CD4541
+SOH4 m2 oh dnh VSS SWL_HI_CD4541
+RM1 m1 VSS 1k
+CLM1 m1 VSS 10p
+RM2 m2 VSS 1k
+CLM2 m2 VSS 10p
+ROH oh VSS 1k
+CLOH oh VSS 10p
+
+* ---- output stage: VDD or VSS through ROUT
+.model SWOUT_HI_CD4541 SW(Vt=0.5 Vh=5m Ron=1m Roff=1e12)
+.model SWOUT_LO_CD4541 SW(Vt=-0.5 Vh=5m Ron=1m Roff=1e12)
+SOUTH VDD oint oh VSS SWOUT_HI_CD4541
+SOUTL oint VSS VSS oh SWOUT_LO_CD4541
+RO oint OUT {ROUT}
+DO1 OUT VDD DPROT_CD4541
+DO2 VSS OUT DPROT_CD4541
+.ends CD4541B

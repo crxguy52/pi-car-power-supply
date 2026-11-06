@@ -1,0 +1,13 @@
+# KiCad
+*.lck
+fp-info-cache
+*.kicad_prl
+pi_power_board-backups/
+# tooling
+.venv/
+.pdm-python
+__pycache__/
+build/
+# LTspice binary outputs
+*.raw
+*.op.raw

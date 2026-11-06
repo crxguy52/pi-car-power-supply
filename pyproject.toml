@@ -1,0 +1,26 @@
+[project]
+name = "pi-power-board"
+version = "0.1.0"
+description = "Raspberry Pi car power HAT: KiCad project checks, Digi-Key lookups, datasheet helpers"
+requires-python = ">=3.11,<3.12"
+dependencies = [
+    "pymupdf>=1.26.5,<1.27",
+]
+
+[tool.pdm]
+distribution = false
+
+# KiCad steps call kicad-cli from config/toolchain.toml (tools/run_kicad.py, under a timeout).
+[tool.pdm.scripts]
+check-toolchain = { cmd = "python -I tools/check_toolchain.py", help = "Check KiCad, Java, Freerouting and PyMuPDF against config/toolchain.toml" }
+erc = { cmd = "python -I tools/run_kicad.py erc", help = "ERC -> build/erc.rpt (summary line printed)" }
+drc = { cmd = "python -I tools/run_kicad.py drc", help = "DRC with schematic parity -> build/drc.rpt (summary lines printed)" }
+check-netlist = { cmd = "python -I tools/check_netlist.py", help = "Schematic netlist vs SPEC 7 (exports build/netlist.xml); --selftest proves each check fails on a mutated copy" }
+verify-sch = { cmd = "python -I tools/verify_sch.py", help = "Schematic gate: ERC + netlist check + selftest + reports/schematic.pdf/.png + PDF text-overlap check + sim (run_sim.py --selftest, fast mode)" }
+sim = { cmd = "python -I tools/run_sim.py", help = "Delay-off timer sim from the schematic (KiCad netlist + KiCad ngspice): every scenario, fast mode (U5 count scaled, hold extrapolated); --full real time; --selftest broken decks must fail (verify-sch runs --selftest); --only NAME, --list, --jobs N" }
+build-lib = { cmd = "python -I tools/build_lib.py", help = "Project footprint library pipwr (lib/pi_power_board.pretty) + fp-lib-table" }
+raster = { cmd = "python -I tools/raster_pdf.py", help = "PDF page -> PNG: pdm run raster <pdf> <png> <dpi> [page, 1-based]" }
+dk-mpn = { cmd = "python -I tools/digikey_lookup.py mpn", help = "Digi-Key lookup: pdm run dk-mpn <MPN...>" }
+dk-check = { cmd = "python -I tools/digikey_lookup.py check docs/SPEC.md", help = "Every MPN in the spec Parts table: Active, stock >= order qty, DK PN as the spec" }
+dk-selftest = { cmd = "python -I tools/digikey_lookup.py selftest docs/SPEC.md", help = "Offline check of the spec-table parsing" }
+dk-bom = { cmd = "python -I tools/digikey_lookup.py bom docs/SPEC.md", help = "bom/: Digi-Key BOM Manager CSV + PIPWR_BOM.md from the spec Parts table" }

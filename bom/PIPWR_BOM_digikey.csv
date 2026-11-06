@@ -1,0 +1,37 @@
+Digi-Key Part Number,Manufacturer Part Number,Manufacturer,Quantity,Reference Designator,Customer Reference,Description
+277-1948-ND,1727023,Phoenix Contact,3,J1,"PIPWR Input terminal GND/ACC/BATT 3-pos 3.81 mm,","Input terminal GND/ACC/BATT 3-pos 3.81 mm, 10 A (IEC; 12 A max load), AWG 16-30 (UL) Phoenix MKDS 1/3-3,81"
+277-1947-ND,1727010,Phoenix Contact,5,J4 J5,PIPWR J4: Pi 12 V output VOUT/GND; J5: ACC statu,"J4: Pi 12 V output VOUT/GND; J5: ACC status to Pi GPIO (ACC_N/GND) 2-pos 3.81 mm, 10 A (IEC; 12 A max load), AWG 16-30 (UL) Phoenix MKDS 1/2-3,81"
+0484060001-ND,0484060001,Molex,3,J2,"PIPWR USB-A charging ports, stacked USB3 A stack","USB-A charging ports, stacked USB3 A stacked, 1.8 A per VBUS contact, -20 to 85 degC Molex 48406-0001"
+CAS120JCT-ND,CAS-120TA,Nidec Components,4,SW1,PIPWR Force-on switch (acts like the key) SPDT s,"Force-on switch (acts like the key) SPDT slide, 24 V / 25 mA switching Nidec CAS-120A (J-hook, taped)"
+SQD50P04-13L_GE3CT-ND,SQD50P04-13L_GE3,Vishay Siliconix,4,Q1,"PIPWR High-side P-FET 40 V, 22 mOhm at -4.5 V, A","High-side P-FET 40 V, 22 mOhm at -4.5 V, AEC-Q101 DPAK (TO-252)"
+296-3536-1-ND,CD4541BM96,Texas Instruments,4,U5,PIPWR Delay-off timer: RC oscillator + 16-stage ,"Delay-off timer: RC oscillator + 16-stage counter, on VDD_TMR (VOUT through R30, D7 clamp) CD4541B, 3-18 V, -55 to 125 degC SOIC-14"
+1727-4789-1-ND,"2N7002BK,215",Nexperia,9,Q5 Q6,PIPWR Q5: hold FET on DRV (Q1 gate network); Q6:,"Q5: hold FET on DRV (Q1 gate network); Q6: ACC status open drain to J5 2N7002BK, 60 V, 350 mA, ESD-protected gate SOT-23"
+296-41978-5-ND,TPS54336ADDA,Texas Instruments,4,U8,PIPWR 5.1 V buck for USB TPS54336A (tube: the DD,"5.1 V buck for USB TPS54336A (tube: the DDAR cut tape has 0 stock) SO PowerPAD-8 (DDA), project hand-solder footprint"
+SRP1038A-150MCT-ND,SRP1038A-150M,Bourns,3,L1,"PIPWR Buck inductor 15 uH +/-20 %, I_sat 10 A, I","Buck inductor 15 uH +/-20 %, I_sat 10 A, I_rms 6.25 A, 45 mOhm max Bourns SRP1038A (10 x 11 mm)"
+SMBJ16ABCT-ND,SMBJ16A,Bourns,9,TVS1 TVS2,PIPWR BATT and ACC TVS SMBJ16A SMB,BATT and ACC TVS SMBJ16A SMB
+1N4148W-E3-08CT-ND,1N4148W-E3-08,Vishay,9,D4 D5,PIPWR D5: ACC_IN -> ACC_S isolation (keeps BATT/,"D5: ACC_IN -> ACC_S isolation (keeps BATT/SW1 off the car's ACC line); D4: SW1 -> ACC_S (keeps ACC off BATT when BATT is dead) 1N4148W, 75 V (100 V repetitive peak) SOD-123"
+BAS116LT1GOSCT-ND,BAS116LT1G,onsemi,7,D6,PIPWR ACC_G -> HOLD_G OR diode (Q1 on before +5V,"ACC_G -> HOLD_G OR diode (Q1 on before +5V1 exists), low leakage BAS116L, 75 V, <= 80 nA at 150 degC SOT-23"
+BZT52C5V1-E3-08CT-ND,BZT52C5V1-E3-08,Vishay,7,D7,PIPWR U5 supply clamp: VDD_TMR -> GND BZT52C5V1 ,"U5 supply clamp: VDD_TMR -> GND BZT52C5V1 zener, 4.85-5.36 V at 5 mA, 300 mW on FR-4 SOD-123"
+404-1321-1-ND,VFR1105W-6C9-TR,Stanley Electric,7,D3,"PIPWR VOUT-on LED (from VOUT), -40 to 100 degC r","VOUT-on LED (from VOUT), -40 to 100 degC red 1206"
+541-5.10KCCT-ND,CRCW08055K10FKEA,Vishay Dale,7,R3,PIPWR LED series (D3 to GND) 5.1 kOhm 1 % 0.125 ,LED series (D3 to GND) 5.1 kOhm 1 % 0.125 W 0805
+541-22.0KCCT-ND,CRCW080522K0FKEA,Vishay Dale,7,R8,PIPWR ACC_G divider top (ACC_S) 22 kOhm 1 % 0.12,ACC_G divider top (ACC_S) 22 kOhm 1 % 0.125 W 0805
+541-27.0KCCT-ND,CRCW080527K0FKEA,Vishay Dale,7,R25,PIPWR ACC_G divider bottom (also the ACC_S pull-,ACC_G divider bottom (also the ACC_S pull-down) 27 kOhm 1 % 0.125 W 0805
+541-100KCCT-ND,CRCW0805100KFKEA,Vishay Dale,7,R26,"PIPWR U5 MR series (clamp current, start-up) 100","U5 MR series (clamp current, start-up) 100 kOhm 1 % 0.125 W 0805"
+541-39.2KCCT-ND,CRCW080539K2FKEA,Vishay Dale,7,R27,PIPWR U5 RTC (oscillator timing) 39.2 kOhm 1 % 0,"U5 RTC (oscillator timing) 39.2 kOhm 1 % 0.125 W, <= 100 ppm/K 0805"
+541-78.7KCCT-ND,CRCW080578K7FKEA,Vishay Dale,7,R28,PIPWR U5 RS (oscillator input) 78.7 kOhm 1 % 0.1,"U5 RS (oscillator input) 78.7 kOhm 1 % 0.125 W, <= 100 ppm/K 0805"
+541-47.0KCCT-ND,CRCW080547K0FKEA,Vishay Dale,7,R29,PIPWR U5 OUT -> HOLD_G 47 kOhm 1 % 0.125 W 0805,U5 OUT -> HOLD_G 47 kOhm 1 % 0.125 W 0805
+541-1.30KFCT-ND,CRCW12061K30FKEA,Vishay Dale,7,R30,PIPWR U5 supply series: VOUT -> VDD_TMR (pulse p,U5 supply series: VOUT -> VDD_TMR (pulse power at the TVS clamp) 1.3 kOhm 1 % 0.25 W 1206
+541-13.7KCCT-ND,CRCW080513K7FKEA,Vishay Dale,7,R17,PIPWR Buck FB divider bottom 13.7 kOhm 1 % 0.125,Buck FB divider bottom 13.7 kOhm 1 % 0.125 W 0805
+541-10.0KCCT-ND,CRCW080510K0FKEA,Vishay Dale,7,R31,PIPWR VDD_TMR bleed to GND (holds U5 unpowered a,VDD_TMR bleed to GND (holds U5 unpowered against Q1 off-state leakage) 10.0 kOhm 1 % 0.125 W 0805
+541-220KCCT-ND,CRCW0805220KFKEA,Vishay Dale,7,R14,PIPWR Q1 gate pull-up (G-S) 220 kOhm 1 % 0.125 W,Q1 gate pull-up (G-S) 220 kOhm 1 % 0.125 W 0805
+541-180KCCT-ND,CRCW0805180KFKEA,Vishay Dale,7,R15,PIPWR Q1 gate to DRV (Q5) 180 kOhm 1 % 0.125 W 0,Q1 gate to DRV (Q5) 180 kOhm 1 % 0.125 W 0805
+541-73.2KCCT-ND,CRCW080573K2FKEA,Vishay Dale,7,R16,PIPWR Buck FB divider top 73.2 kOhm 1 % 0.125 W ,Buck FB divider top 73.2 kOhm 1 % 0.125 W 0805
+541-7.32KCCT-ND,CRCW08057K32FKEA,Vishay Dale,7,R18,PIPWR Buck COMP 7.32 kOhm 1 % 0.125 W 0805,Buck COMP 7.32 kOhm 1 % 0.125 W 0805
+541-1.50KFCT-ND,CRCW12061K50FKEA,Vishay Dale,7,R21,PIPWR J5 series (Q6 drain to the Pi cable: fault,J5 series (Q6 drain to the Pi cable: fault current) 1.5 kOhm 1 % 0.25 W 1206
+490-GCM21B5C2E103FX0ALCT-ND,GCM21B5C2E103FX0AL,Murata Electronics,7,C29,"PIPWR U5 CTC timing capacitor (>= 50 V needed), ","U5 CTC timing capacitor (>= 50 V needed), AEC-Q200 10 nF 250 V C0G +/-1 % 0805"
+399-C0805C104K5RACTUCT-ND,C0805C104K5RACTU,KEMET,11,C17 C18 C30,PIPWR C17: buck VIN high-frequency bypass; C18: ,C17: buck VIN high-frequency bypass; C18: buck BOOT; C30: Q1 gate-source (battery hot-plug) 100 nF 50 V X7R +/-10 % 0805
+399-C0805C103K5RACTUCT-ND,C0805C103K5RACTU,KEMET,7,C19,PIPWR Buck soft start 10 nF 50 V X7R +/-10 % 080,Buck soft start 10 nF 50 V X7R +/-10 % 0805
+399-C0805C153K5RACTUCT-ND,C0805C153K5RACTU,KEMET,7,C20,PIPWR Buck COMP 15 nF 50 V X7R +/-10 % 0805,Buck COMP 15 nF 50 V X7R +/-10 % 0805
+4713-GMC21X7R105K50NTCT-ND,GMC21X7R105K50NT,Cal-Chip Electronics,7,C8,PIPWR U5 decoupling on VDD_TMR 1 uF 50 V X7R +/-,U5 decoupling on VDD_TMR 1 uF 50 V X7R +/-10 % 0805
+4713-GMC31X7R106K50NTCT-ND,GMC31X7R106K50NT,Cal-Chip Electronics,9,C15 C31,PIPWR Buck input 10 uF 50 V X7R +/-10 % 1206,Buck input 10 uF 50 V X7R +/-10 % 1206
+4713-GMC32X7R476K10NTCT-ND,GMC32X7R476K10NT,Cal-Chip Electronics,13,C22 C23 C24 C32,"PIPWR Buck output, 4 x 47 uF: >= 8.7 uF each eff","Buck output, 4 x 47 uF: >= 8.7 uF each effective at 5.07 V for eq 22; the only +5V1 capacitance (no USB bulk) 47 uF 10 V X7R +/-10 % 1210"

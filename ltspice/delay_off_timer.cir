@@ -1,0 +1,274 @@
+* Pi power HAT: delay-off timer, full loop (docs/SPEC.md "Delay-off timer").
+* ACC sense node ACC_S = OR of the J1 ACC terminal (through DACC) and SW1 from BATT (through D4); its dividers are the
+* pull-down. ACC_S drives the comparator divider, the Q4 gate divider (ACC status to the Pi) and D1 into the OR node.
+* ACC_S or 555 Q -> OR diodes D1/D2 -> R2/C2/R1 -> DRV_G -> Q2 pulls the P-FET gate (BATT to VOUT).
+* LED D3 + R3 from VOUT to GND (project lead: lights while VOUT is on; Q3 removed).
+* VOUT -> series R + zener -> logic VCC for the 555 and the comparator.
+* LM397 stand-in: behavioural open-collector comparator (the LTspice LT1017 model sources current from its
+* output, so it is not a valid stand-in). + = VOUT divider, - = ACC divider; output discharges C5 through RDIS.
+* 555 = TLC555-Q1 (CMOS): no LTspice model, so a behavioural one (section "U4" below, SLFS078D 5.5/5.6/6.1).
+* TRIG and THRES on C5 through R22 (limits the input clamp current while C5 sits above the collapsing VCC),
+* RESET on VCC, DIS not connected, R9 from VCC to C5, DCL from C5 to VCC.
+* Run: LTspice.exe -b delay_off_timer.cir  (results: delay_off_timer.log, .meas lines)
+*
+* ACC stimulus (one run): key on, key off; key on, off, on again mid-delay, off; short blip.
+* Steps: battery voltage, component corner, load.
+*   CORNER 1 = short delay: C5 low (tolerance x temperature), R9 low, 555 THRES level at its datasheet minimum,
+*              555 input currents sourced into C5, DCL reverse leakage at its hot datasheet limit (VCC into C5),
+*              N-FET threshold at its cold maximum (weakest gate drive)
+*   CORNER 2 = nominal
+*   CORNER 3 = long delay: C5 high, R9 high, THRES level at its maximum, 555 input currents sunk from C5,
+*              N-FET threshold at its hot minimum
+*   CORNER 4 = stall check: corner 3 plus LM397 output leakage at its datasheet max (sunk from C5)
+*   LOAD 1 = Pi 5 plus buck at full load; LOAD 2 = light load (Pi shut down): slow VOUT collapse
+
+.param VB=12
+.step param VB list 9 12 14.4
+.step param CORNER list 1 2 3 4
+.step param LOAD list 1 2
+
+* ---- timing parts (values chosen in reports/sim_delay_off.md)
+.param R9NOM=1.3e6
+.param R9TOL=0.01
+* C5 = 2 x 10 uF; 6.4 uF effective each over the charge ramp (DC bias, assumption: BOM phase verifies)
+.param C5EFF=12.8u
+.param RDIS=2.2e3
+.param CF_SHORT=0.765
+.param CF_LONG=1.265
+* TLC555-Q1 TRIG and THRES input current, each, full temperature range (SLFS078D 5.5/5.6)
+.param IIN_555_MAX=5n
+.param ILEAK_CMP_MAX=1u
+* BAS116LT1G reverse leakage, max at 150 C (onsemi BAS116LT1/D)
+.param ILEAK_DCL_MAX=80n
+.param CF=if(CORNER==1, CF_SHORT, if(CORNER>=3, CF_LONG, 1))
+.param RF=if(CORNER==1, 1-R9TOL, if(CORNER>=3, 1+R9TOL, 1))
+.param IIN_SRC=if(CORNER==1, 2*IIN_555_MAX, 0)
+.param IIN_SNK=if(CORNER>=3, 2*IIN_555_MAX, 0)
+.param ILEAK_CMP=if(CORNER==4, ILEAK_CMP_MAX, 0)
+.param ILEAK_DCL=if(CORNER==1, ILEAK_DCL_MAX, 0)
+
+* ---- loads on VOUT
+.param RL_FULL=3.3
+.param RL_LIGHT=1e3
+.param RL=if(LOAD==1, RL_FULL, RL_LIGHT)
+* VOUT bulk 100 uF + buck input ceramics (effective) + assumed Pi regulator input capacitance
+.param CBULK=580u
+
+* ---- ACC timing (s)
+.param TEDGE=1m
+.param T_ON1=1
+.param T_OFF1=5
+.param T_ON2=90
+.param T_OFF2=94
+.param T_ON3=100
+.param T_OFF3=102
+.param T_BLIP=190
+.param T_BLIPW=50m
+.param T_STOP=280
+* VOUT must be off for this long before each next ACC edge (residual-voltage windows)
+.param T_OFFCHK=5
+* FORCE=1: ACC stays off; SW1 on from T_ON1 to T_SW_OFF (separate run): SW1 acts like the key
+.param FORCE=0
+.param T_SW_OFF=80
+.param VACC_HI={VB*(1-FORCE)}
+.param VSW_HI={VB*FORCE}
+
+* ---- battery and ACC
+VBAT batt_src 0 {VB}
+RBAT batt_src batt 10m
+VACC acc_src 0 PWL(0 0 {T_ON1} 0 {T_ON1+TEDGE} {VACC_HI} {T_OFF1} {VACC_HI} {T_OFF1+TEDGE} 0
++ {T_ON2} 0 {T_ON2+TEDGE} {VACC_HI} {T_OFF2} {VACC_HI} {T_OFF2+TEDGE} 0
++ {T_ON3} 0 {T_ON3+TEDGE} {VACC_HI} {T_OFF3} {VACC_HI} {T_OFF3+TEDGE} 0
++ {T_BLIP} 0 {T_BLIP+TEDGE} {VACC_HI} {T_BLIP+T_BLIPW} {VACC_HI} {T_BLIP+T_BLIPW+TEDGE} 0)
+RACC acc_src acc 10
+
+* ---- ACC sense node: J1 ACC through DACC, SW1 (from BATT) through D4; dividers RS/R8 and R6/R7 discharge it
+DACC acc accs D1N4148
+VSW sw 0 PWL(0 0 {T_ON1} 0 {T_ON1+TEDGE} {VSW_HI} {T_SW_OFF} {VSW_HI} {T_SW_OFF+TEDGE} 0)
+D4 sw accs D1N4148
+
+* ---- N-FETs Q2-Q4 (2N7002BK stand-in: VGS(th) at the corner, RDS(on) and capacitances near the datasheet typicals)
+* threshold limits read from the datasheet VGS(th)-versus-temperature graph (cold max, hot min)
+.param VTO_N_MAX=2.35
+.param VTO_N_TYP=1.6
+.param VTO_N_MIN=0.75
+.param VTO_N=if(CORNER==1, VTO_N_MAX, if(CORNER>=3, VTO_N_MIN, VTO_N_TYP))
+.model NFET VDMOS(Vto={VTO_N} Kp=0.3 Rd=0.3 Rs=0.2 Cgs=30p Cgdmax=10p Cgdmin=2p Cjo=7p Is=1e-12)
+
+* ---- Q4: ACC status to the Pi (open drain through R21 to J5: low = ACC on); Pi GPIO pull-up to 3.3 V (assumption)
+.param VPI=3.3
+.param RPU_PI=50k
+R6 accs statg 47k
+R7 statg 0 47k
+C3 statg 0 100n
+M4 q4d statg 0 0 NFET
+R21 q4d j5 1k
+RPI j5 pi3v3 {RPU_PI}
+VPI3 pi3v3 0 {VPI}
+
+* ---- OR of ACC_S and 555 Q into DRV_G (Q2 gate); R1 is the gate pull-down
+D1 accs orn D1N4148
+D2 q orn D1N4148
+R2 orn drvg 10k
+C2 drvg 0 1u
+R1 drvg 0 10k
+
+* ---- LED: D3 + R3 from VOUT to GND (project lead)
+D3 vout d3k LEDR
+R3 d3k 0 5.1k
+.model LEDR D(Is=1e-22 N=1.6 Rs=5)
+
+* ---- P-FET high-side switch Q1 (SQD50P04-13L stand-in: VTH, capacitances and RDS(on) near the datasheet typicals)
+* gate network: RGS pull-up to source, RG to the Q2 drain, CGD sets the drain slew (inrush), CGS keeps a battery
+* hot-plug step from coupling the gate on through CGD, DZG clamps VGS
+RGS batt gate 100k
+RG gate q2d 47k
+CGS batt gate 470n
+CGD gate vout 22n
+DZG gate batt DZ12
+M1 vout gate batt batt PFET
+.model PFET VDMOS(pchan Vto=-2.0 Kp=40 Rd=4m Rs=2m Rb=5m Cgdmax=2.2n Cgdmin=0.35n Cgs=2.5n Cjo=1n Is=1e-12)
+M2 q2d drvg 0 0 NFET
+
+* ---- loads
+RLOAD vout 0 {RL}
+CBULK vout 0 {CBULK}
+
+* ---- logic VCC clamp: series R (R13) + 13 V zener (DZ1), decoupling (C7 bulk, C8/C9 at U3/U4)
+RCL vout vcc 220
+DZ1 0 vcc DZ13
+CVCC vcc 0 1u
+CDEC vcc 0 200n
+* supply current of the TLC555-Q1 plus the LM397 near their datasheet maxima
+RQ vcc 0 5.1k
+
+* ---- comparator (LM397 stand-in), supplied from logic VCC; R4 68k: trip at ACC_S < 0.70 x VOUT (staff review)
+* open collector: sinks when IN- > IN+ and VCC is above the comparator's minimum supply, else off
+.param VS_CMP_MIN=2
+.param RON_CMP=45
+R4 vout cp 68k
+R5 cp 0 47k
+RS accs cm 33k
+R8 cm 0 47k
+BCTL ctl 0 V=if(V(vcc) > VS_CMP_MIN, V(cm)-V(cp), -1)
+SU3 cmpo 0 ctl 0 SWCMP
+.model SWCMP SW(Vt=0 Vh=2m Ron={RON_CMP} Roff=1e12)
+RDISCH cmpo c5 {RDIS}
+* output leakage while off (corner 4 only)
+BLEAK cmpo 0 I={ILEAK_CMP}*(1+tanh(V(cmpo)/VSMOOTH))*0.5
+
+* ---- U4: TLC555-Q1 behavioural model (TRIG and THRES both on C5, RESET on VCC, DIS not connected)
+* THRES level: datasheet limits at the 5 V and 15 V rows (full temperature range), linear in VDD between them,
+* constant ratio outside; corner 1 = minimum, corner 3/4 = maximum, corner 2 = CONT nominal (2/3 VDD).
+* TRIG level 1/3 VDD (C5 sits near 0 V while U3 is on, far below the datasheet trigger minimum).
+* Priority (SLFS078D 6.1): RESET overrides TRIG, TRIG overrides THRES. RESET is on VCC: modelled as reset below
+* the recommended minimum supply. Output: VDD x state through ROH (VOH at its datasheet minimum, 1 mA).
+.param VTH_LO=5
+.param VTH_HI=15
+.param VTH_LO_MIN=2.7
+.param VTH_LO_MAX=3.9
+.param VTH_HI_MIN=9.35
+.param VTH_HI_MAX=10.65
+.param VTH_A=if(CORNER==1, VTH_LO_MIN, if(CORNER>=3, VTH_LO_MAX, VTH_LO*2/3))
+.param VTH_B=if(CORNER==1, VTH_HI_MIN, if(CORNER>=3, VTH_HI_MAX, VTH_HI*2/3))
+.param VDD_MIN_555=2
+.param ROH=900
+.param RLATCH=1k
+.param CLATCH=1n
+BVTH vth 0 V=V(vcc)*(VTH_A+(VTH_B-VTH_A)*(limit(V(vcc),VTH_LO,VTH_HI)-VTH_LO)/(VTH_HI-VTH_LO))/limit(V(vcc),VTH_LO,VTH_HI)
+BSET sx 0 V=if(V(vcc)<VDD_MIN_555, 0, if(V(u4in)<V(vcc)/3, 1, if(V(u4in)>V(vth), 0, if(V(s)>0.5, 1, 0))))
+RLAT sx s {RLATCH}
+CLAT s 0 {CLATCH}
+BOUT qi 0 V=V(s)*V(vcc)
+ROUT qi q {ROH}
+C4 cv 0 10n
+RCV cv vcc 1e12
+* options (1 = on): CLAMP = DCL, diode from C5 to VCC (SPEC 3, on by default); DIS_TIED wires a DIS switch to C5
+* (the old schematic: DIS on while the output is low)
+.param CLAMP=1
+.param DIS_TIED=0
+.param R_OPEN=1e12
+.param R_SHORT=1
+.param RDIS_ON=20
+BDIS c5 0 I=if(DIS_TIED, (1-V(s))*V(c5)/RDIS_ON, 0)
+DCL c5 clamp_k DBAS116
+RCLMP clamp_k vcc {if(CLAMP, R_SHORT, R_OPEN)}
+R9 vcc c5 {R9NOM*RF}
+C5 c5 0 {C5EFF*CF}
+* datasheet input currents on C5 (corner-dependent), only while the 555 is powered
+.param VSMOOTH=50m
+.param VCC_ON=2
+BIN1 0 u4in I=IIN_SRC*0.5*(1+tanh((V(vcc)-VCC_ON)/VSMOOTH))
+BIN2 u4in 0 I=IIN_SNK*0.5*(1+tanh((V(vcc)-VCC_ON)/VSMOOTH))
+* R22: C5 to the TRIG/THRES pins; DESD = the 555 input clamp to VDD (generic, assumption: not in SLFS078D)
+.param R22=10k
+R22 c5 u4in {R22}
+DESD u4in vcc DESD
+* DCL reverse leakage (corner 1): VCC into C5 while C5 is below VCC
+BDCLK vcc c5 I=ILEAK_DCL*0.5*(1+tanh((V(vcc)-V(c5))/VSMOOTH))
+
+* BAS116LT1G: fitted to the BAS116LT1/D VF maxima (1 mA, 10 mA, 150 mA); leakage is BDCLK
+.model DBAS116 D(Is=1e-12 N=1.68 Rs=0.88 Cjo=2p BV=75 Ibv=100n)
+.model DESD D(Is=1e-14 N=1 Cjo=1p)
+.model D1N4148 D(Is=2.52n Rs=0.568 N=1.752 Cjo=4p M=0.4 tt=20n BV=100 Ibv=0.1u)
+.model DZ13 D(Is=1e-14 Rs=7 BV=13 Ibv=5m)
+.model DZ12 D(Is=1e-14 Rs=5 BV=12 Ibv=5m)
+
+* Gear integration: the default trapezoidal method rings on the high-impedance J5 node (drain capacitance)
+.options method=gear
+.tran 0 {T_STOP} 0 5m uic
+
+* ---- measurements: delay = ACC falling edge to VOUT falling through half of VB
+.meas TRAN delay_keyoff TRIG V(acc) VAL={VB/2} FALL=1 TARG V(vout) VAL={VB/2} FALL=1
+.meas TRAN delay_restart TRIG V(acc) VAL={VB/2} FALL=3 TARG V(vout) VAL={VB/2} FALL=2
+.meas TRAN delay_blip TRIG V(acc) VAL={VB/2} FALL=4 TARG V(vout) VAL={VB/2} FALL=3
+* restart: VOUT must stay on from the second key-on to the final key-off
+.param T_SETTLE=0.5
+.param VQ_HI=2
+.meas TRAN vmin_restart MIN V(vout) FROM {T_ON2+T_SETTLE} TO {T_OFF3}
+* chatter / re-latch: exactly three VOUT turn-ons and three DRV_G turn-ons are expected (a battery hot-plug
+* turn-on at t = 0 would show up as a VOUT rise before T_ON1: hotplug_vmax). DRV_G counted at the lowest N-FET
+* threshold (most sensitive)
+.meas TRAN vout_rise4 FIND time WHEN V(vout)={VB/2} RISE=4
+.meas TRAN drv_rise4 FIND time WHEN V(drvg)={VTO_N_MIN} RISE=4
+.meas TRAN q_rise4 FIND time WHEN V(q)={VQ_HI} RISE=4
+* residual VOUT before each next ACC edge (also catches a timer that never times out)
+.meas TRAN vmax_off1 MAX V(vout) FROM {T_ON2-T_OFFCHK} TO {T_ON2-TEDGE}
+.meas TRAN vmax_off2 MAX V(vout) FROM {T_BLIP-T_OFFCHK} TO {T_BLIP-TEDGE}
+.meas TRAN vmax_off3 MAX V(vout) FROM {T_STOP-T_OFFCHK} TO {T_STOP}
+* battery hot-plug at t = 0 (all capacitors start empty): VOUT and DRV_G must stay off before the first key-on
+.meas TRAN hotplug_vmax MAX V(vout) FROM 0 TO {T_ON1}
+.meas TRAN hotplug_drv MAX V(drvg) FROM 0 TO {T_ON1}
+* inrush at key-on: peak current into the VOUT capacitance, VOUT 10-90 % rise time
+.meas TRAN inrush_pk MAX I(CBULK) FROM {T_ON1} TO {T_ON1+T_SETTLE}
+.meas TRAN vout_tr TRIG V(vout) VAL={0.1*VB} RISE=1 TARG V(vout) VAL={0.9*VB} RISE=1
+* gate drive of Q2: from ACC (key on) and from the 555 alone (inside the delay, before the earliest time-out)
+.param T_QWIN=9
+.meas TRAN drv_min_acc MIN V(drvg) FROM {T_ON1+T_SETTLE} TO {T_OFF1}
+.meas TRAN drv_min_q MIN V(drvg) FROM {T_OFF1+T_SETTLE} TO {T_OFF1+T_QWIN}
+.meas TRAN q2d_max_q MAX V(q2d) FROM {T_OFF1+T_SETTLE} TO {T_OFF1+T_QWIN}
+.meas TRAN q_hi FIND V(q) AT {T_OFF1+T_SETTLE}
+.meas TRAN led_on FIND I(D3) AT {T_OFF1-T_SETTLE}
+* Q4 status: gate and J5 level while ACC is on; J5 released in the off windows
+.meas TRAN statg_min_on MIN V(statg) FROM {T_ON1+T_SETTLE} TO {T_OFF1}
+.meas TRAN j5_max_on MAX V(j5) FROM {T_ON1+T_SETTLE} TO {T_OFF1}
+.meas TRAN j5_min_off MIN V(j5) FROM {T_OFF1+T_SETTLE} TO {T_ON2}
+* logic VCC while on (key on, before the first key-off)
+.meas TRAN vcc_on FIND V(vcc) AT {T_OFF1-T_SETTLE}
+* SW1 run (FORCE=1): delay after SW1 opens, Q and status while SW1 is on
+.meas TRAN delay_sw_off TRIG V(sw) VAL={VB/2} FALL=1 TARG V(vout) VAL={VB/2} FALL=1
+.meas TRAN q_fall_sw FIND time WHEN V(q)={VQ_HI} FALL=1
+.meas TRAN j5_max_sw MAX V(j5) FROM {T_ON1+T_SETTLE} TO {T_SW_OFF}
+* J5 starts empty at t = 0 (uic) and rises once before the first ACC or SW1 edge: the release is the second rise
+.meas TRAN j5_rise_sw TRIG V(sw) VAL={VB/2} FALL=1 TARG V(j5) VAL={VPI/2} RISE=2
+.meas TRAN vmin_sw MIN V(vout) FROM {T_ON1+T_SETTLE} TO {T_SW_OFF}
+* C5 above VCC during the collapse (555 abs max: inputs <= VDD)
+.meas TRAN c5_over_vcc MAX V(c5)-V(vcc) FROM {T_ON2-T_OFFCHK} TO {T_ON2-TEDGE}
+* worst C5 excess over VCC across the whole first collapse
+.meas TRAN c5_over_vcc_any MAX V(c5)-V(vcc) FROM {T_OFF1+1} TO {T_ON2-TEDGE}
+* 555 TRIG/THRES pins above VDD (abs max: inputs <= VDD) and the current into their clamp, whole first collapse
+.meas TRAN u4in_over_vcc MAX V(u4in)-V(vcc) FROM {T_OFF1+1} TO {T_ON2-TEDGE}
+.meas TRAN i_u4in_clamp MAX I(DESD) FROM {T_OFF1+1} TO {T_ON2-TEDGE}
+.meas TRAN i_dcl_max MAX I(DCL) FROM {T_OFF1+1} TO {T_ON2-TEDGE}
+.backanno
+.end

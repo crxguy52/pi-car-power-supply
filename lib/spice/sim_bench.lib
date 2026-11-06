@@ -1,0 +1,75 @@
+* Pi power HAT: sim-only test bench blocks for simulation.kicad_sch (KiCad 10 simulator / ngspice).
+* Not board parts: the symbols using them are excluded from the board and the BOM (tools/post_sch/12_kicad_sim.py).
+* Values follow the LTspice deck ltspice/delay_off_counter.cir (assumptions stated there and in reports/sim_kicad.md).
+* Node names are case-insensitive in ngspice: internal nodes must not repeat a pin name.
+* Every timing / level is a global .param defined on simulation.kicad_sch; tools/run_sim.py overrides them per scenario.
+
+* ---- battery + harness: 0 V until T_PLUG, then VB (hot-plug, all capacitors empty); harness R + L
+.subckt SIM_BATT BATT GND
+VBAT bsrc GND PWL(0 0 {T_PLUG} 0 {T_PLUG+1u} {VB})
+RH bsrc bh {RHARN}
+LH bh BATT {LHARN}
+.ends SIM_BATT
+
+* ---- key switch (ACC): two key-on windows, ACC_V high (0 = key never on); edges TEDGE; wire resistance
+.subckt SIM_ACC ACC GND
+VACC asrc GND PWL(0 0 {T_ON1} 0 {T_ON1+TEDGE} {ACC_V} {T_OFF1} {ACC_V} {T_OFF1+TEDGE} 0
++ {T_ON2} 0 {T_ON2+TEDGE} {ACC_V} {T_OFF2} {ACC_V} {T_OFF2+TEDGE} 0)
+RACC asrc ACC 0.1
+.ends SIM_ACC
+
+* ---- SW1 stand-in (SW1 is excluded from the sim): BATT -> SW1_C closed from T_SW_ON to T_SW_OFF when SW_EN = 1
+.subckt SIM_SW1 BATT SWC
+VSWC swctl 0 PWL(0 0 {T_SW_ON} 0 {T_SW_ON+TEDGE} {SW_EN} {T_SW_OFF} {SW_EN} {T_SW_OFF+TEDGE} 0)
+SSW BATT SWC swctl 0 SWK_SIM
+.model SWK_SIM SW(Vt=0.5 Vh=0 Ron=50m Roff=1e12)
+.ends SIM_SW1
+
+* ---- Pi 5 12 V regulator on VOUT (J4 is excluded): input capacitance with ESR, constant-power load with an
+* undervoltage cut-off. P_RUN until T_PIOFF (the Pi shuts down T_PISD after the last key-off), then P_AFTER.
+.subckt SIM_PI_LOAD VOUT GND
+CVO VOUT cvo {CVOUT}
+RCVO cvo GND 20m
+VPW pw GND PWL(0 {P_RUN} {T_PIOFF} {P_RUN} {T_PIOFF+TEDGE} {P_AFTER})
+BLOAD VOUT GND I=V(pw,GND)/max(V(VOUT,GND),{VUV})*0.5*(1+tanh((V(VOUT,GND)-{VUV})/0.2))
+.ends SIM_PI_LOAD
+
+* ---- Pi GPIO on J5 pin 2 (ACC_N): the Pi's pull-up to its 3.3 V rail
+.subckt SIM_PI_GPIO ACC_N GND
+VPI pi3v3 GND {VPI}
+RPI ACC_N pi3v3 {RPI}
+.ends SIM_PI_GPIO
+
+* ---- U8 TPS54336A stand-in (U8 and the buck passives are excluded): VIN = VOUT, OUT = +5V1.
+* Enable with the VIN UVLO hysteresis, linear soft start, output = min(set point x ramp, VIN - drop), source only,
+* current limit ILIM, FB divider, output capacitance, USB load I_USB; CIN_U8 = C15 + C17 on VIN (effective value).
+* OVL = 1: an overload R_OVL on +5V1 from T_OVL, with the hiccup pattern (off T_HOFF, retry). Input power = output
+* power / ETA drawn from VIN.
+.subckt SIM_U8 VIN OUT GND
+VONE one GND 1
+CIN VIN GND {CIN_U8}
+SEN one en VIN GND SWUV_SIM
+REN en GND 1k
+.model SWUV_SIM SW(Vt={(UV_ON+UV_OFF)/2} Vh={(UV_ON-UV_OFF)/2} Ron=1 Roff=1e12)
+* hiccup pattern (0 = running) and the overload switch
+VHIC hic GND PULSE(0 {OVL} {T_OVL+T_HWAIT} 10u 10u {T_HOFF} {T_HOFF+T_SS+T_HWAIT})
+VOVL ovlc GND PWL(0 0 {T_OVL} 0 {T_OVL+1u} {OVL})
+* soft start
+CSS ss GND 1
+RSSL ss GND 1e12
+BSS GND ss I=(V(en,GND)*(1-V(hic,GND)) > 0.5) ? ((V(ss,GND) < 1) ? {1/T_SS} : 0) : -V(ss,GND)*1e4
+* set point x ramp, limited to VIN - 0.3 V (dropout) by a smooth minimum (a hard min() stalled the solver at key-on)
+B5 b5 GND V=0.5*({V5SET}*V(ss,GND) + V(VIN,GND) - 0.3 - sqrt(({V5SET}*V(ss,GND) - V(VIN,GND) + 0.3)**2 + 1e-4))
+D5V b5 n5x DID_SIM
+.model DID_SIM D(Is=1e-12 N=0.05 Rs=1m)
+C5X n5x GND 1n
+* output path: current limit (smooth)
+BL5 n5x OUT I={ILIM}*tanh(max(V(n5x,GND)-V(OUT,GND), 0)/(20m*{ILIM}))
+BIN VIN GND I=V(OUT,GND)*{ILIM}*tanh(max(V(n5x,GND)-V(OUT,GND), 0)/(20m*{ILIM}))/({ETA}*max(V(VIN,GND), 1))
+SOVL OUT novl ovlc GND SWOVL_SIM
+.model SWOVL_SIM SW(Vt=0.5 Vh=0 Ron=50m Roff=1e12)
+ROVL novl GND {R_OVL}
+C5V1 OUT GND {C5V1}
+RFB OUT GND {RFB}
+RUSB OUT GND {V5SET/max(I_USB, 1n)}
+.ends SIM_U8

@@ -1,0 +1,2062 @@
+{
+ "source": "C:\\git-personal\\pi-car-power-supply - Copy\\pi_power_board.kicad_pcb",
+ "date": "2026-11-05",
+ "footprints": {
+  "R27": {
+   "pos": [
+    131500000,
+    89600000
+   ],
+   "angle": 180.0,
+   "flipped": false,
+   "fpid": "Resistor_SMD:R_0805_2012Metric_Pad1.20x1.40mm_HandSolder",
+   "path": "/bf4e889c-fe94-5c2b-ab94-e7ed486c764d",
+   "nets": [
+    [
+     "1",
+     "/U5_RTC"
+    ],
+    [
+     "2",
+     "/U5_TJ"
+    ]
+   ],
+   "ref": {
+    "pos": [
+     128305000,
+     89600000
+    ],
+    "angle": 90.0,
+    "layer": "F.Silkscreen",
+    "visible": true
+   },
+   "value": {
+    "pos": [
+     131500000,
+     87950000
+    ],
+    "angle": 180.0,
+    "layer": "F.Fab",
+    "visible": true
+   }
+  },
+  "D7": {
+   "pos": [
+    147600000,
+    91000000
+   ],
+   "angle": -90.0,
+   "flipped": false,
+   "fpid": "Diode_SMD:D_SOD-123",
+   "path": "/dbc2427c-ce64-5a1b-b173-9b5a9de80276",
+   "nets": [
+    [
+     "1",
+     "/VDD_TMR"
+    ],
+    [
+     "2",
+     "GND"
+    ]
+   ],
+   "ref": {
+    "pos": [
+     150094999,
+     91000000
+    ],
+    "angle": 90.0,
+    "layer": "F.Silkscreen",
+    "visible": true
+   },
+   "value": {
+    "pos": [
+     145500000,
+     91000000
+    ],
+    "angle": 270.0,
+    "layer": "F.Fab",
+    "visible": true
+   }
+  },
+  "TVS1": {
+   "pos": [
+    171300000,
+    89550000
+   ],
+   "angle": -90.0,
+   "flipped": false,
+   "fpid": "Diode_SMD:D_SMB_Handsoldering",
+   "path": "/5852cb68-e174-5507-9e05-5f3aa31689f6",
+   "nets": [
+    [
+     "1",
+     "/BATT"
+    ],
+    [
+     "2",
+     "GND"
+    ]
+   ],
+   "ref": {
+    "pos": [
+     171300000,
+     89550000
+    ],
+    "angle": 0.0,
+    "layer": "F.Fab",
+    "visible": true
+   },
+   "value": {
+    "pos": [
+     168300000,
+     89550000
+    ],
+    "angle": 270.0,
+    "layer": "F.Fab",
+    "visible": true
+   }
+  },
+  "R16": {
+   "pos": [
+    153613000,
+    75152000
+   ],
+   "angle": -90.0,
+   "flipped": false,
+   "fpid": "Resistor_SMD:R_0805_2012Metric_Pad1.20x1.40mm_HandSolder",
+   "path": "/f25913c9-d309-58f3-9d0b-59af54f7b77b",
+   "nets": [
+    [
+     "1",
+     "/+5V1"
+    ],
+    [
+     "2",
+     "/U8_FB"
+    ]
+   ],
+   "ref": {
+    "pos": [
+     153613000,
+     71957001
+    ],
+    "angle": 0.0,
+    "layer": "F.Silkscreen",
+    "visible": true
+   },
+   "value": {
+    "pos": [
+     151963000,
+     75152000
+    ],
+    "angle": 90.0,
+    "layer": "F.Fab",
+    "visible": true
+   }
+  },
+  "C20": {
+   "pos": [
+    149019000,
+    80545000
+   ],
+   "angle": 90.0,
+   "flipped": false,
+   "fpid": "Capacitor_SMD:C_0805_2012Metric_Pad1.18x1.45mm_HandSolder",
+   "path": "/997040de-2c58-5f1f-aede-d34d86f5e614",
+   "nets": [
+    [
+     "1",
+     "/U8_CRC"
+    ],
+    [
+     "2",
+     "GND"
+    ]
+   ],
+   "ref": {
+    "pos": [
+     146694000,
+     80545000
+    ],
+    "angle": 90.0,
+    "layer": "F.Silkscreen",
+    "visible": true
+   },
+   "value": {
+    "pos": [
+     150699000,
+     80545000
+    ],
+    "angle": 90.0,
+    "layer": "F.Fab",
+    "visible": true
+   }
+  },
+  "Q5": {
+   "pos": [
+    153670000,
+    94361000
+   ],
+   "angle": 90.0,
+   "flipped": false,
+   "fpid": "Package_TO_SOT_SMD:SOT-23_Handsoldering",
+   "path": "/e1bd47a3-437e-58b4-8754-4806adddd9a9",
+   "nets": [
+    [
+     "1",
+     "/HOLD_G"
+    ],
+    [
+     "2",
+     "GND"
+    ],
+    [
+     "3",
+     "/DRV"
+    ]
+   ],
+   "ref": {
+    "pos": [
+     153670000,
+     90316001
+    ],
+    "angle": 0.0,
+    "layer": "F.Silkscreen",
+    "visible": true
+   },
+   "value": {
+    "pos": [
+     156170000,
+     94361000
+    ],
+    "angle": 90.0,
+    "layer": "F.Fab",
+    "visible": true
+   }
+  },
+  "SW1": {
+   "pos": [
+    137668000,
+    103124000
+   ],
+   "angle": 90.0,
+   "flipped": false,
+   "fpid": "Button_Switch_SMD:Nidec_Copal_CAS-120A",
+   "path": "/21e5d0e0-1b63-40e3-be1c-590e1f32f4dc",
+   "nets": [
+    [
+     "1",
+     "/SW1_C"
+    ],
+    [
+     "2",
+     "/BATT"
+    ],
+    [
+     "3",
+     "unconnected-(SW1-A-Pad3)"
+    ]
+   ],
+   "ref": {
+    "pos": [
+     133373000,
+     103124000
+    ],
+    "angle": 90.0,
+    "layer": "F.Silkscreen",
+    "visible": true
+   },
+   "value": {
+    "pos": [
+     141368000,
+     103124000
+    ],
+    "angle": 90.0,
+    "layer": "F.Fab",
+    "visible": true
+   }
+  },
+  "J1": {
+   "pos": [
+    179406500,
+    95250000
+   ],
+   "angle": 90.0,
+   "flipped": false,
+   "fpid": "TerminalBlock_Phoenix:TerminalBlock_Phoenix_MKDS-1-3-3.81_1x03_P3.81mm_Horizontal",
+   "path": "/e69445bc-6ede-4f31-b440-b65798b110cf",
+   "nets": [
+    [
+     "1",
+     "GND"
+    ],
+    [
+     "2",
+     "/ACC_IN"
+    ],
+    [
+     "3",
+     "/BATT"
+    ]
+   ],
+   "ref": {
+    "pos": [
+     173861500,
+     97694999
+    ],
+    "angle": 90.0,
+    "layer": "F.Silkscreen",
+    "visible": true
+   },
+   "value": {
+    "pos": [
+     184126500,
+     91440000
+    ],
+    "angle": 90.0,
+    "layer": "F.Fab",
+    "visible": true
+   }
+  },
+  "MH4": {
+   "pos": [
+    188548000,
+    110800000
+   ],
+   "angle": 0.0,
+   "flipped": false,
+   "fpid": "MountingHole:MountingHole_2.7mm_M2.5",
+   "path": "",
+   "nets": [
+    [
+     "",
+     ""
+    ]
+   ],
+   "ref": {
+    "pos": [
+     188548000,
+     106800000
+    ],
+    "angle": 0.0,
+    "layer": "F.Fab",
+    "visible": false
+   },
+   "value": {
+    "pos": [
+     188548000,
+     114500000
+    ],
+    "angle": 0.0,
+    "layer": "F.Fab",
+    "visible": false
+   }
+  },
+  "C22": {
+   "pos": [
+    161819000,
+    69295000
+   ],
+   "angle": 90.0,
+   "flipped": false,
+   "fpid": "Capacitor_SMD:C_1210_3225Metric_Pad1.33x2.70mm_HandSolder",
+   "path": "/4476d332-a2d9-5976-a674-361217bc633a",
+   "nets": [
+    [
+     "1",
+     "/+5V1"
+    ],
+    [
+     "2",
+     "GND"
+    ]
+   ],
+   "ref": {
+    "pos": [
+     161819000,
+     69295000
+    ],
+    "angle": 0.0,
+    "layer": "F.Fab",
+    "visible": true
+   },
+   "value": {
+    "pos": [
+     164119000,
+     69295000
+    ],
+    "angle": 90.0,
+    "layer": "F.Fab",
+    "visible": true
+   }
+  },
+  "U8": {
+   "pos": [
+    148919000,
+    69795000
+   ],
+   "angle": 180.0,
+   "flipped": false,
+   "fpid": "pipwr:TI_DDA_PowerPAD-8_HandSolder",
+   "path": "/2e3d29e9-e0df-4176-9077-fdcf0482c409",
+   "nets": [
+    [
+     "1",
+     "/U8_BOOT"
+    ],
+    [
+     "2",
+     "/VOUT"
+    ],
+    [
+     "3",
+     "/U8_PH"
+    ],
+    [
+     "4",
+     "GND"
+    ],
+    [
+     "5",
+     "/U8_FB"
+    ],
+    [
+     "6",
+     "/U8_COMP"
+    ],
+    [
+     "7",
+     "unconnected-(U8-EN-Pad7)"
+    ],
+    [
+     "8",
+     "/U8_SS"
+    ],
+    [
+     "9",
+     "GND"
+    ],
+    [
+     "9",
+     "GND"
+    ],
+    [
+     "9",
+     "GND"
+    ],
+    [
+     "9",
+     "GND"
+    ],
+    [
+     "9",
+     "GND"
+    ],
+    [
+     "9",
+     "GND"
+    ],
+    [
+     "9",
+     "GND"
+    ],
+    [
+     "9",
+     "GND"
+    ],
+    [
+     "9",
+     "GND"
+    ],
+    [
+     "9",
+     "GND"
+    ],
+    [
+     "9",
+     "GND"
+    ],
+    [
+     "9",
+     "GND"
+    ],
+    [
+     "9",
+     "GND"
+    ],
+    [
+     "9",
+     "GND"
+    ]
+   ],
+   "ref": {
+    "pos": [
+     148919000,
+     69795000
+    ],
+    "angle": 0.0,
+    "layer": "F.Fab",
+    "visible": true
+   },
+   "value": {
+    "pos": [
+     148919000,
+     66295000
+    ],
+    "angle": 180.0,
+    "layer": "F.Fab",
+    "visible": true
+   }
+  },
+  "R14": {
+   "pos": [
+    163068000,
+    89916000
+   ],
+   "angle": 0.0,
+   "flipped": false,
+   "fpid": "Resistor_SMD:R_0805_2012Metric_Pad1.20x1.40mm_HandSolder",
+   "path": "/7ddf3975-879a-59f9-b06a-98401bbdd2ca",
+   "nets": [
+    [
+     "1",
+     "/BATT"
+    ],
+    [
+     "2",
+     "/Q1_G"
+    ]
+   ],
+   "ref": {
+    "pos": [
+     163068000,
+     87621001
+    ],
+    "angle": 0.0,
+    "layer": "F.Silkscreen",
+    "visible": true
+   },
+   "value": {
+    "pos": [
+     163068000,
+     91566000
+    ],
+    "angle": 0.0,
+    "layer": "F.Fab",
+    "visible": true
+   }
+  },
+  "Q1": {
+   "pos": [
+    163576000,
+    101219000
+   ],
+   "angle": -90.0,
+   "flipped": false,
+   "fpid": "Package_TO_SOT_SMD:TO-252-2",
+   "path": "/0a69a11c-093e-5a94-94ac-d17f626507fc",
+   "nets": [
+    [
+     "",
+     ""
+    ],
+    [
+     "",
+     ""
+    ],
+    [
+     "",
+     ""
+    ],
+    [
+     "",
+     ""
+    ],
+    [
+     "1",
+     "/Q1_G"
+    ],
+    [
+     "2",
+     "/VOUT"
+    ],
+    [
+     "3",
+     "/BATT"
+    ]
+   ],
+   "ref": {
+    "pos": [
+     158731000,
+     100379001
+    ],
+    "angle": 90.0,
+    "layer": "F.Silkscreen",
+    "visible": true
+   },
+   "value": {
+    "pos": [
+     159076000,
+     101219000
+    ],
+    "angle": 270.0,
+    "layer": "F.Fab",
+    "visible": true
+   }
+  },
+  "C24": {
+   "pos": [
+    169919000,
+    69295000
+   ],
+   "angle": 90.0,
+   "flipped": false,
+   "fpid": "Capacitor_SMD:C_1210_3225Metric_Pad1.33x2.70mm_HandSolder",
+   "path": "/99250a19-d506-57a8-b16c-1c91392b98d1",
+   "nets": [
+    [
+     "1",
+     "/+5V1"
+    ],
+    [
+     "2",
+     "GND"
+    ]
+   ],
+   "ref": {
+    "pos": [
+     169919000,
+     69295000
+    ],
+    "angle": 0.0,
+    "layer": "F.Fab",
+    "visible": true
+   },
+   "value": {
+    "pos": [
+     172219000,
+     69295000
+    ],
+    "angle": 90.0,
+    "layer": "F.Fab",
+    "visible": true
+   }
+  },
+  "L1": {
+   "pos": [
+    164719000,
+    78105000
+   ],
+   "angle": 0.0,
+   "flipped": false,
+   "fpid": "pipwr:L_Bourns_SRP1038A",
+   "path": "/ca253561-619d-5305-887c-9fbeefe52d42",
+   "nets": [
+    [
+     "1",
+     "/U8_PH"
+    ],
+    [
+     "2",
+     "/+5V1"
+    ]
+   ],
+   "ref": {
+    "pos": [
+     164719000,
+     84150000
+    ],
+    "angle": 0.0,
+    "layer": "F.Silkscreen",
+    "visible": true
+   },
+   "value": {
+    "pos": [
+     164719000,
+     84405000
+    ],
+    "angle": 0.0,
+    "layer": "F.Fab",
+    "visible": true
+   }
+  },
+  "R30": {
+   "pos": [
+    150495000,
+    90932000
+   ],
+   "angle": -90.0,
+   "flipped": false,
+   "fpid": "Resistor_SMD:R_1206_3216Metric_Pad1.30x1.75mm_HandSolder",
+   "path": "/8c3ba9df-8ee6-5aa1-83c6-74e185894297",
+   "nets": [
+    [
+     "1",
+     "/VOUT"
+    ],
+    [
+     "2",
+     "/VDD_TMR"
+    ]
+   ],
+   "ref": {
+    "pos": [
+     150495000,
+     90932000
+    ],
+    "angle": 90.0,
+    "layer": "F.Fab",
+    "visible": true
+   },
+   "value": {
+    "pos": [
+     148665000,
+     90932000
+    ],
+    "angle": 90.0,
+    "layer": "F.Fab",
+    "visible": true
+   }
+  },
+  "U5": {
+   "pos": [
+    138500000,
+    94500000
+   ],
+   "angle": 0.0,
+   "flipped": false,
+   "fpid": "Package_SO:SOIC-14_3.9x8.7mm_P1.27mm",
+   "path": "/0c4d0c65-ae6b-567b-a944-b5b4fa2b999f",
+   "nets": [
+    [
+     "1",
+     "/U5_RTC"
+    ],
+    [
+     "10",
+     "GND"
+    ],
+    [
+     "11",
+     "unconnected-(U5-NC-Pad11)"
+    ],
+    [
+     "12",
+     "/VDD_TMR"
+    ],
+    [
+     "13",
+     "/VDD_TMR"
+    ],
+    [
+     "14",
+     "/VDD_TMR"
+    ],
+    [
+     "2",
+     "/U5_CTC"
+    ],
+    [
+     "3",
+     "/U5_RS"
+    ],
+    [
+     "4",
+     "unconnected-(U5-NC-Pad4)"
+    ],
+    [
+     "5",
+     "GND"
+    ],
+    [
+     "6",
+     "/U5_MR"
+    ],
+    [
+     "7",
+     "GND"
+    ],
+    [
+     "8",
+     "/U5_OUT"
+    ],
+    [
+     "9",
+     "/VDD_TMR"
+    ]
+   ],
+   "ref": {
+    "pos": [
+     138500000,
+     88575000
+    ],
+    "angle": 0.0,
+    "layer": "F.Silkscreen",
+    "visible": true
+   },
+   "value": {
+    "pos": [
+     138500000,
+     99780000
+    ],
+    "angle": 0.0,
+    "layer": "F.Fab",
+    "visible": true
+   }
+  },
+  "R25": {
+   "pos": [
+    131572000,
+    101854000
+   ],
+   "angle": 0.0,
+   "flipped": false,
+   "fpid": "Resistor_SMD:R_0805_2012Metric_Pad1.20x1.40mm_HandSolder",
+   "path": "/9a306f63-3063-52d4-8dce-48b1f75feee9",
+   "nets": [
+    [
+     "1",
+     "/ACC_G"
+    ],
+    [
+     "2",
+     "GND"
+    ]
+   ],
+   "ref": {
+    "pos": [
+     128377001,
+     101854000
+    ],
+    "angle": 90.0,
+    "layer": "F.Silkscreen",
+    "visible": true
+   },
+   "value": {
+    "pos": [
+     131572000,
+     103504000
+    ],
+    "angle": 0.0,
+    "layer": "F.Fab",
+    "visible": true
+   }
+  },
+  "C30": {
+   "pos": [
+    163068000,
+    92837000
+   ],
+   "angle": 0.0,
+   "flipped": false,
+   "fpid": "Capacitor_SMD:C_0805_2012Metric_Pad1.18x1.45mm_HandSolder",
+   "path": "/02f1c0e8-8c54-5dbd-8fcd-2c9371698d36",
+   "nets": [
+    [
+     "1",
+     "/BATT"
+    ],
+    [
+     "2",
+     "/Q1_G"
+    ]
+   ],
+   "ref": {
+    "pos": [
+     159843001,
+     92837000
+    ],
+    "angle": 90.0,
+    "layer": "F.Silkscreen",
+    "visible": true
+   },
+   "value": {
+    "pos": [
+     163068000,
+     94517000
+    ],
+    "angle": 0.0,
+    "layer": "F.Fab",
+    "visible": true
+   }
+  },
+  "R8": {
+   "pos": [
+    152273000,
+    100330000
+   ],
+   "angle": -90.0,
+   "flipped": false,
+   "fpid": "Resistor_SMD:R_0805_2012Metric_Pad1.20x1.40mm_HandSolder",
+   "path": "/b3c7759c-dacf-418a-aac6-084e131bed0e",
+   "nets": [
+    [
+     "1",
+     "/ACC_S"
+    ],
+    [
+     "2",
+     "/ACC_G"
+    ]
+   ],
+   "ref": {
+    "pos": [
+     152273000,
+     100330000
+    ],
+    "angle": 0.0,
+    "layer": "F.Fab",
+    "visible": true
+   },
+   "value": {
+    "pos": [
+     150623000,
+     100330000
+    ],
+    "angle": 270.0,
+    "layer": "F.Fab",
+    "visible": true
+   }
+  },
+  "D5": {
+   "pos": [
+    155067000,
+    100838000
+   ],
+   "angle": -90.0,
+   "flipped": false,
+   "fpid": "Diode_SMD:D_SOD-123",
+   "path": "/f8690172-a283-579f-8960-49aebe88617f",
+   "nets": [
+    [
+     "1",
+     "/ACC_S"
+    ],
+    [
+     "2",
+     "/ACC_IN"
+    ]
+   ],
+   "ref": {
+    "pos": [
+     155067000,
+     104532999
+    ],
+    "angle": 0.0,
+    "layer": "F.Silkscreen",
+    "visible": true
+   },
+   "value": {
+    "pos": [
+     152967000,
+     100838000
+    ],
+    "angle": 90.0,
+    "layer": "F.Fab",
+    "visible": true
+   }
+  },
+  "R17": {
+   "pos": [
+    145866000,
+    80486000
+   ],
+   "angle": 90.0,
+   "flipped": false,
+   "fpid": "Resistor_SMD:R_0805_2012Metric_Pad1.20x1.40mm_HandSolder",
+   "path": "/358e992a-5c00-58da-885c-c3c8ad3063b0",
+   "nets": [
+    [
+     "1",
+     "/U8_FB"
+    ],
+    [
+     "2",
+     "GND"
+    ]
+   ],
+   "ref": {
+    "pos": [
+     143571001,
+     80486000
+    ],
+    "angle": 90.0,
+    "layer": "F.Silkscreen",
+    "visible": true
+   },
+   "value": {
+    "pos": [
+     147516000,
+     80486000
+    ],
+    "angle": 90.0,
+    "layer": "F.Fab",
+    "visible": true
+   }
+  },
+  "MH2": {
+   "pos": [
+    188548000,
+    61800000
+   ],
+   "angle": 0.0,
+   "flipped": false,
+   "fpid": "MountingHole:MountingHole_2.7mm_M2.5",
+   "path": "",
+   "nets": [
+    [
+     "",
+     ""
+    ]
+   ],
+   "ref": {
+    "pos": [
+     188548000,
+     65800000
+    ],
+    "angle": 0.0,
+    "layer": "F.Fab",
+    "visible": false
+   },
+   "value": {
+    "pos": [
+     188548000,
+     65500000
+    ],
+    "angle": 0.0,
+    "layer": "F.Fab",
+    "visible": false
+   }
+  },
+  "J5": {
+   "pos": [
+    140208000,
+    71456500
+   ],
+   "angle": 180.0,
+   "flipped": false,
+   "fpid": "TerminalBlock_Phoenix:TerminalBlock_Phoenix_MKDS-1-2-3.81_1x02_P3.81mm_Horizontal",
+   "path": "/4ea4c11b-bcf7-4dbf-b432-dca31f57eb29",
+   "nets": [
+    [
+     "1",
+     "GND"
+    ],
+    [
+     "2",
+     "/ACC_N"
+    ]
+   ],
+   "ref": {
+    "pos": [
+     138303001,
+     76201500
+    ],
+    "angle": 0.0,
+    "layer": "F.Silkscreen",
+    "visible": true
+   },
+   "value": {
+    "pos": [
+     138303000,
+     66736500
+    ],
+    "angle": 0.0,
+    "layer": "F.Fab",
+    "visible": true
+   }
+  },
+  "D3": {
+   "pos": [
+    156153000,
+    75914000
+   ],
+   "angle": 90.0,
+   "flipped": false,
+   "fpid": "LED_SMD:LED_1206_3216Metric_Pad1.42x1.75mm_HandSolder",
+   "path": "/06e5c463-9203-4d87-8e0c-275c6133275a",
+   "nets": [
+    [
+     "1",
+     "/D3_K"
+    ],
+    [
+     "2",
+     "/VOUT"
+    ]
+   ],
+   "ref": {
+    "pos": [
+     156153000,
+     72119000
+    ],
+    "angle": 0.0,
+    "layer": "F.Silkscreen",
+    "visible": true
+   },
+   "value": {
+    "pos": [
+     157983000,
+     75914000
+    ],
+    "angle": 90.0,
+    "layer": "F.Fab",
+    "visible": true
+   }
+  },
+  "C29": {
+   "pos": [
+    131500000,
+    92850000
+   ],
+   "angle": 180.0,
+   "flipped": false,
+   "fpid": "Capacitor_SMD:C_0805_2012Metric_Pad1.18x1.45mm_HandSolder",
+   "path": "/fcc5ccbc-81f4-526b-b03e-8df509ab5315",
+   "nets": [
+    [
+     "1",
+     "/U5_CTC"
+    ],
+    [
+     "2",
+     "/U5_TJ"
+    ]
+   ],
+   "ref": {
+    "pos": [
+     128275000,
+     92850000
+    ],
+    "angle": 90.0,
+    "layer": "F.Silkscreen",
+    "visible": true
+   },
+   "value": {
+    "pos": [
+     131500000,
+     91170000
+    ],
+    "angle": 180.0,
+    "layer": "F.Fab",
+    "visible": true
+   }
+  },
+  "C17": {
+   "pos": [
+    155419000,
+    69155000
+   ],
+   "angle": 90.0,
+   "flipped": false,
+   "fpid": "Capacitor_SMD:C_0805_2012Metric_Pad1.18x1.45mm_HandSolder",
+   "path": "/e9b19ef8-4474-56ea-a17d-32a9bfaa030a",
+   "nets": [
+    [
+     "1",
+     "/VOUT"
+    ],
+    [
+     "2",
+     "GND"
+    ]
+   ],
+   "ref": {
+    "pos": [
+     155419000,
+     69155000
+    ],
+    "angle": 0.0,
+    "layer": "F.Fab",
+    "visible": true
+   },
+   "value": {
+    "pos": [
+     157099000,
+     69155000
+    ],
+    "angle": 90.0,
+    "layer": "F.Fab",
+    "visible": true
+   }
+  },
+  "D4": {
+   "pos": [
+    143383000,
+    102997000
+   ],
+   "angle": -90.0,
+   "flipped": false,
+   "fpid": "Diode_SMD:D_SOD-123",
+   "path": "/0df2549a-6a52-54d0-b791-da5148488ab2",
+   "nets": [
+    [
+     "1",
+     "/ACC_S"
+    ],
+    [
+     "2",
+     "/SW1_C"
+    ]
+   ],
+   "ref": {
+    "pos": [
+     140888001,
+     102997000
+    ],
+    "angle": 90.0,
+    "layer": "F.Silkscreen",
+    "visible": true
+   },
+   "value": {
+    "pos": [
+     141283000,
+     102997000
+    ],
+    "angle": 90.0,
+    "layer": "F.Fab",
+    "visible": true
+   }
+  },
+  "D6": {
+   "pos": [
+    148590000,
+    100711000
+   ],
+   "angle": 90.0,
+   "flipped": false,
+   "fpid": "Package_TO_SOT_SMD:SOT-23_Handsoldering",
+   "path": "/5b0bb960-9d67-5783-9448-9952350f029f",
+   "nets": [
+    [
+     "1",
+     "/ACC_G"
+    ],
+    [
+     "2",
+     "unconnected-(D6-NC-Pad2)"
+    ],
+    [
+     "3",
+     "/HOLD_G"
+    ]
+   ],
+   "ref": {
+    "pos": [
+     148590000,
+     104755999
+    ],
+    "angle": 0.0,
+    "layer": "F.Silkscreen",
+    "visible": true
+   },
+   "value": {
+    "pos": [
+     151090000,
+     100711000
+    ],
+    "angle": 90.0,
+    "layer": "F.Fab",
+    "visible": true
+   }
+  },
+  "Q6": {
+   "pos": [
+    131445000,
+    83312000
+   ],
+   "angle": 90.0,
+   "flipped": false,
+   "fpid": "Package_TO_SOT_SMD:SOT-23_Handsoldering",
+   "path": "/80fcdaa3-08ac-5244-9d84-6e5e96626537",
+   "nets": [
+    [
+     "1",
+     "/ACC_G"
+    ],
+    [
+     "2",
+     "GND"
+    ],
+    [
+     "3",
+     "/STAT_O"
+    ]
+   ],
+   "ref": {
+    "pos": [
+     128350000,
+     83312000
+    ],
+    "angle": 90.0,
+    "layer": "F.Silkscreen",
+    "visible": true
+   },
+   "value": {
+    "pos": [
+     133945000,
+     83312000
+    ],
+    "angle": 90.0,
+    "layer": "F.Fab",
+    "visible": true
+   }
+  },
+  "R29": {
+   "pos": [
+    148600000,
+    96050000
+   ],
+   "angle": 0.0,
+   "flipped": false,
+   "fpid": "Resistor_SMD:R_0805_2012Metric_Pad1.20x1.40mm_HandSolder",
+   "path": "/6e9c6320-3aff-5fdb-a774-d1d2dc0673aa",
+   "nets": [
+    [
+     "1",
+     "/U5_OUT"
+    ],
+    [
+     "2",
+     "/HOLD_G"
+    ]
+   ],
+   "ref": {
+    "pos": [
+     148600000,
+     96050000
+    ],
+    "angle": 0.0,
+    "layer": "F.Fab",
+    "visible": true
+   },
+   "value": {
+    "pos": [
+     148600000,
+     97700000
+    ],
+    "angle": 0.0,
+    "layer": "F.Fab",
+    "visible": true
+   }
+  },
+  "C18": {
+   "pos": [
+    150946000,
+    75152000
+   ],
+   "angle": 90.0,
+   "flipped": false,
+   "fpid": "Capacitor_SMD:C_0805_2012Metric_Pad1.18x1.45mm_HandSolder",
+   "path": "/1bd419b6-f095-5e6b-8fa0-f6f09297701f",
+   "nets": [
+    [
+     "1",
+     "/U8_BOOT"
+    ],
+    [
+     "2",
+     "/U8_PH"
+    ]
+   ],
+   "ref": {
+    "pos": [
+     153271000,
+     75152000
+    ],
+    "angle": 90.0,
+    "layer": "F.Silkscreen",
+    "visible": true
+   },
+   "value": {
+    "pos": [
+     152626000,
+     75152000
+    ],
+    "angle": 90.0,
+    "layer": "F.Fab",
+    "visible": true
+   }
+  },
+  "C23": {
+   "pos": [
+    165869000,
+    69295000
+   ],
+   "angle": 90.0,
+   "flipped": false,
+   "fpid": "Capacitor_SMD:C_1210_3225Metric_Pad1.33x2.70mm_HandSolder",
+   "path": "/780c76e6-92ea-5a65-a31d-b82859a651a1",
+   "nets": [
+    [
+     "1",
+     "/+5V1"
+    ],
+    [
+     "2",
+     "GND"
+    ]
+   ],
+   "ref": {
+    "pos": [
+     165869000,
+     69295000
+    ],
+    "angle": 0.0,
+    "layer": "F.Fab",
+    "visible": true
+   },
+   "value": {
+    "pos": [
+     168169000,
+     69295000
+    ],
+    "angle": 90.0,
+    "layer": "F.Fab",
+    "visible": true
+   }
+  },
+  "C15": {
+   "pos": [
+    158219000,
+    69245000
+   ],
+   "angle": 90.0,
+   "flipped": false,
+   "fpid": "Capacitor_SMD:C_1206_3216Metric_Pad1.33x1.80mm_HandSolder",
+   "path": "/c5dfdd16-d4a4-5fc4-bc89-b4498627f32d",
+   "nets": [
+    [
+     "1",
+     "/VOUT"
+    ],
+    [
+     "2",
+     "GND"
+    ]
+   ],
+   "ref": {
+    "pos": [
+     158219000,
+     69245000
+    ],
+    "angle": 0.0,
+    "layer": "F.Fab",
+    "visible": true
+   },
+   "value": {
+    "pos": [
+     160069000,
+     69245000
+    ],
+    "angle": 90.0,
+    "layer": "F.Fab",
+    "visible": true
+   }
+  },
+  "R3": {
+   "pos": [
+    156153000,
+    80867000
+   ],
+   "angle": -90.0,
+   "flipped": false,
+   "fpid": "Resistor_SMD:R_0805_2012Metric_Pad1.20x1.40mm_HandSolder",
+   "path": "/6135e8ae-9dd6-4d7e-abd8-4e10ce668f30",
+   "nets": [
+    [
+     "1",
+     "/D3_K"
+    ],
+    [
+     "2",
+     "GND"
+    ]
+   ],
+   "ref": {
+    "pos": [
+     156153000,
+     80867000
+    ],
+    "angle": 0.0,
+    "layer": "F.Fab",
+    "visible": true
+   },
+   "value": {
+    "pos": [
+     154503000,
+     80867000
+    ],
+    "angle": 90.0,
+    "layer": "F.Fab",
+    "visible": true
+   }
+  },
+  "J4": {
+   "pos": [
+    177419000,
+    102235000
+   ],
+   "angle": 0.0,
+   "flipped": false,
+   "fpid": "TerminalBlock_Phoenix:TerminalBlock_Phoenix_MKDS-1-2-3.81_1x02_P3.81mm_Horizontal",
+   "path": "/7723de96-7af4-4ea3-92ca-d8c45cd3a669",
+   "nets": [
+    [
+     "1",
+     "/VOUT"
+    ],
+    [
+     "2",
+     "GND"
+    ]
+   ],
+   "ref": {
+    "pos": [
+     179324000,
+     102190000
+    ],
+    "angle": 0.0,
+    "layer": "F.Fab",
+    "visible": true
+   },
+   "value": {
+    "pos": [
+     179324000,
+     106955000
+    ],
+    "angle": 0.0,
+    "layer": "F.Fab",
+    "visible": true
+   }
+  },
+  "C19": {
+   "pos": [
+    145739000,
+    75152000
+   ],
+   "angle": -90.0,
+   "flipped": false,
+   "fpid": "Capacitor_SMD:C_0805_2012Metric_Pad1.18x1.45mm_HandSolder",
+   "path": "/e26a9dd6-51bd-55ce-adbf-e0760c499089",
+   "nets": [
+    [
+     "1",
+     "/U8_SS"
+    ],
+    [
+     "2",
+     "GND"
+    ]
+   ],
+   "ref": {
+    "pos": [
+     145739000,
+     78377000
+    ],
+    "angle": 0.0,
+    "layer": "F.Silkscreen",
+    "visible": true
+   },
+   "value": {
+    "pos": [
+     144059000,
+     75152000
+    ],
+    "angle": 90.0,
+    "layer": "F.Fab",
+    "visible": true
+   }
+  },
+  "C8": {
+   "pos": [
+    144350000,
+    91000000
+   ],
+   "angle": -90.0,
+   "flipped": false,
+   "fpid": "Capacitor_SMD:C_0805_2012Metric_Pad1.18x1.45mm_HandSolder",
+   "path": "/ec04ce88-9643-5cda-98f6-850d1c2ccf3f",
+   "nets": [
+    [
+     "1",
+     "/VDD_TMR"
+    ],
+    [
+     "2",
+     "GND"
+    ]
+   ],
+   "ref": {
+    "pos": [
+     144350000,
+     91000000
+    ],
+    "angle": 0.0,
+    "layer": "F.Fab",
+    "visible": true
+   },
+   "value": {
+    "pos": [
+     142670000,
+     91000000
+    ],
+    "angle": 270.0,
+    "layer": "F.Fab",
+    "visible": true
+   }
+  },
+  "R21": {
+   "pos": [
+    135890000,
+    83312000
+   ],
+   "angle": 90.0,
+   "flipped": false,
+   "fpid": "Resistor_SMD:R_1206_3216Metric_Pad1.30x1.75mm_HandSolder",
+   "path": "/83a64208-7225-559c-a060-cecc4eb06f68",
+   "nets": [
+    [
+     "1",
+     "/STAT_O"
+    ],
+    [
+     "2",
+     "/ACC_N"
+    ]
+   ],
+   "ref": {
+    "pos": [
+     135890000,
+     79517001
+    ],
+    "angle": 0.0,
+    "layer": "F.Silkscreen",
+    "visible": true
+   },
+   "value": {
+    "pos": [
+     137720000,
+     83312000
+    ],
+    "angle": 90.0,
+    "layer": "F.Fab",
+    "visible": true
+   }
+  },
+  "MH3": {
+   "pos": [
+    130548000,
+    110800000
+   ],
+   "angle": 0.0,
+   "flipped": false,
+   "fpid": "MountingHole:MountingHole_2.7mm_M2.5",
+   "path": "",
+   "nets": [
+    [
+     "",
+     ""
+    ]
+   ],
+   "ref": {
+    "pos": [
+     130548000,
+     106800000
+    ],
+    "angle": 0.0,
+    "layer": "F.Fab",
+    "visible": false
+   },
+   "value": {
+    "pos": [
+     130548000,
+     114500000
+    ],
+    "angle": 0.0,
+    "layer": "F.Fab",
+    "visible": false
+   }
+  },
+  "R31": {
+   "pos": [
+    144350000,
+    95850000
+   ],
+   "angle": -90.0,
+   "flipped": false,
+   "fpid": "Resistor_SMD:R_0805_2012Metric_Pad1.20x1.40mm_HandSolder",
+   "path": "/b6689d96-4fe8-518c-a2a2-684f9714d355",
+   "nets": [
+    [
+     "1",
+     "/VDD_TMR"
+    ],
+    [
+     "2",
+     "GND"
+    ]
+   ],
+   "ref": {
+    "pos": [
+     144350000,
+     99045000
+    ],
+    "angle": 0.0,
+    "layer": "F.Silkscreen",
+    "visible": true
+   },
+   "value": {
+    "pos": [
+     142700000,
+     95850000
+    ],
+    "angle": 270.0,
+    "layer": "F.Fab",
+    "visible": true
+   }
+  },
+  "R18": {
+   "pos": [
+    148152000,
+    75152000
+   ],
+   "angle": -90.0,
+   "flipped": false,
+   "fpid": "Resistor_SMD:R_0805_2012Metric_Pad1.20x1.40mm_HandSolder",
+   "path": "/ee08035d-ab39-5f0e-9e4b-b182223380b8",
+   "nets": [
+    [
+     "1",
+     "/U8_COMP"
+    ],
+    [
+     "2",
+     "/U8_CRC"
+    ]
+   ],
+   "ref": {
+    "pos": [
+     150447000,
+     75152000
+    ],
+    "angle": 90.0,
+    "layer": "F.Silkscreen",
+    "visible": true
+   },
+   "value": {
+    "pos": [
+     146502000,
+     75152000
+    ],
+    "angle": 270.0,
+    "layer": "F.Fab",
+    "visible": true
+   }
+  },
+  "MH1": {
+   "pos": [
+    130548000,
+    61800000
+   ],
+   "angle": 0.0,
+   "flipped": false,
+   "fpid": "MountingHole:MountingHole_2.7mm_M2.5",
+   "path": "",
+   "nets": [
+    [
+     "",
+     ""
+    ]
+   ],
+   "ref": {
+    "pos": [
+     130548000,
+     65800000
+    ],
+    "angle": 0.0,
+    "layer": "F.Fab",
+    "visible": false
+   },
+   "value": {
+    "pos": [
+     130548000,
+     65500000
+    ],
+    "angle": 0.0,
+    "layer": "F.Fab",
+    "visible": false
+   }
+  },
+  "R15": {
+   "pos": [
+    157607000,
+    91948000
+   ],
+   "angle": -90.0,
+   "flipped": false,
+   "fpid": "Resistor_SMD:R_0805_2012Metric_Pad1.20x1.40mm_HandSolder",
+   "path": "/8c926eaf-e77c-599b-a34c-2b9b82b2428a",
+   "nets": [
+    [
+     "1",
+     "/Q1_G"
+    ],
+    [
+     "2",
+     "/DRV"
+    ]
+   ],
+   "ref": {
+    "pos": [
+     155312000,
+     91948000
+    ],
+    "angle": 90.0,
+    "layer": "F.Silkscreen",
+    "visible": true
+   },
+   "value": {
+    "pos": [
+     155957000,
+     91948000
+    ],
+    "angle": 90.0,
+    "layer": "F.Fab",
+    "visible": true
+   }
+  },
+  "R28": {
+   "pos": [
+    131500000,
+    96100000
+   ],
+   "angle": 180.0,
+   "flipped": false,
+   "fpid": "Resistor_SMD:R_0805_2012Metric_Pad1.20x1.40mm_HandSolder",
+   "path": "/1b1b3027-3afd-5a74-9f92-b0a3af9dc67c",
+   "nets": [
+    [
+     "1",
+     "/U5_RS"
+    ],
+    [
+     "2",
+     "/U5_TJ"
+    ]
+   ],
+   "ref": {
+    "pos": [
+     128305000,
+     96100000
+    ],
+    "angle": 90.0,
+    "layer": "F.Silkscreen",
+    "visible": true
+   },
+   "value": {
+    "pos": [
+     131500000,
+     94450000
+    ],
+    "angle": 180.0,
+    "layer": "F.Fab",
+    "visible": true
+   }
+  },
+  "TVS2": {
+   "pos": [
+    171450000,
+    99822000
+   ],
+   "angle": -90.0,
+   "flipped": false,
+   "fpid": "Diode_SMD:D_SMB_Handsoldering",
+   "path": "/4dc873d6-e234-5021-b24e-4c5744a0c8a7",
+   "nets": [
+    [
+     "1",
+     "/ACC_IN"
+    ],
+    [
+     "2",
+     "GND"
+    ]
+   ],
+   "ref": {
+    "pos": [
+     167855001,
+     99822000
+    ],
+    "angle": 90.0,
+    "layer": "F.Silkscreen",
+    "visible": true
+   },
+   "value": {
+    "pos": [
+     168450000,
+     99822000
+    ],
+    "angle": 90.0,
+    "layer": "F.Fab",
+    "visible": true
+   }
+  },
+  "J2": {
+   "pos": [
+    180043000,
+    79192001
+   ],
+   "angle": 90.0,
+   "flipped": false,
+   "fpid": "Connector_USB:USB3_A_Molex_48406-0001_Horizontal_Stacked",
+   "path": "/54dbfcf2-28b2-42dc-93cf-dc85206fbfa6",
+   "nets": [
+    [
+     "1",
+     "/+5V1"
+    ],
+    [
+     "10",
+     "/+5V1"
+    ],
+    [
+     "11",
+     "/USB2_D"
+    ],
+    [
+     "12",
+     "/USB2_D"
+    ],
+    [
+     "13",
+     "GND"
+    ],
+    [
+     "14",
+     "unconnected-(J2B-SSRX2--Pad14)"
+    ],
+    [
+     "15",
+     "unconnected-(J2B-SSRX2+-Pad15)"
+    ],
+    [
+     "16",
+     "GND"
+    ],
+    [
+     "17",
+     "unconnected-(J2B-SSTX2--Pad17)"
+    ],
+    [
+     "18",
+     "unconnected-(J2B-SSTX2+-Pad18)"
+    ],
+    [
+     "2",
+     "/USB1_D"
+    ],
+    [
+     "3",
+     "/USB1_D"
+    ],
+    [
+     "4",
+     "GND"
+    ],
+    [
+     "5",
+     "unconnected-(J2A-SSRX1--Pad5)"
+    ],
+    [
+     "6",
+     "unconnected-(J2A-SSRX1+-Pad6)"
+    ],
+    [
+     "7",
+     "GND"
+    ],
+    [
+     "8",
+     "unconnected-(J2A-SSTX1--Pad8)"
+    ],
+    [
+     "9",
+     "unconnected-(J2A-SSTX1+-Pad9)"
+    ],
+    [
+     "SH",
+     "GND"
+    ],
+    [
+     "SH",
+     "GND"
+    ],
+    [
+     "SH",
+     "GND"
+    ],
+    [
+     "SH",
+     "GND"
+    ]
+   ],
+   "ref": {
+    "pos": [
+     182753000,
+     75692001
+    ],
+    "angle": 0.0,
+    "layer": "F.Silkscreen",
+    "visible": true
+   },
+   "value": {
+    "pos": [
+     193043000,
+     75692001
+    ],
+    "angle": 90.0,
+    "layer": "F.Fab",
+    "visible": true
+   }
+  },
+  "R26": {
+   "pos": [
+    131500000,
+    99100000
+   ],
+   "angle": 0.0,
+   "flipped": false,
+   "fpid": "Resistor_SMD:R_0805_2012Metric_Pad1.20x1.40mm_HandSolder",
+   "path": "/ec847089-8126-5d15-aa96-74426bfe3b29",
+   "nets": [
+    [
+     "1",
+     "/ACC_G"
+    ],
+    [
+     "2",
+     "/U5_MR"
+    ]
+   ],
+   "ref": {
+    "pos": [
+     131500000,
+     101394999
+    ],
+    "angle": 0.0,
+    "layer": "F.Silkscreen",
+    "visible": true
+   },
+   "value": {
+    "pos": [
+     131500000,
+     100750000
+    ],
+    "angle": 0.0,
+    "layer": "F.Fab",
+    "visible": true
+   }
+  }
+ }
+}

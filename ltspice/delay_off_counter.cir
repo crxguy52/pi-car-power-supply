@@ -1,0 +1,344 @@
+* Pi power HAT: delay-off timer, CD4541B clock + counter on VDD_TMR from VOUT (docs/SPEC.md sections 2-4, 2026-11-05).
+* The LM2903B design (delay_off_lm393.cir) and the TLC555 design (delay_off_timer.cir) are kept unchanged.
+*
+* ACC_S = J1 ACC through D5, or BATT through SW1 and D4 (unchanged). ACC_S -> R8 -> ACC_G -> R25 -> GND.
+*   ACC_G -> Q6 gate (J5 status, open drain through R21: low = ACC on)
+*   ACC_G -> D6 -> HOLD_G (Q5 gate): ACC turns Q1 on directly, before +5V1 exists
+*   ACC_G -> R26 -> U5 MASTER RESET (high = reset: output high = hold, counter at zero)
+* U5 OUT -> R29 -> HOLD_G. Q5 drain = DRV pulls the Q1 gate network R15 / R14 (unchanged).
+* U5 = CD4541B on VDD_TMR (VOUT -> R30, D7 zener clamp, R31 bleed, C8: 2026-11-05 lead decision): no LTspice model. Behavioural stand-in (TI SCHS085E): counter as an integrator of the
+*   oscillator frequency (counts in kilo-counts on node cnt), output latched low after 2^15 counts (tap 2^16,
+*   single-transition mode, Q-bar select), reset by MR or by the auto (power-on) reset on a rising VDD; counts only
+*   with VDD >= 3 V; state kept while VDD falls (retention); supply current only above 1.5 V (CMOS: no bleed of its
+*   own when nearly unpowered, so R31 alone holds VDD_TMR down when parked). The oscillator and counter logic are checked
+*   separately, gate by gate at a scaled frequency: cd4541_osc_counter.cir.
+* U8 = TPS54336A: behavioural: enable with VIN UVLO hysteresis, linear soft start, source-only output (pre-bias),
+*   dropout to VIN; +5V1 capacitance at the design retention; FB divider; USB load per LOAD.
+* Q1 P-FET, constant-power load on VOUT, harness, TVS: as delay_off_lm393.cir; plus C30 gate-source (hot-plug).
+* Run: LTspice.exe -b delay_off_counter.cir  (results: delay_off_counter.log, .meas lines)
+*
+* One run: battery hot-plug at T_PLUG (all capacitors empty), key on, key off; key on, off, on again mid-count, off;
+* a 50 ms ACC blip; a short blip (shorter than the +5V1 start-up). Steps: battery voltage, corner, load.
+*   CORNER 1 = short delay: oscillator fast (period / RC bound low, CTC and RTC low), diodes at their maximum drop
+*              (lowest ACC_G), N-FET threshold cold maximum, Q1 threshold cold maximum (weakest gate drive)
+*   CORNER 2 = nominal
+*   CORNER 3 = long delay: oscillator slow, low diode drop, N-FET threshold hot minimum plus Q5 drain leakage at its
+*              parked bound, Q1 threshold hot minimum (hot-plug, off-state and re-latch margin)
+*   LOAD 1 = Pi 5 + buck at full load, the Pi shuts down T_PISD after key-off; USB keeps charging (+5V1 loaded)
+*   LOAD 2 = full load through the whole delay
+*   LOAD 3 = Pi halted after T_PISD (small load), no USB load: slowest +5V1 collapse (re-latch check)
+* 2026-11-05 re-tune (A12): hold >= 25 s worst case (project lead), RTC / CTC for about 1.1 kHz, timeline
+*   compressed to the shorter delay; U8 current limit + hiccup (SLVSCD5D 6.6, 7.3.13) and an OVL run: a USB
+*   overload on +5V1 during the count, key off (must not keep Q1 on):
+*   sed -e 's/^.param OVL=0/.param OVL=1/' -e 's/^.step param LOAD list 1 2 3/.param LOAD=3\n.step param P_HALT list 0.05 2/'
+*       -e 's/^.param T_STOP=220/.param T_STOP=45/' -e 's/^.tran 0 {T_STOP} 0 10m uic/.tran 0 {T_STOP} 0 0.2m uic/'
+*       delay_off_counter.cir > delay_off_counter_ovl.cir
+* 2026-11-05 U5 from VOUT (project lead, A13): node vtmr (VDD_TMR) = VOUT through R30, D7 BZT52C5V1 zener clamp, R31
+*   bleed, C8 1 uF; replaces +5V1 -> BAT43W -> 10 uF (that netlist: pi_power_board-backups/delay_off_counter_2026-11-05_115852.cir).
+*   Q1 off-state leakage (85 C bound) on VOUT in corner 3. BATT 14.4 V added. Overload-resistance sweep at 12 V, P_HALT 0.05
+*   (log delay_off_counter_ovlr.log):
+*   sed -e 's/^.step param VB list 9 12 14.4 16/.step param R_OVL list 0.5 0.8 1.0/' -e 's/^.param R_OVL=0.5/* R_OVL stepped/'
+*       -e '/^.step param P_HALT list 0.05 2/d' -e 's/^.param P_HALT=2$/.param P_HALT=0.05/' delay_off_counter_ovl.cir > delay_off_counter_ovlr.cir
+
+.param VB=12
+.step param VB list 9 12 14.4 16
+.step param CORNER list 1 2 3
+.step param LOAD list 1 2 3
+
+* ---- U5 timing (SPEC 3, tools/design_calc.py counter_timer())
+.param RTC=39.2e3
+.param CTC=10n
+.param NCNT=32768
+.param KRC_NOM=2.3
+* period / (RTC CTC) bound from design_calc.py counter_timer() (fig. 2 solved over the datasheet limits, driver
+* resistance included, +-2 % allowance)
+.param KRC=if(CORNER==1, 2.104, if(CORNER==3, 2.450, KRC_NOM))
+* tolerance x temperature drift: C0G +-1 % and 30 ppm/K, RTC 1 % and 100 ppm/K, over 100 K
+.param CFAC=if(CORNER==1, 0.99*0.997, if(CORNER==3, 1.01*1.003, 1))
+.param RFAC=if(CORNER==1, 0.99*0.99, if(CORNER==3, 1.01*1.01, 1))
+.param ROUT_U5=370
+.param RTC_EFF=RTC*RFAC
+.param FOSC={1/(KRC*RTC_EFF*CTC*CFAC)}
+.param VDD_MIN=3
+.param VPOR_ON=2.0
+.param VPOR_OFF=1.0
+.param T_POR=1m
+* U5 supply current at VDD_TMR max (design_calc u5_current()): corner 1 typical (highest VDD_TMR), corner 3 the
+*   datasheet maxima (lowest VDD_TMR)
+.param IDD_U5=if(CORNER==1, 0.16m, if(CORNER==3, 0.54m, 0.3m))
+* U5 supply VDD_TMR: VOUT -> R30 -> vtmr; D7 BZT52C5V1 (Vishay 86342) zener vtmr -> GND; R31 bleed; C8 decoupling.
+*   Zener voltage at IZT1 5 mA per corner: 1 = upper bound (VZ max, hot TC), 2 = typ, 3 = lower bound (design_calc vz())
+.param R30V=1.3k
+.param R31V=10k
+.param BVZ=if(CORNER==1, 5.57, if(CORNER==3, 4.70, 5.1))
+.model DZ D(Is=1e-14 N=1 Rs=5 Cjo=100p BV={BVZ} Ibv=5m Nbv=10)
+* C8 1 uF 50 V X7R 0805: effective value at 5 V after tolerance, temperature and DC bias (assumption)
+.param C8_EFF=0.7u
+* Q1 off-state leakage on VOUT (IDSS bound at 85 C, log-interpolated 1 uA / 25 C to 50 uA / 125 C) in corner 3
+.param IDSS_Q1=if(CORNER==3, 10.5u, 0)
+
+* ---- ACC interface
+.param R8V=22k
+.param R25V=27k
+.param R26V=100k
+.param R29V=47k
+
+* ---- N-FETs Q5 / Q6 (2N7002BK): threshold per corner; Q5 drain leakage bound (parked, 85 C) in corner 3
+.param VTO_N=if(CORNER==1, 2.35, if(CORNER==3, 0.75, 1.6))
+.param IDSS_Q5=if(CORNER==3, 3u, 0)
+.model NFET VDMOS(Vto={VTO_N} Kp=0.5 Rd=0.3 Rs=0.3 Cgdmax=20p Cgdmin=4p Cgs=30p Cjo=7p Is=1e-12 ksubthres=0.1)
+
+* ---- diodes: drop at microamps; corner 1 = model fitted to the BAS116 VF maxima (as delay_off_lm393.cir)
+.param IS_D=if(CORNER==1, 1e-12, if(CORNER==3, 4.6e-10, 1.5e-10))
+.model DSIG D(Is={IS_D} N=1.68 Rs=0.88 Cjo=2p BV=75 Ibv=100n)
+* CMOS input / output protection network (assumption)
+.model DCL D(Is=1e-14 N=1 Rs=10)
+.model DID D(Is=1e-12 N=0.05 Rs=1m)
+
+* ---- loads (constant power) on VOUT; VOUT capacitance incl. the Pi regulator (assumption, SPEC 4)
+.param P_FULL=42
+.param P_USB=17
+.param P_HALT=2
+.param VUV=4.5
+.param CVOUT=674u
+.param T_PISD=3
+
+* ---- U8 / +5V1 (TPS54336A SLVSCD5D: UVLO 4.0-4.5 V rising, 180 mV hysteresis; soft start C19)
+.param V5SET=5.09
+.param UV_ON=4.5
+.param UV_OFF=4.32
+.param T_SS=3.5m
+.param C5V1=48u
+.param RFB=63.6k
+.param I_USB=2
+* current limit (low-side sourcing, typ) and hiccup at the highest switching frequency (shortest off time)
+.param ILIM=4.7
+.param FSW_MAX=408k
+.param T_HWAIT={512/FSW_MAX}
+.param T_HOFF={16384/FSW_MAX}
+* OVL=1: USB overload R_OVL on +5V1 from T_OVL (key off, mid-count) to the end
+.param OVL=0
+.param R_OVL=0.5
+.param T_OVL={T_OFF1+8}
+.param R_USB=if(LOAD==3, 1e9, V5SET/I_USB)
+
+* ---- timing (s)
+.param T_PLUG=10m
+.param TEDGE=1m
+.param T_ON1=1
+.param T_OFF1=5
+.param T_ON2=50
+.param T_OFF2=54
+.param T_ON3=66
+.param T_OFF3=68
+.param T_BLIP=110
+.param T_BLIPW=50m
+.param T_BLIP2=160
+.param T_BLIP2W=2m
+.param T_STOP=220
+.param T_OFFCHK=5
+* FORCE=1: ACC stays off; SW1 on from T_ON1 to T_SW_OFF (separate run): SW1 acts like the key
+.param FORCE=0
+.param T_SW_OFF=40
+.param VACC_HI={VB*(1-FORCE)}
+
+* ---- battery, harness R + L (assumption), hot-plug step at T_PLUG
+.param RHARN=50m
+.param LHARN=1u
+VBAT bsrc 0 PWL(0 0 {T_PLUG} 0 {T_PLUG+1u} {VB})
+RH bsrc bh {RHARN}
+LH bh batt {LHARN}
+.model TVS D(Is=1e-12 N=1.5 Rs=50m BV=18.8 Ibv=1m)
+DTVS1 0 batt TVS
+
+* ---- ACC: key switch and wire, TVS2, D5 into ACC_S; SW1 + D4 from BATT to ACC_S
+VACC acc_src 0 PWL(0 0 {T_ON1} 0 {T_ON1+TEDGE} {VACC_HI} {T_OFF1} {VACC_HI} {T_OFF1+TEDGE} 0
++ {T_ON2} 0 {T_ON2+TEDGE} {VACC_HI} {T_OFF2} {VACC_HI} {T_OFF2+TEDGE} 0
++ {T_ON3} 0 {T_ON3+TEDGE} {VACC_HI} {T_OFF3} {VACC_HI} {T_OFF3+TEDGE} 0
++ {T_BLIP} 0 {T_BLIP+0.1m} {VACC_HI} {T_BLIP+T_BLIPW} {VACC_HI} {T_BLIP+T_BLIPW+0.1m} 0
++ {T_BLIP2} 0 {T_BLIP2+0.1m} {VACC_HI} {T_BLIP2+T_BLIP2W} {VACC_HI} {T_BLIP2+T_BLIP2W+0.1m} 0)
+RACC acc_src acc 0.1
+DTVS2 0 acc TVS
+D5 acc accs DSIG
+VSW swc 0 PWL(0 0 {T_ON1} 0 {T_ON1+TEDGE} {FORCE} {T_SW_OFF} {FORCE} {T_SW_OFF+TEDGE} 0)
+SSW1 batt swd swc 0 SWK
+D4 swd accs DSIG
+.model SWK SW(Vt=0.5 Vh=0 Ron=50m Roff=1e12)
+* ACC wire / board capacitance (assumption)
+CACC accs 0 1n
+
+* ---- ACC_G divider, Q6 status, D6 into HOLD_G, R26 into MR
+R8 accs accg {R8V}
+R25 accg 0 {R25V}
+D6 accg holdg DSIG
+R26 accg mr {R26V}
+MQ6 q6d accg 0 0 NFET
+.param VPI=3.3
+R21 q6d j5 1.5k
+RPI j5 pi3v3 50k
+VPI3 pi3v3 0 {VPI}
+
+* ---- U5 supply VDD_TMR (node vtmr) from VOUT: R30, zener clamp D7, bleed R31, C8
+R30 vout vtmr {R30V}
+D7 0 vtmr DZ
+R31 vtmr 0 {R31V}
+C8 vtmr 0 {C8_EFF}
+* ---- U5 CD4541B stand-in on VDD_TMR (node vtmr)
+DMR1 mr vtmr DCL
+DMR2 0 mr DCL
+* MR logic level: switching threshold at half VDD (between VIL and VIH)
+BMRH mrh 0 V=if(V(mr) > 0.5*max(V(vtmr), 0.2), 1, 0)
+* auto reset: a pulse T_POR long after VDD rises through VPOR_ON (rising edge only; released below VPOR_OFF)
+BPOK pokx 0 V=if(V(vtmr) > VPOR_ON, 1, if(V(vtmr) < VPOR_OFF, 0, V(pok)))
+RPOK pokx pok 1k
+CPOK pok 0 10n
+RPD pok pokd {T_POR/10n}
+CPD pokd 0 10n
+BRST rst 0 V=if((V(mrh) > 0.5) | (V(pok) - V(pokd) > 0.5), 1, 0)
+* counter: kilo-counts on cnt; reset to zero; counts at FOSC while VDD >= VDD_MIN and not done
+CCNT cnt 0 1
+RCNT cnt 0 1e12
+BCNT 0 cnt I=if(V(rst) > 0.5, -V(cnt)*1e4, if((V(vtmr) >= VDD_MIN) & (V(dn) < 0.5), FOSC*1e-3, 0))
+* single-transition latch: set at NCNT counts, cleared by reset
+BDN dnx 0 V=if(V(rst) > 0.5, 0, if((V(cnt) >= NCNT*1e-3) | (V(dn) > 0.5), 1, 0))
+RDN dnx dn 1k
+CDN dn 0 10n
+* output (Q-bar select): VDD while not done, through the driver resistance; protection diodes to the rails
+BOUT oint 0 V=max(V(vtmr), 0)*(1 - V(dn))
+ROUT oint u5out {ROUT_U5}
+DOU1 u5out vtmr DCL
+DOU2 0 u5out DCL
+BIDD vtmr 0 I=IDD_U5*min(max(V(vtmr)-1.5, 0)/3.5, 1)
+R29 u5out holdg {R29V}
+
+* ---- Q5 hold FET on DRV; Q1 gate network (unchanged R14 / R15)
+MQ5 drv holdg 0 0 NFET
+IQ5L drv 0 {IDSS_Q5}
+.param VTO_P=if(CORNER==1, -2.5, if(CORNER==3, -1.1, -2.0))
+R14 batt gate 220k
+* C30: Q1 gate-source capacitor (battery hot-plug: keeps Q1 off so U8 cannot start and latch a hold)
+.param C30V=100n
+C30 batt gate {C30V}
+R15 gate drv 180k
+M1 q1d gate batt batt PFET
+.model PFET VDMOS(pchan Vto={VTO_P} Kp=40 Rd=4m Rs=2m Rb=5m Cgdmax=2.2n Cgdmin=0.35n Cgs=2.5n Cjo=1n Is=1e-12)
+VSNS q1d vout 0
+IQ1L batt vout {IDSS_Q1}
+
+* ---- VOUT: capacitance (with ESR), LED D3 + R3, constant-power load with an undervoltage cut-off
+CVO vout cvo {CVOUT}
+RCVO cvo 0 20m
+D3 vout d3k LEDR
+R3 d3k 0 5.1k
+.model LEDR D(Is=1e-22 N=1.6 Rs=5)
+.param P2=if(LOAD==1, P_USB, if(LOAD==3, P_HALT, P_FULL))
+VPW pw 0 PWL(0 {P_FULL} {T_OFF1+T_PISD} {P_FULL} {T_OFF1+T_PISD+TEDGE} {P2} {T_ON2} {P2} {T_ON2+TEDGE} {P_FULL}
++ {T_OFF3+T_PISD} {P_FULL} {T_OFF3+T_PISD+TEDGE} {P2} {T_BLIP} {P2} {T_BLIP+TEDGE} {P_FULL}
++ {T_BLIP+T_BLIPW+T_PISD} {P_FULL} {T_BLIP+T_BLIPW+T_PISD+TEDGE} {P2})
+BLOAD vout 0 I=V(pw)/max(V(vout),VUV)*0.5*(1+tanh((V(vout)-VUV)/0.2))
+
+* ---- U8 stand-in: enable latch (UVLO), soft start, output = min(set point x ramp, VIN - drop), source only
+BEN enx 0 V=if(V(vout) > UV_ON, 1, if(V(vout) < UV_OFF, 0, V(en)))
+REN enx en 1k
+CEN en 0 10n
+CSS ss 0 1
+RSSL ss 0 1e12
+BSS 0 ss I=if((V(en) > 0.5) & (V(hic) < 0.5), if(V(ss) < 1, 1/T_SS, 0), -V(ss)*1e4)
+B5 b5 0 V=max(min(V5SET*min(V(ss), 1), V(vout) - 0.3), 0)
+D5V b5 n5x DID
+* output path: 20 mohm, current-limited at ILIM (smooth limit: convergence)
+BL5 n5x n5 I=ILIM*tanh(max(V(n5x)-V(n5), 0)/(20m*ILIM))
+C5X n5x 0 1n
+* hiccup under a persistent overload (OVL run): the limit trips T_HWAIT after each soft start, then U8 is
+* off (soft start discharged) for T_HOFF, and retries: a fixed pattern from T_OVL (0 V = running)
+VHIC hic 0 PULSE(0 {OVL} {T_OVL+T_HWAIT} 10u 10u {T_HOFF} {T_HOFF+T_SS+T_HWAIT})
+VOVL ovlc 0 PWL(0 0 {T_OVL} 0 {T_OVL+1u} {OVL})
+SOVL n5 novl ovlc 0 SWK
+ROVL novl 0 {R_OVL}
+C5V1 n5 0 {C5V1}
+RFB n5 0 {RFB}
+RUSB n5 0 {R_USB}
+
+.options method=gear
+* saved vectors: the .meas and plot nodes only (raw file size)
+.save V(acc) V(accg) V(batt) V(cnt) V(drv) V(gate) V(holdg) V(j5) V(n5) V(plin) V(q1d) V(swc) V(tlin) V(u5out) V(vout) V(vtmr) I(DMR1) I(VSNS)
+.tran 0 {T_STOP} 0 10m uic
+
+* ---- delays: ACC (or SW1) falling edge to VOUT falling through VB/2
+.meas TRAN delay_keyoff TRIG V(acc) VAL={VB/2} TD={T_OFF1-0.5} FALL=1 TARG V(vout) VAL={VB/2} TD={T_OFF1} FALL=1
+.meas TRAN delay_restart TRIG V(acc) VAL={VB/2} TD={T_OFF3-0.5} FALL=1 TARG V(vout) VAL={VB/2} TD={T_OFF3} FALL=1
+.meas TRAN delay_blip TRIG V(acc) VAL={VB/2} TD={T_BLIP} FALL=1 TARG V(vout) VAL={VB/2} TD={T_BLIP} FALL=1
+.meas TRAN delay_sw_off TRIG V(swc) VAL=0.5 TD={T_SW_OFF-0.5} FALL=1 TARG V(vout) VAL={VB/2} TD={T_SW_OFF} FALL=1
+* restart mid-count: VOUT stays on from the second key-on to the final key-off; counter back at zero
+.param T_SETTLE=0.5
+.meas TRAN vmin_restart MIN V(vout) FROM {T_ON2+T_SETTLE} TO {T_OFF3}
+.meas TRAN cnt_mid FIND V(cnt) AT {T_ON3-TEDGE}
+.meas TRAN cnt_after_on3 FIND V(cnt) AT {T_ON3+T_SETTLE}
+* chatter / re-latch: four VOUT turn-ons expected (key-on 1, key-on 2, 50 ms blip, short blip: the short blip may
+* or may not hold), no fifth
+.meas TRAN vout_rise4 FIND time WHEN V(vout)={VB/2} TD={T_ON1-0.5} RISE=4
+.meas TRAN vout_rise5 FIND time WHEN V(vout)={VB/2} TD={T_ON1-0.5} RISE=5
+.meas TRAN vout_fall5 FIND time WHEN V(vout)={VB/2} TD={T_ON1-0.5} FALL=5
+.meas TRAN drv_rise5 FIND time WHEN V(drv)={VB/2} TD={T_ON1-0.5} RISE=5
+* residual VOUT and +5V1 before each next ACC edge and at the end (also catches a timer that never times out)
+.meas TRAN vmax_off1 MAX V(vout) FROM {T_ON2-T_OFFCHK} TO {T_ON2-TEDGE}
+.meas TRAN vmax_off2 MAX V(vout) FROM {T_BLIP-T_OFFCHK} TO {T_BLIP-TEDGE}
+.meas TRAN vmax_off3 MAX V(vout) FROM {T_BLIP2-T_OFFCHK} TO {T_BLIP2-TEDGE}
+.meas TRAN vmax_end MAX V(vout) FROM {T_STOP-20} TO {T_STOP}
+.meas TRAN v5_off1 MAX V(n5) FROM {T_ON2-T_OFFCHK} TO {T_ON2-TEDGE}
+.meas TRAN holdg_off1 MAX V(holdg) FROM {T_ON2-T_OFFCHK} TO {T_ON2-TEDGE}
+.meas TRAN vtmr_off1 MAX V(vtmr) FROM {T_ON2-T_OFFCHK} TO {T_ON2-TEDGE}
+.meas TRAN vtmr_off3 MAX V(vtmr) FROM {T_BLIP2-T_OFFCHK} TO {T_BLIP2-TEDGE}
+.meas TRAN hotplug_vtmr MAX V(vtmr) FROM 0 TO {T_ON1}
+* +5V1 collapse after the first time-out: from 4.5 V to 1 V; HOLD_G and U5 OUT during it
+.meas TRAN t5_fall TRIG V(n5) VAL=4.5 TD={T_OFF1+10} FALL=1 TARG V(n5) VAL=1 TD={T_OFF1+10} FALL=1
+.meas TRAN holdg_collapse MAX V(holdg) FROM {T_OFF1+38} TO {T_ON2-TEDGE}
+* battery hot-plug: VOUT pulse, +5V1, HOLD_G, VOUT back near 0 before the key-on
+.meas TRAN hotplug_vmax MAX V(vout) FROM 0 TO {T_ON1}
+.meas TRAN hotplug_v5 MAX V(n5) FROM 0 TO {T_ON1}
+.meas TRAN hotplug_holdg MAX V(holdg) FROM 0 TO {T_ON1}
+.meas TRAN hotplug_vend FIND V(vout) AT {T_ON1-TEDGE}
+* key-on: VOUT rise, +5V1 up, HOLD_G before +5V1, U5 reset state
+.meas TRAN t_vout_on TRIG V(acc) VAL={VB/2} TD={T_ON1-0.5} RISE=1 TARG V(vout) VAL={0.9*VB} TD={T_ON1} RISE=1
+.meas TRAN t_5v1_on TRIG V(acc) VAL={VB/2} TD={T_ON1-0.5} RISE=1 TARG V(n5) VAL=4.5 TD={T_ON1} RISE=1
+.meas TRAN holdg_keyon FIND V(holdg) AT {T_ON1+0.5m}
+.meas TRAN accg_keyon FIND V(accg) AT {T_ON1+0.5m}
+.meas TRAN u5out_on FIND V(u5out) AT {T_OFF1-TEDGE}
+.meas TRAN holdg_on MIN V(holdg) FROM {T_OFF1+T_SETTLE} TO {T_OFF1+20}
+.meas TRAN imr_max MAX I(DMR1) FROM {T_ON1} TO {T_OFF1}
+* key-on inrush
+.meas TRAN inrush_pk MAX I(VSNS) FROM {T_ON1} TO {T_ON1+T_SETTLE}
+.meas TRAN q1_on_pk MAX (V(batt)-V(q1d))*I(VSNS) FROM {T_ON1} TO {T_ON1+T_SETTLE}
+.meas TRAN vout_tr TRIG V(vout) VAL={0.1*VB} TD={T_ON1} RISE=1 TARG V(vout) VAL={0.9*VB} TD={T_ON1} RISE=1
+* turn-off peak power, gate drive while on, VGS while parked
+.meas TRAN q1_off_pk MAX (V(batt)-V(q1d))*I(VSNS) FROM {T_OFF1+20} TO {T_ON2-TEDGE}
+* turn-off linear region (VDS > 0.5 V while > 0.1 A flows): energy and time
+BPLIN plin 0 V=if((V(batt)-V(q1d) > 0.5) & (I(VSNS) > 0.1), (V(batt)-V(q1d))*I(VSNS), 0)
+BTLIN tlin 0 V=if((V(batt)-V(q1d) > 0.5) & (I(VSNS) > 0.1), 1, 0)
+.meas TRAN q1_off_e INTEG V(plin) FROM {T_OFF1+20} TO {T_ON2-TEDGE}
+.meas TRAN q1_off_tlin INTEG V(tlin) FROM {T_OFF1+20} TO {T_ON2-TEDGE}
+* OVL run: VOUT and +5V1 well after the normal end of the hold (must be off), last VOUT fall
+.meas TRAN ovl_vtmr_min MIN V(vtmr) FROM {T_OVL} TO {T_OVL+1}
+.meas TRAN ovl_cnt_end FIND V(cnt) AT {T_OVL+1}
+.meas TRAN vtmr_on_max MAX V(vtmr) FROM {T_ON1+T_SETTLE} TO {T_OFF1}
+.meas TRAN vtmr_cnt_min MIN V(vtmr) FROM {T_OFF1+T_SETTLE} TO {T_OFF1+20}
+.meas TRAN ovl_vout_late MAX V(vout) FROM {T_ON2-10} TO {T_ON2-5}
+.meas TRAN ovl_v5_late MAX V(n5) FROM {T_ON2-10} TO {T_ON2-5}
+.meas TRAN ovl_last_fall FIND time WHEN V(vout)={VB/2} FALL=LAST
+.meas TRAN ovl_v5_max_after MAX V(n5) FROM {T_OVL+0.2} TO {T_ON2-5}
+.meas TRAN ovl_fall1 FIND time WHEN V(vout)={VB/2} TD={T_OFF1} FALL=1
+.meas TRAN vtmr_cnt_max MAX V(vtmr) FROM {T_OFF1+T_SETTLE} TO {T_OFF1+20}
+.meas TRAN vgs_on_min MIN V(batt)-V(gate) FROM {T_ON1+T_SETTLE} TO {T_OFF1+20}
+.meas TRAN vgs_off_max MAX V(batt)-V(gate) FROM {T_ON2-T_OFFCHK} TO {T_ON2-TEDGE}
+* J5: level while on, released level, release time after key-off and after SW1 opens
+.meas TRAN j5_max_on MAX V(j5) FROM {T_ON1+T_SETTLE} TO {T_OFF1}
+.meas TRAN j5_min_off MIN V(j5) FROM {T_OFF1+T_SETTLE} TO {T_ON2}
+.meas TRAN j5_rel TRIG V(acc) VAL={VB/2} TD={T_OFF1-0.5} FALL=1 TARG V(j5) VAL={VPI/2} TD={T_OFF1} RISE=1
+.meas TRAN j5_rel_sw TRIG V(swc) VAL=0.5 TD={T_SW_OFF-0.5} FALL=1 TARG V(j5) VAL={VPI/2} TD={T_SW_OFF} RISE=1
+.meas TRAN j5_max_sw MAX V(j5) FROM {T_ON1+T_SETTLE} TO {T_SW_OFF}
+.meas TRAN vmin_sw MIN V(vout) FROM {T_ON1+T_SETTLE} TO {T_SW_OFF}
+* short blip (shorter than the +5V1 start-up): VOUT afterwards
+.meas TRAN blip2_vmax_late MAX V(vout) FROM {T_BLIP2+1} TO {T_BLIP2+5}
+.meas TRAN blip2_v5max MAX V(n5) FROM {T_BLIP2} TO {T_BLIP2+1}
+.backanno
+.end
