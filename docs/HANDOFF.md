@@ -18,7 +18,7 @@ A HAT on standoffs above a Waveshare 2-CH CAN FD HAT, which sits on a Pi 5, in a
 | BOM | 36 MPN rows, $121.32 for 2 boards + spares | `pdm run dk-check` PASS; `bom/` incl. `assembly_checklist.md` |
 | IC review for the lead | U8 and U5 against their datasheets, with screenshots | `reports/ic_review.md` |
 
-**Git:** `e96698a` (KiCad 9 baseline), `926bafb` (the agent design through 2026-11-06). Later work (the lead's 2026-11-09 GUI edits, `tools/post_route/17`) is uncommitted. The lead commits; agents never commit or push.
+**Git:** `e96698a` (KiCad 9 baseline), `926bafb` (the agent design through 2026-11-06), `bd0b54f` (2026-11-09: the lead's GUI edits, `tools/post_route/17`-`18`). The lead commits; agents commit or push only when the lead asks.
 
 ## Where to start
 1. `docs/TODO.md`, section "Lead review": what the lead still has to look at or decide.
