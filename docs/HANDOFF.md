@@ -1,4 +1,4 @@
-# Handoff: Pi car power HAT (2026-11-06)
+# Handoff: Pi car power HAT (2026-11-09)
 
 For a new agent picking this up. Read this, then `.claude/CLAUDE.md`, the whole of it: phase table, masters, working rules, verify commands. Don't re-derive what's below; it's checked.
 
@@ -14,11 +14,11 @@ A HAT on standoffs above a Waveshare 2-CH CAN FD HAT, which sits on a Pi 5, in a
 |---|---|---|
 | Schematic | 41 parts + J1/J2/J4/J5/SW1. Master edits by `tools/post_sch/01`–`16` (16 = U8 datasheet fixes) | `pdm run verify-sch` PASS (ERC 0/0, netlist 0 errors, selftest, sim 14/14) |
 | Sim | KiCad-native (`simulation.kicad_sch`, `lib/spice/`, `tools/run_sim.py`); LTspice decks are history | `pdm run sim` (fast, inside verify-sch); `pdm run sim --full` (~24 min, real time) |
-| Board | Placed and routed; OSH Park rules; right-edge notch y 85.0–102.0 | `pdm run drc`: 0 errors / 0 unconnected / 0 parity + 1 accepted warning (J4 silk); `check_fixed.py` PASS |
+| Board | Placed and routed; OSH Park rules; right-edge notch y 85.0–102.0; lead's buck edits 2026-11-09; references on silk (`tools/post_route/17`); thermal reliefs on pads (`18`) | `pdm run drc`: 0 errors / 0 unconnected / 0 parity + 1 accepted warning (J4 silk at the edge); `check_fixed.py` PASS |
 | BOM | 36 MPN rows, $121.32 for 2 boards + spares | `pdm run dk-check` PASS; `bom/` incl. `assembly_checklist.md` |
 | IC review for the lead | U8 and U5 against their datasheets, with screenshots | `reports/ic_review.md` |
 
-**Git:** one commit (`e96698a`, the original KiCad 9 baseline). **All agent work is uncommitted.** The lead commits; agents never commit or push.
+**Git:** `e96698a` (KiCad 9 baseline), `926bafb` (the agent design through 2026-11-06). Later work (the lead's 2026-11-09 GUI edits, `tools/post_route/17`) is uncommitted. The lead commits; agents never commit or push.
 
 ## Where to start
 1. `docs/TODO.md`, section "Lead review": what the lead still has to look at or decide.
@@ -34,7 +34,7 @@ A HAT on standoffs above a Waveshare 2-CH CAN FD HAT, which sits on a Pi 5, in a
 
 ## Rules and gotchas that cost time here
 - **Masters change only by KiCad GUI edits (by the lead) or a new numbered script** in `tools/post_sch/` or `tools/post_route/`. Re-run only scripts that their README marks re-runnable; most are applied-once and stop at their guard.
-- **The lead edits layouts in a copy** (`C:\git-personal\pi-car-power-supply - Copy`). Adopt them by diffing (netlist, UUIDs, positions) and applying via a recorded script with the positions saved as JSON. Never copy files wholesale. Check the result; the lead says not to take it as gospel.
+- **The lead edits the masters directly in the KiCad GUI** (since 2026-11-09; the old copy workflow, `tools/post_route/08`, is history). Review each round against the last commit: netlist diff (`kicad-cli sch export netlist`), footprint / track / zone diff with pcbnew, `verify-sch`, `drc`, `check_fixed`. Check the result; the lead says not to take it as gospel.
 - **Fixed by the lead:** board outline, MH1–4, J1/J2/J4/J5 positions, keep-outs. `tools/check_fixed.py` enforces them. The only way to change the baseline is a recorded `--accept-lead-change <NAME>`.
 - **One writer per KiCad file.** Parallel agents must have explicit file ownership. Sim/BOM fields added in the schematic cause DRC `footprint_symbol_field_mismatch` until they are synced to the board (`tools/post_route/15` pattern: hidden fields).
 - **Parts:** nothing smaller than 0805; hand-solderable only; prefer fewer parts. Every reviewer addition needs a named, datasheet-backed failure mode (the design once bloated to 64 parts through reviewer fixes, and the lead rejected it).

@@ -60,12 +60,12 @@
           "hatch_smoothing_level": 0,
           "hatch_smoothing_value": 0.1,
           "hatch_thickness": 1.0,
-          "min_clearance": 0.5,
-          "min_island_area": 10.0,
+          "min_clearance": 0.3,
+          "min_island_area": 9.99999999996,
           "min_thickness": 0.25,
-          "pad_connection": 1,
+          "pad_connection": 3,
           "remove_islands": 0,
-          "thermal_relief_gap": 0.5,
+          "thermal_relief_gap": 0.3,
           "thermal_relief_spoke_width": 0.5
         }
       },
@@ -762,7 +762,7 @@
       {
         "filename": "pi_power_board.kicad_sch",
         "name": "pi_power_board",
-        "uuid": "00000000-0000-0000-0000-000000000000"
+        "uuid": "476998b3-1d41-432b-8dbb-a9785d730e83"
       }
     ],
     "used_designators": "",
@@ -771,7 +771,11 @@
   "sheets": [
     [
       "476998b3-1d41-432b-8dbb-a9785d730e83",
-      "Root"
+      "pi_power_board"
+    ],
+    [
+      "658a07f4-228a-5050-b50d-e60a11980d62",
+      "simulation"
     ]
   ],
   "text_variables": {},

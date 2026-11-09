@@ -16,8 +16,12 @@
 			(exclude_from_sim no)
 			(in_bom no)
 			(on_board no)
+			(in_pos_files yes)
+			(duplicate_pin_numbers_are_jumpers no)
 			(property "Reference" "S"
 				(at 3.81 1.27 0)
+				(show_name no)
+				(do_not_autoplace no)
 				(effects
 					(font
 						(size 1.27 1.27)
@@ -27,6 +31,8 @@
 			)
 			(property "Value" "SIM_2T"
 				(at 3.81 -1.27 0)
+				(show_name no)
+				(do_not_autoplace no)
 				(effects
 					(font
 						(size 1.27 1.27)
@@ -36,38 +42,46 @@
 			)
 			(property "Footprint" ""
 				(at 0 0 0)
+				(show_name no)
+				(do_not_autoplace no)
+				(hide yes)
 				(effects
 					(font
 						(size 1.27 1.27)
 					)
-					(hide yes)
 				)
 			)
 			(property "Datasheet" ""
 				(at 0 0 0)
+				(show_name no)
+				(do_not_autoplace no)
+				(hide yes)
 				(effects
 					(font
 						(size 1.27 1.27)
 					)
-					(hide yes)
 				)
 			)
 			(property "Description" "Simulation-only two-terminal block (a subcircuit of lib/spice/sim_bench.lib): not a board part"
 				(at 0 0 0)
+				(show_name no)
+				(do_not_autoplace no)
+				(hide yes)
 				(effects
 					(font
 						(size 1.27 1.27)
 					)
-					(hide yes)
 				)
 			)
 			(property "ki_keywords" "simulation"
 				(at 0 0 0)
+				(show_name no)
+				(do_not_autoplace no)
+				(hide yes)
 				(effects
 					(font
 						(size 1.27 1.27)
 					)
-					(hide yes)
 				)
 			)
 			(symbol "SIM_2T_0_1"
@@ -138,8 +152,12 @@
 			(exclude_from_sim no)
 			(in_bom no)
 			(on_board no)
+			(in_pos_files yes)
+			(duplicate_pin_numbers_are_jumpers no)
 			(property "Reference" "S"
 				(at 0 6.35 0)
+				(show_name no)
+				(do_not_autoplace no)
 				(effects
 					(font
 						(size 1.27 1.27)
@@ -148,6 +166,8 @@
 			)
 			(property "Value" "SIM_3T"
 				(at 0 4.445 0)
+				(show_name no)
+				(do_not_autoplace no)
 				(effects
 					(font
 						(size 1.27 1.27)
@@ -156,38 +176,46 @@
 			)
 			(property "Footprint" ""
 				(at 0 0 0)
+				(show_name no)
+				(do_not_autoplace no)
+				(hide yes)
 				(effects
 					(font
 						(size 1.27 1.27)
 					)
-					(hide yes)
 				)
 			)
 			(property "Datasheet" ""
 				(at 0 0 0)
+				(show_name no)
+				(do_not_autoplace no)
+				(hide yes)
 				(effects
 					(font
 						(size 1.27 1.27)
 					)
-					(hide yes)
 				)
 			)
 			(property "Description" "Simulation-only in / out / ground block (a subcircuit of lib/spice/sim_bench.lib): not a board part"
 				(at 0 0 0)
+				(show_name no)
+				(do_not_autoplace no)
+				(hide yes)
 				(effects
 					(font
 						(size 1.27 1.27)
 					)
-					(hide yes)
 				)
 			)
 			(property "ki_keywords" "simulation"
 				(at 0 0 0)
+				(show_name no)
+				(do_not_autoplace no)
+				(hide yes)
 				(effects
 					(font
 						(size 1.27 1.27)
 					)
-					(hide yes)
 				)
 			)
 			(symbol "SIM_3T_0_1"
@@ -343,12 +371,7 @@
 			(symbol "GND_0_1"
 				(polyline
 					(pts
-						(xy 0 0)
-						(xy 0 -1.27)
-						(xy 1.27 -1.27)
-						(xy 0 -2.54)
-						(xy -1.27 -1.27)
-						(xy 0 -1.27)
+						(xy 0 0) (xy 0 -1.27) (xy 1.27 -1.27) (xy 0 -2.54) (xy -1.27 -1.27) (xy 0 -1.27)
 					)
 					(stroke
 						(width 0)
@@ -382,119 +405,48 @@
 			(embedded_fonts no)
 		)
 	)
-	(symbol
-		(lib_id "pipwr:SIM_2T")
-		(at 38.1 63.5 0)
-		(unit 1)
-		(body_style 1)
+	(text "SIM-ONLY SHEET: not on the board or in the BOM. Inspect > Simulator: FAST default (U5 count / U5_TAPDIV). pdm run sim; --full: real time (tools/run_sim.py, reports/sim_kicad.md)"
 		(exclude_from_sim no)
-		(in_bom no)
-		(on_board no)
-		(in_pos_files no)
-		(dnp no)
-		(uuid "ee2b019d-c249-5bf1-9744-5676a1f74c58")
-		(property "Reference" "SB1"
-			(at 41.91 62.23 0)
-			(show_name no)
-			(do_not_autoplace no)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-				(justify left)
+		(at 25.4 38.1 0)
+		(effects
+			(font
+				(size 1.524 1.524)
 			)
+			(justify left top)
 		)
-		(property "Value" "SIM_BATT battery + harness"
-			(at 41.91 64.77 0)
-			(show_name no)
-			(do_not_autoplace no)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-				(justify left)
+		(uuid "53d6de62-0ea4-5580-8a90-fedf0602ebfd")
+	)
+	(text ".options method=gear\n.save V(/BATT) V(/ACC_IN) V(/ACC_G) V(/HOLD_G) V(/VOUT) V(/VDD_TMR) V(/U5_OUT) V(/ACC_N) V(/+5V1) V(/U5_CTC)\n.tran 1m 6 0 1m uic\n* hold: last ACC / SW1 falling edge to VOUT falling through VB / 2\n.meas TRAN vout_fall FIND time WHEN V(/VOUT)={VB/2} TD={T_LASTOFF} FALL=1\n.meas TRAN hold PARAM='vout_fall - T_LASTOFF'\n.meas TRAN vout_fall_last FIND time WHEN V(/VOUT)={VB/2} FALL=LAST\n.meas TRAN vout_rise_last FIND time WHEN V(/VOUT)={VB/2} RISE=LAST\n* U5: end of the count, oscillator period on CTC (raw points: no interp), the hold with all N_CNT counts\n.meas TRAN u5_fall FIND time WHEN V(/U5_OUT)={VTH_MEAS} TD={T_LASTOFF} FALL=1\n.meas TRAN osc_t1 FIND time WHEN V(/U5_CTC)={VTH_MEAS} TD={T_LASTOFF} RISE={N_P1}\n.meas TRAN osc_t2 FIND time WHEN V(/U5_CTC)={VTH_MEAS} TD={T_LASTOFF} RISE={N_P2}\n.meas TRAN t_osc PARAM='(osc_t2 - osc_t1)/(N_P2 - N_P1)'\n.meas TRAN hold_est PARAM='hold + (N_CNT - N_CNT/U5_TAPDIV)*t_osc'\n* on / counting: VOUT never dips, VDD_TMR range, HOLD_G, J5\n.meas TRAN vout_min_on MIN V(/VOUT) FROM={T_VON0} TO={T_LASTOFF+T_CW1}\n.meas TRAN vtmr_cnt_min MIN V(/VDD_TMR) FROM={T_LASTOFF+T_CW0} TO={T_LASTOFF+T_CW1}\n.meas TRAN vtmr_cnt_max MAX V(/VDD_TMR) FROM={T_LASTOFF+T_CW0} TO={T_LASTOFF+T_CW1}\n.meas TRAN holdg_cnt_min MIN V(/HOLD_G) FROM={T_LASTOFF+T_CW0} TO={T_LASTOFF+T_CW1}\n.meas TRAN j5_on_max MAX V(/ACC_N) FROM={T_ON1+0.5} TO={T_OFF1}\n.meas TRAN j5_off_min MIN V(/ACC_N) FROM={T_LASTOFF+T_CW0} TO={T_LASTOFF+T_CW1}\n* end: VOUT / VDD_TMR / HOLD_G off in the last T_ENDWIN, no re-latch\n.meas TRAN vout_end_max MAX V(/VOUT) FROM={T_STOP-T_ENDWIN} TO={T_END}\n.meas TRAN vtmr_end_max MAX V(/VDD_TMR) FROM={T_STOP-T_ENDWIN} TO={T_END}\n.meas TRAN holdg_end_max MAX V(/HOLD_G) FROM={T_STOP-T_ENDWIN} TO={T_END}\n* battery hot-plug, key off: VOUT, VDD_TMR, HOLD_G before the first key-on\n.meas TRAN hp_vout_max MAX V(/VOUT) FROM=0 TO={min(min(T_ON1, T_SW_ON)-TEDGE, T_END)}\n.meas TRAN hp_vtmr_max MAX V(/VDD_TMR) FROM=0 TO={min(min(T_ON1, T_SW_ON)-TEDGE, T_END)}\n.meas TRAN hp_holdg_max MAX V(/HOLD_G) FROM=0 TO={min(min(T_ON1, T_SW_ON)-TEDGE, T_END)}"
+		(exclude_from_sim no)
+		(at 152.4 96.52 0)
+		(effects
+			(font
+				(size 1.27 1.27)
 			)
+			(justify left top)
 		)
-		(property "Footprint" ""
-			(at 38.1 63.5 0)
-			(hide yes)
-			(show_name no)
-			(do_not_autoplace no)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
+		(uuid "98204e77-0972-563f-a4cd-980c8fe24acb")
+	)
+	(text "* SIM-ONLY (tools/post_sch/12, 13): defaults = the FAST nominal key cycle at 12 V, one key cycle\n* FAST: U5 counts 2^15 / U5_TAPDIV clocks on the real R27 / C29 / R28; hold_est adds the rest at the measured period.\n* Real time: U5_TAPDIV=1, T_PIOFF / T_CW1 unscaled, T_STOP past the hold, .options interp (pdm run sim --full)\n* corners (tools/run_sim.py): R27 / C29 factors, U5 oscillator, diodes, FET V_GS(th) and C_gd, zener, U5 current\n.param RFAC=1 CFAC=1 C8_RET=0.7\n.param U5_HYS=0.054 U5_RDRV=129 U5_IDD=0.3m U5_TAPDIV=256 N_CNT=32768\n.param IS_D=1.5e-10 BVZ=5.1 VTO_N=1.6 IDSS_N=0 VTO_P=-2.0 IDSS_P=0 CGD_FAC=1\n* battery, key, SW1\n.param VB=12 RHARN=50m LHARN=1u T_PLUG=10m TEDGE=1m\n.param ACC_V=12 T_ON1=1 T_OFF1=5 T_ON2=1e3 T_OFF2=1.001e3\n.param SW_EN=0 T_SW_ON=1 T_SW_OFF=5\n* Pi load (constant power) and GPIO pull-up\n.param CVOUT=674u VUV=4.5 P_RUN=27 P_AFTER=2 T_PIOFF=5.0117 T_PISD=3 VPI=3.3 RPI=50k\n* U8 stand-in (CIN_U8: C15 + C17 effective), USB load, overload\n.param V5SET=5.07 UV_ON=4.5 UV_OFF=4.32 T_SS=3.5m C5V1=64u CIN_U8=10u RFB=86.9k I_USB=3 ETA=0.91 ILIM=4.7\n.param OVL=0 R_OVL=0.5 T_OVL=13 T_HWAIT=1.255m T_HOFF=40.16m\n* windows after the last ACC / SW1 falling edge T_LASTOFF: counting T_CW0 to T_CW1, VOUT on from T_VON0;\n* U5 period between the CTC rising edges N_P1 and N_P2; logic threshold VTH_MEAS\n.param T_LASTOFF=5 T_CW0=20m T_CW1=78.1m T_VON0=1.5 N_P1=16 N_P2=80 VTH_MEAS=2.5\n* output grid T_STEP (with interp); T_END = last point; keep T_STEP / T_STOP / T_MAX equal to the .tran numbers\n.param T_STOP=6 T_STEP=1m T_MAX=1m T_ENDWIN=0.3\n.param T_END={T_STOP-2*T_STEP}"
+		(exclude_from_sim no)
+		(at 25.4 96.52 0)
+		(effects
+			(font
+				(size 1.27 1.27)
 			)
+			(justify left top)
 		)
-		(property "Datasheet" ""
-			(at 38.1 63.5 0)
-			(hide yes)
-			(show_name no)
-			(do_not_autoplace no)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-			)
+		(uuid "c02c43a9-7f52-549d-9268-2d62712fbdf3")
+	)
+	(wire
+		(pts
+			(xy 78.74 57.15) (xy 78.74 54.61)
 		)
-		(property "Description" "Simulation only (not a board part): SIM_BATT in lib/spice/sim_bench.lib"
-			(at 38.1 63.5 0)
-			(hide yes)
-			(show_name no)
-			(do_not_autoplace no)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-			)
+		(stroke
+			(width 0)
+			(type default)
 		)
-		(property "Sim.Library" "${KIPRJMOD}/lib/spice/sim_bench.lib"
-			(at 38.1 63.5 0)
-			(hide yes)
-			(show_name no)
-			(do_not_autoplace no)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-			)
-		)
-		(property "Sim.Name" "SIM_BATT"
-			(at 38.1 63.5 0)
-			(hide yes)
-			(show_name no)
-			(do_not_autoplace no)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-			)
-		)
-		(property "Sim.Pins" "1=BATT 2=GND"
-			(at 38.1 63.5 0)
-			(hide yes)
-			(show_name no)
-			(do_not_autoplace no)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-			)
-		)
-		(pin "1"
-			(uuid "f00df36c-6f43-50e2-99a8-967de5fe9066")
-		)
-		(pin "2"
-			(uuid "b7656eb6-ee87-517a-a288-87694fd4c801")
-		)
-		(instances
-			(project "pi_power_board"
-				(path "/476998b3-1d41-432b-8dbb-a9785d730e83/658a07f4-228a-5050-b50d-e60a11980d62"
-					(reference "SB1")
-					(unit 1)
-				)
-			)
-		)
+		(uuid "05672194-3ebc-5261-9e73-ec92871afe11")
 	)
 	(wire
 		(pts
@@ -505,6 +457,116 @@
 			(type default)
 		)
 		(uuid "0b0804da-a7a6-5fce-beda-35ea69d3c0b1")
+	)
+	(wire
+		(pts
+			(xy 38.1 69.85) (xy 38.1 72.39)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "0e008631-8e04-550a-81c6-a7e53b38c4cf")
+	)
+	(wire
+		(pts
+			(xy 78.74 69.85) (xy 78.74 72.39)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "1312903a-79ac-5197-bbb3-eafe11831383")
+	)
+	(wire
+		(pts
+			(xy 119.38 69.85) (xy 119.38 72.39)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "20f7482a-f214-570e-bc28-4f0de6893c1a")
+	)
+	(wire
+		(pts
+			(xy 200.66 69.85) (xy 200.66 72.39)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "279b7281-524b-5a24-b63f-5581740ceb65")
+	)
+	(wire
+		(pts
+			(xy 160.02 69.85) (xy 160.02 72.39)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "86f94304-70d4-5ce4-bf38-ee4b1a1ecdc2")
+	)
+	(wire
+		(pts
+			(xy 243.84 69.85) (xy 243.84 72.39)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "8736670c-7d54-59c2-9bad-c37c15319664")
+	)
+	(wire
+		(pts
+			(xy 119.38 57.15) (xy 119.38 54.61)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "c215c820-4b30-59f8-b725-43c6299a1c15")
+	)
+	(wire
+		(pts
+			(xy 236.22 63.5) (xy 233.68 63.5)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "c69d9f81-3325-5f0a-a3a5-e79d1154fae8")
+	)
+	(wire
+		(pts
+			(xy 251.46 63.5) (xy 254 63.5)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "caa638aa-b401-5ce9-ae48-1520c91d5d4d")
+	)
+	(wire
+		(pts
+			(xy 200.66 57.15) (xy 200.66 54.61)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "ceb8edca-ea46-5e9e-a292-66d19d239578")
+	)
+	(wire
+		(pts
+			(xy 160.02 57.15) (xy 160.02 54.61)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "f81d3cdf-fb87-59d9-b64f-be8a6829f627")
 	)
 	(hierarchical_label "BATT"
 		(shape bidirectional)
@@ -517,19 +579,86 @@
 		)
 		(uuid "165cfabf-2ed7-56ff-abee-463f4bf3b93c")
 	)
-	(wire
-		(pts
-			(xy 38.1 69.85) (xy 38.1 72.39)
+	(hierarchical_label "BATT"
+		(shape bidirectional)
+		(at 119.38 54.61 90)
+		(effects
+			(font
+				(size 1.27 1.27)
+			)
+			(justify left)
 		)
-		(stroke
-			(width 0)
-			(type default)
+		(uuid "18d5933c-4ba2-5ea7-9405-07ac33de0df4")
+	)
+	(hierarchical_label "VOUT"
+		(shape bidirectional)
+		(at 233.68 63.5 180)
+		(effects
+			(font
+				(size 1.27 1.27)
+			)
+			(justify right)
 		)
-		(uuid "0e008631-8e04-550a-81c6-a7e53b38c4cf")
+		(uuid "4bef8be6-0a30-57f2-a71c-9992696bd83a")
+	)
+	(hierarchical_label "+5V1"
+		(shape bidirectional)
+		(at 254 63.5 0)
+		(effects
+			(font
+				(size 1.27 1.27)
+			)
+			(justify left)
+		)
+		(uuid "6581a584-1091-51ac-ac7b-361e3de92117")
+	)
+	(hierarchical_label "VOUT"
+		(shape bidirectional)
+		(at 160.02 54.61 90)
+		(effects
+			(font
+				(size 1.27 1.27)
+			)
+			(justify left)
+		)
+		(uuid "74285a3b-6d5b-520a-8653-c3e1664c0e4b")
+	)
+	(hierarchical_label "ACC_N"
+		(shape bidirectional)
+		(at 200.66 54.61 90)
+		(effects
+			(font
+				(size 1.27 1.27)
+			)
+			(justify left)
+		)
+		(uuid "a5851686-000b-5108-9211-02969e1061c9")
+	)
+	(hierarchical_label "SW1_C"
+		(shape bidirectional)
+		(at 119.38 72.39 270)
+		(effects
+			(font
+				(size 1.27 1.27)
+			)
+			(justify right)
+		)
+		(uuid "a64706bb-d7cd-5cdb-8186-3ca3d7eeae35")
+	)
+	(hierarchical_label "ACC_IN"
+		(shape bidirectional)
+		(at 78.74 54.61 90)
+		(effects
+			(font
+				(size 1.27 1.27)
+			)
+			(justify left)
+		)
+		(uuid "eea1807d-8e0c-5dec-8856-9104c52e2317")
 	)
 	(symbol
 		(lib_id "power:GND")
-		(at 38.1 72.39 0)
+		(at 200.66 72.39 0)
 		(unit 1)
 		(body_style 1)
 		(exclude_from_sim no)
@@ -537,9 +666,9 @@
 		(on_board no)
 		(in_pos_files no)
 		(dnp no)
-		(uuid "ce0c95bd-e968-5f9e-ab76-f68be0360543")
-		(property "Reference" "#PWR101"
-			(at 38.1 78.74 0)
+		(uuid "1ed5e773-e6e5-59b0-8cbc-e4d48357957a")
+		(property "Reference" "#PWR104"
+			(at 200.66 78.74 0)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
@@ -550,7 +679,7 @@
 			)
 		)
 		(property "Value" "GND"
-			(at 38.1 76.2 0)
+			(at 200.66 76.2 0)
 			(show_name no)
 			(do_not_autoplace no)
 			(effects
@@ -560,7 +689,7 @@
 			)
 		)
 		(property "Footprint" ""
-			(at 38.1 72.39 0)
+			(at 200.66 72.39 0)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
@@ -571,7 +700,7 @@
 			)
 		)
 		(property "Datasheet" ""
-			(at 38.1 72.39 0)
+			(at 200.66 72.39 0)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
@@ -582,7 +711,7 @@
 			)
 		)
 		(property "Description" "Power symbol creates a global label with name \"GND\" , ground"
-			(at 38.1 72.39 0)
+			(at 200.66 72.39 0)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
@@ -593,12 +722,12 @@
 			)
 		)
 		(pin "1"
-			(uuid "f2c8a9f5-944b-5286-b705-d801a5dc5156")
+			(uuid "e03200c0-82f8-5f10-811a-3ec8f8075ffc")
 		)
 		(instances
 			(project "pi_power_board"
 				(path "/476998b3-1d41-432b-8dbb-a9785d730e83/658a07f4-228a-5050-b50d-e60a11980d62"
-					(reference "#PWR101")
+					(reference "#PWR104")
 					(unit 1)
 				)
 			)
@@ -718,492 +847,6 @@
 			)
 		)
 	)
-	(wire
-		(pts
-			(xy 78.74 57.15) (xy 78.74 54.61)
-		)
-		(stroke
-			(width 0)
-			(type default)
-		)
-		(uuid "05672194-3ebc-5261-9e73-ec92871afe11")
-	)
-	(hierarchical_label "ACC_IN"
-		(shape bidirectional)
-		(at 78.74 54.61 90)
-		(effects
-			(font
-				(size 1.27 1.27)
-			)
-			(justify left)
-		)
-		(uuid "eea1807d-8e0c-5dec-8856-9104c52e2317")
-	)
-	(wire
-		(pts
-			(xy 78.74 69.85) (xy 78.74 72.39)
-		)
-		(stroke
-			(width 0)
-			(type default)
-		)
-		(uuid "1312903a-79ac-5197-bbb3-eafe11831383")
-	)
-	(symbol
-		(lib_id "power:GND")
-		(at 78.74 72.39 0)
-		(unit 1)
-		(body_style 1)
-		(exclude_from_sim no)
-		(in_bom no)
-		(on_board no)
-		(in_pos_files no)
-		(dnp no)
-		(uuid "6fa121fe-4674-5d09-ad4a-e1a62859a20d")
-		(property "Reference" "#PWR102"
-			(at 78.74 78.74 0)
-			(hide yes)
-			(show_name no)
-			(do_not_autoplace no)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-			)
-		)
-		(property "Value" "GND"
-			(at 78.74 76.2 0)
-			(show_name no)
-			(do_not_autoplace no)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-			)
-		)
-		(property "Footprint" ""
-			(at 78.74 72.39 0)
-			(hide yes)
-			(show_name no)
-			(do_not_autoplace no)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-			)
-		)
-		(property "Datasheet" ""
-			(at 78.74 72.39 0)
-			(hide yes)
-			(show_name no)
-			(do_not_autoplace no)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-			)
-		)
-		(property "Description" "Power symbol creates a global label with name \"GND\" , ground"
-			(at 78.74 72.39 0)
-			(hide yes)
-			(show_name no)
-			(do_not_autoplace no)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-			)
-		)
-		(pin "1"
-			(uuid "e2149085-80b2-5de5-9fa1-fdb09c2015b5")
-		)
-		(instances
-			(project "pi_power_board"
-				(path "/476998b3-1d41-432b-8dbb-a9785d730e83/658a07f4-228a-5050-b50d-e60a11980d62"
-					(reference "#PWR102")
-					(unit 1)
-				)
-			)
-		)
-	)
-	(symbol
-		(lib_id "pipwr:SIM_2T")
-		(at 119.38 63.5 0)
-		(unit 1)
-		(body_style 1)
-		(exclude_from_sim no)
-		(in_bom no)
-		(on_board no)
-		(in_pos_files no)
-		(dnp no)
-		(uuid "8f2b4e31-0c32-568c-903a-f13e0f0702bc")
-		(property "Reference" "SS1"
-			(at 123.19 62.23 0)
-			(show_name no)
-			(do_not_autoplace no)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-				(justify left)
-			)
-		)
-		(property "Value" "SIM_SW1 SW1 stand-in"
-			(at 123.19 64.77 0)
-			(show_name no)
-			(do_not_autoplace no)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-				(justify left)
-			)
-		)
-		(property "Footprint" ""
-			(at 119.38 63.5 0)
-			(hide yes)
-			(show_name no)
-			(do_not_autoplace no)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-			)
-		)
-		(property "Datasheet" ""
-			(at 119.38 63.5 0)
-			(hide yes)
-			(show_name no)
-			(do_not_autoplace no)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-			)
-		)
-		(property "Description" "Simulation only (not a board part): SIM_SW1 in lib/spice/sim_bench.lib"
-			(at 119.38 63.5 0)
-			(hide yes)
-			(show_name no)
-			(do_not_autoplace no)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-			)
-		)
-		(property "Sim.Library" "${KIPRJMOD}/lib/spice/sim_bench.lib"
-			(at 119.38 63.5 0)
-			(hide yes)
-			(show_name no)
-			(do_not_autoplace no)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-			)
-		)
-		(property "Sim.Name" "SIM_SW1"
-			(at 119.38 63.5 0)
-			(hide yes)
-			(show_name no)
-			(do_not_autoplace no)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-			)
-		)
-		(property "Sim.Pins" "1=BATT 2=SWC"
-			(at 119.38 63.5 0)
-			(hide yes)
-			(show_name no)
-			(do_not_autoplace no)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-			)
-		)
-		(pin "1"
-			(uuid "afc1204b-d005-5710-85de-6a98ec19a49a")
-		)
-		(pin "2"
-			(uuid "d82c566f-ce66-5137-95ad-e2195dbca0dc")
-		)
-		(instances
-			(project "pi_power_board"
-				(path "/476998b3-1d41-432b-8dbb-a9785d730e83/658a07f4-228a-5050-b50d-e60a11980d62"
-					(reference "SS1")
-					(unit 1)
-				)
-			)
-		)
-	)
-	(wire
-		(pts
-			(xy 119.38 57.15) (xy 119.38 54.61)
-		)
-		(stroke
-			(width 0)
-			(type default)
-		)
-		(uuid "c215c820-4b30-59f8-b725-43c6299a1c15")
-	)
-	(hierarchical_label "BATT"
-		(shape bidirectional)
-		(at 119.38 54.61 90)
-		(effects
-			(font
-				(size 1.27 1.27)
-			)
-			(justify left)
-		)
-		(uuid "18d5933c-4ba2-5ea7-9405-07ac33de0df4")
-	)
-	(wire
-		(pts
-			(xy 119.38 69.85) (xy 119.38 72.39)
-		)
-		(stroke
-			(width 0)
-			(type default)
-		)
-		(uuid "20f7482a-f214-570e-bc28-4f0de6893c1a")
-	)
-	(hierarchical_label "SW1_C"
-		(shape bidirectional)
-		(at 119.38 72.39 270)
-		(effects
-			(font
-				(size 1.27 1.27)
-			)
-			(justify right)
-		)
-		(uuid "a64706bb-d7cd-5cdb-8186-3ca3d7eeae35")
-	)
-	(symbol
-		(lib_id "pipwr:SIM_2T")
-		(at 160.02 63.5 0)
-		(unit 1)
-		(body_style 1)
-		(exclude_from_sim no)
-		(in_bom no)
-		(on_board no)
-		(in_pos_files no)
-		(dnp no)
-		(uuid "c52bee1d-d786-577d-aad1-3fbbc2311e85")
-		(property "Reference" "SL1"
-			(at 163.83 62.23 0)
-			(show_name no)
-			(do_not_autoplace no)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-				(justify left)
-			)
-		)
-		(property "Value" "SIM_PI_LOAD Pi 12 V input"
-			(at 163.83 64.77 0)
-			(show_name no)
-			(do_not_autoplace no)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-				(justify left)
-			)
-		)
-		(property "Footprint" ""
-			(at 160.02 63.5 0)
-			(hide yes)
-			(show_name no)
-			(do_not_autoplace no)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-			)
-		)
-		(property "Datasheet" ""
-			(at 160.02 63.5 0)
-			(hide yes)
-			(show_name no)
-			(do_not_autoplace no)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-			)
-		)
-		(property "Description" "Simulation only (not a board part): SIM_PI_LOAD in lib/spice/sim_bench.lib"
-			(at 160.02 63.5 0)
-			(hide yes)
-			(show_name no)
-			(do_not_autoplace no)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-			)
-		)
-		(property "Sim.Library" "${KIPRJMOD}/lib/spice/sim_bench.lib"
-			(at 160.02 63.5 0)
-			(hide yes)
-			(show_name no)
-			(do_not_autoplace no)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-			)
-		)
-		(property "Sim.Name" "SIM_PI_LOAD"
-			(at 160.02 63.5 0)
-			(hide yes)
-			(show_name no)
-			(do_not_autoplace no)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-			)
-		)
-		(property "Sim.Pins" "1=VOUT 2=GND"
-			(at 160.02 63.5 0)
-			(hide yes)
-			(show_name no)
-			(do_not_autoplace no)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-			)
-		)
-		(pin "1"
-			(uuid "ee0dfb38-e575-5ee5-8b36-7e9858e83daa")
-		)
-		(pin "2"
-			(uuid "4d81a1d8-39dd-5b1a-8f18-572b37109324")
-		)
-		(instances
-			(project "pi_power_board"
-				(path "/476998b3-1d41-432b-8dbb-a9785d730e83/658a07f4-228a-5050-b50d-e60a11980d62"
-					(reference "SL1")
-					(unit 1)
-				)
-			)
-		)
-	)
-	(wire
-		(pts
-			(xy 160.02 57.15) (xy 160.02 54.61)
-		)
-		(stroke
-			(width 0)
-			(type default)
-		)
-		(uuid "f81d3cdf-fb87-59d9-b64f-be8a6829f627")
-	)
-	(hierarchical_label "VOUT"
-		(shape bidirectional)
-		(at 160.02 54.61 90)
-		(effects
-			(font
-				(size 1.27 1.27)
-			)
-			(justify left)
-		)
-		(uuid "74285a3b-6d5b-520a-8653-c3e1664c0e4b")
-	)
-	(wire
-		(pts
-			(xy 160.02 69.85) (xy 160.02 72.39)
-		)
-		(stroke
-			(width 0)
-			(type default)
-		)
-		(uuid "86f94304-70d4-5ce4-bf38-ee4b1a1ecdc2")
-	)
-	(symbol
-		(lib_id "power:GND")
-		(at 160.02 72.39 0)
-		(unit 1)
-		(body_style 1)
-		(exclude_from_sim no)
-		(in_bom no)
-		(on_board no)
-		(in_pos_files no)
-		(dnp no)
-		(uuid "da239abe-b3bd-5c6f-9ac6-4dbc279b5089")
-		(property "Reference" "#PWR103"
-			(at 160.02 78.74 0)
-			(hide yes)
-			(show_name no)
-			(do_not_autoplace no)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-			)
-		)
-		(property "Value" "GND"
-			(at 160.02 76.2 0)
-			(show_name no)
-			(do_not_autoplace no)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-			)
-		)
-		(property "Footprint" ""
-			(at 160.02 72.39 0)
-			(hide yes)
-			(show_name no)
-			(do_not_autoplace no)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-			)
-		)
-		(property "Datasheet" ""
-			(at 160.02 72.39 0)
-			(hide yes)
-			(show_name no)
-			(do_not_autoplace no)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-			)
-		)
-		(property "Description" "Power symbol creates a global label with name \"GND\" , ground"
-			(at 160.02 72.39 0)
-			(hide yes)
-			(show_name no)
-			(do_not_autoplace no)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-			)
-		)
-		(pin "1"
-			(uuid "a2083d36-e11e-5991-aae9-06d0e8ab3aa5")
-		)
-		(instances
-			(project "pi_power_board"
-				(path "/476998b3-1d41-432b-8dbb-a9785d730e83/658a07f4-228a-5050-b50d-e60a11980d62"
-					(reference "#PWR103")
-					(unit 1)
-				)
-			)
-		)
-	)
 	(symbol
 		(lib_id "pipwr:SIM_2T")
 		(at 200.66 63.5 0)
@@ -1318,40 +961,9 @@
 			)
 		)
 	)
-	(wire
-		(pts
-			(xy 200.66 57.15) (xy 200.66 54.61)
-		)
-		(stroke
-			(width 0)
-			(type default)
-		)
-		(uuid "ceb8edca-ea46-5e9e-a292-66d19d239578")
-	)
-	(hierarchical_label "ACC_N"
-		(shape bidirectional)
-		(at 200.66 54.61 90)
-		(effects
-			(font
-				(size 1.27 1.27)
-			)
-			(justify left)
-		)
-		(uuid "a5851686-000b-5108-9211-02969e1061c9")
-	)
-	(wire
-		(pts
-			(xy 200.66 69.85) (xy 200.66 72.39)
-		)
-		(stroke
-			(width 0)
-			(type default)
-		)
-		(uuid "279b7281-524b-5a24-b63f-5581740ceb65")
-	)
 	(symbol
 		(lib_id "power:GND")
-		(at 200.66 72.39 0)
+		(at 78.74 72.39 0)
 		(unit 1)
 		(body_style 1)
 		(exclude_from_sim no)
@@ -1359,9 +971,9 @@
 		(on_board no)
 		(in_pos_files no)
 		(dnp no)
-		(uuid "1ed5e773-e6e5-59b0-8cbc-e4d48357957a")
-		(property "Reference" "#PWR104"
-			(at 200.66 78.74 0)
+		(uuid "6fa121fe-4674-5d09-ad4a-e1a62859a20d")
+		(property "Reference" "#PWR102"
+			(at 78.74 78.74 0)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
@@ -1372,7 +984,7 @@
 			)
 		)
 		(property "Value" "GND"
-			(at 200.66 76.2 0)
+			(at 78.74 76.2 0)
 			(show_name no)
 			(do_not_autoplace no)
 			(effects
@@ -1382,7 +994,7 @@
 			)
 		)
 		(property "Footprint" ""
-			(at 200.66 72.39 0)
+			(at 78.74 72.39 0)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
@@ -1393,7 +1005,7 @@
 			)
 		)
 		(property "Datasheet" ""
-			(at 200.66 72.39 0)
+			(at 78.74 72.39 0)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
@@ -1404,7 +1016,7 @@
 			)
 		)
 		(property "Description" "Power symbol creates a global label with name \"GND\" , ground"
-			(at 200.66 72.39 0)
+			(at 78.74 72.39 0)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
@@ -1415,12 +1027,203 @@
 			)
 		)
 		(pin "1"
-			(uuid "e03200c0-82f8-5f10-811a-3ec8f8075ffc")
+			(uuid "e2149085-80b2-5de5-9fa1-fdb09c2015b5")
 		)
 		(instances
 			(project "pi_power_board"
 				(path "/476998b3-1d41-432b-8dbb-a9785d730e83/658a07f4-228a-5050-b50d-e60a11980d62"
-					(reference "#PWR104")
+					(reference "#PWR102")
+					(unit 1)
+				)
+			)
+		)
+	)
+	(symbol
+		(lib_id "power:GND")
+		(at 243.84 72.39 0)
+		(unit 1)
+		(body_style 1)
+		(exclude_from_sim no)
+		(in_bom no)
+		(on_board no)
+		(in_pos_files no)
+		(dnp no)
+		(uuid "7f5080f6-cdb1-534e-9cae-4e9d9ef3af6f")
+		(property "Reference" "#PWR105"
+			(at 243.84 78.74 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Value" "GND"
+			(at 243.84 76.2 0)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Footprint" ""
+			(at 243.84 72.39 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Datasheet" ""
+			(at 243.84 72.39 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Description" "Power symbol creates a global label with name \"GND\" , ground"
+			(at 243.84 72.39 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(pin "1"
+			(uuid "169919c5-aa0a-574e-8c02-6bfe42a84bce")
+		)
+		(instances
+			(project "pi_power_board"
+				(path "/476998b3-1d41-432b-8dbb-a9785d730e83/658a07f4-228a-5050-b50d-e60a11980d62"
+					(reference "#PWR105")
+					(unit 1)
+				)
+			)
+		)
+	)
+	(symbol
+		(lib_id "pipwr:SIM_2T")
+		(at 119.38 63.5 0)
+		(unit 1)
+		(body_style 1)
+		(exclude_from_sim no)
+		(in_bom no)
+		(on_board no)
+		(in_pos_files no)
+		(dnp no)
+		(uuid "8f2b4e31-0c32-568c-903a-f13e0f0702bc")
+		(property "Reference" "SS1"
+			(at 123.19 62.23 0)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify left)
+			)
+		)
+		(property "Value" "SIM_SW1 SW1 stand-in"
+			(at 123.19 64.77 0)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify left)
+			)
+		)
+		(property "Footprint" ""
+			(at 119.38 63.5 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Datasheet" ""
+			(at 119.38 63.5 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Description" "Simulation only (not a board part): SIM_SW1 in lib/spice/sim_bench.lib"
+			(at 119.38 63.5 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Sim.Library" "${KIPRJMOD}/lib/spice/sim_bench.lib"
+			(at 119.38 63.5 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Sim.Name" "SIM_SW1"
+			(at 119.38 63.5 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Sim.Pins" "1=BATT 2=SWC"
+			(at 119.38 63.5 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(pin "1"
+			(uuid "afc1204b-d005-5710-85de-6a98ec19a49a")
+		)
+		(pin "2"
+			(uuid "d82c566f-ce66-5137-95ad-e2195dbca0dc")
+		)
+		(instances
+			(project "pi_power_board"
+				(path "/476998b3-1d41-432b-8dbb-a9785d730e83/658a07f4-228a-5050-b50d-e60a11980d62"
+					(reference "SS1")
 					(unit 1)
 				)
 			)
@@ -1541,61 +1344,9 @@
 			)
 		)
 	)
-	(wire
-		(pts
-			(xy 236.22 63.5) (xy 233.68 63.5)
-		)
-		(stroke
-			(width 0)
-			(type default)
-		)
-		(uuid "c69d9f81-3325-5f0a-a3a5-e79d1154fae8")
-	)
-	(hierarchical_label "VOUT"
-		(shape bidirectional)
-		(at 233.68 63.5 180)
-		(effects
-			(font
-				(size 1.27 1.27)
-			)
-			(justify right)
-		)
-		(uuid "4bef8be6-0a30-57f2-a71c-9992696bd83a")
-	)
-	(wire
-		(pts
-			(xy 251.46 63.5) (xy 254 63.5)
-		)
-		(stroke
-			(width 0)
-			(type default)
-		)
-		(uuid "caa638aa-b401-5ce9-ae48-1520c91d5d4d")
-	)
-	(hierarchical_label "+5V1"
-		(shape bidirectional)
-		(at 254 63.5 0)
-		(effects
-			(font
-				(size 1.27 1.27)
-			)
-			(justify left)
-		)
-		(uuid "6581a584-1091-51ac-ac7b-361e3de92117")
-	)
-	(wire
-		(pts
-			(xy 243.84 69.85) (xy 243.84 72.39)
-		)
-		(stroke
-			(width 0)
-			(type default)
-		)
-		(uuid "8736670c-7d54-59c2-9bad-c37c15319664")
-	)
 	(symbol
-		(lib_id "power:GND")
-		(at 243.84 72.39 0)
+		(lib_id "pipwr:SIM_2T")
+		(at 160.02 63.5 0)
 		(unit 1)
 		(body_style 1)
 		(exclude_from_sim no)
@@ -1603,30 +1354,31 @@
 		(on_board no)
 		(in_pos_files no)
 		(dnp no)
-		(uuid "7f5080f6-cdb1-534e-9cae-4e9d9ef3af6f")
-		(property "Reference" "#PWR105"
-			(at 243.84 78.74 0)
-			(hide yes)
+		(uuid "c52bee1d-d786-577d-aad1-3fbbc2311e85")
+		(property "Reference" "SL1"
+			(at 163.83 62.23 0)
 			(show_name no)
 			(do_not_autoplace no)
 			(effects
 				(font
 					(size 1.27 1.27)
 				)
+				(justify left)
 			)
 		)
-		(property "Value" "GND"
-			(at 243.84 76.2 0)
+		(property "Value" "SIM_PI_LOAD Pi 12 V input"
+			(at 163.83 64.77 0)
 			(show_name no)
 			(do_not_autoplace no)
 			(effects
 				(font
 					(size 1.27 1.27)
 				)
+				(justify left)
 			)
 		)
 		(property "Footprint" ""
-			(at 243.84 72.39 0)
+			(at 160.02 63.5 0)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
@@ -1637,7 +1389,7 @@
 			)
 		)
 		(property "Datasheet" ""
-			(at 243.84 72.39 0)
+			(at 160.02 63.5 0)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
@@ -1647,8 +1399,41 @@
 				)
 			)
 		)
-		(property "Description" "Power symbol creates a global label with name \"GND\" , ground"
-			(at 243.84 72.39 0)
+		(property "Description" "Simulation only (not a board part): SIM_PI_LOAD in lib/spice/sim_bench.lib"
+			(at 160.02 63.5 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Sim.Library" "${KIPRJMOD}/lib/spice/sim_bench.lib"
+			(at 160.02 63.5 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Sim.Name" "SIM_PI_LOAD"
+			(at 160.02 63.5 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Sim.Pins" "1=VOUT 2=GND"
+			(at 160.02 63.5 0)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
@@ -1659,49 +1444,286 @@
 			)
 		)
 		(pin "1"
-			(uuid "169919c5-aa0a-574e-8c02-6bfe42a84bce")
+			(uuid "ee0dfb38-e575-5ee5-8b36-7e9858e83daa")
+		)
+		(pin "2"
+			(uuid "4d81a1d8-39dd-5b1a-8f18-572b37109324")
 		)
 		(instances
 			(project "pi_power_board"
 				(path "/476998b3-1d41-432b-8dbb-a9785d730e83/658a07f4-228a-5050-b50d-e60a11980d62"
-					(reference "#PWR105")
+					(reference "SL1")
 					(unit 1)
 				)
 			)
 		)
 	)
-	(text "SIM-ONLY SHEET: not on the board or in the BOM. Inspect > Simulator: FAST default (U5 count / U5_TAPDIV). pdm run sim; --full: real time (tools/run_sim.py, reports/sim_kicad.md)"
+	(symbol
+		(lib_id "power:GND")
+		(at 38.1 72.39 0)
+		(unit 1)
+		(body_style 1)
 		(exclude_from_sim no)
-		(at 25.4 38.1 0)
-		(effects
-			(font
-				(size 1.524 1.524)
+		(in_bom no)
+		(on_board no)
+		(in_pos_files no)
+		(dnp no)
+		(uuid "ce0c95bd-e968-5f9e-ab76-f68be0360543")
+		(property "Reference" "#PWR101"
+			(at 38.1 78.74 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
 			)
-			(justify left top)
 		)
-		(uuid "53d6de62-0ea4-5580-8a90-fedf0602ebfd")
+		(property "Value" "GND"
+			(at 38.1 76.2 0)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Footprint" ""
+			(at 38.1 72.39 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Datasheet" ""
+			(at 38.1 72.39 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Description" "Power symbol creates a global label with name \"GND\" , ground"
+			(at 38.1 72.39 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(pin "1"
+			(uuid "f2c8a9f5-944b-5286-b705-d801a5dc5156")
+		)
+		(instances
+			(project "pi_power_board"
+				(path "/476998b3-1d41-432b-8dbb-a9785d730e83/658a07f4-228a-5050-b50d-e60a11980d62"
+					(reference "#PWR101")
+					(unit 1)
+				)
+			)
+		)
 	)
-	(text "* SIM-ONLY (tools/post_sch/12, 13): defaults = the FAST nominal key cycle at 12 V, one key cycle\n* FAST: U5 counts 2^15 / U5_TAPDIV clocks on the real R27 / C29 / R28; hold_est adds the rest at the measured period.\n* Real time: U5_TAPDIV=1, T_PIOFF / T_CW1 unscaled, T_STOP past the hold, .options interp (pdm run sim --full)\n* corners (tools/run_sim.py): R27 / C29 factors, U5 oscillator, diodes, FET V_GS(th) and C_gd, zener, U5 current\n.param RFAC=1 CFAC=1 C8_RET=0.7\n.param U5_HYS=0.054 U5_RDRV=129 U5_IDD=0.3m U5_TAPDIV=256 N_CNT=32768\n.param IS_D=1.5e-10 BVZ=5.1 VTO_N=1.6 IDSS_N=0 VTO_P=-2.0 IDSS_P=0 CGD_FAC=1\n* battery, key, SW1\n.param VB=12 RHARN=50m LHARN=1u T_PLUG=10m TEDGE=1m\n.param ACC_V=12 T_ON1=1 T_OFF1=5 T_ON2=1e3 T_OFF2=1.001e3\n.param SW_EN=0 T_SW_ON=1 T_SW_OFF=5\n* Pi load (constant power) and GPIO pull-up\n.param CVOUT=674u VUV=4.5 P_RUN=27 P_AFTER=2 T_PIOFF=5.0117 T_PISD=3 VPI=3.3 RPI=50k\n* U8 stand-in (CIN_U8: C15 + C17 effective), USB load, overload\n.param V5SET=5.07 UV_ON=4.5 UV_OFF=4.32 T_SS=3.5m C5V1=64u CIN_U8=10u RFB=86.9k I_USB=3 ETA=0.91 ILIM=4.7\n.param OVL=0 R_OVL=0.5 T_OVL=13 T_HWAIT=1.255m T_HOFF=40.16m\n* windows after the last ACC / SW1 falling edge T_LASTOFF: counting T_CW0 to T_CW1, VOUT on from T_VON0;\n* U5 period between the CTC rising edges N_P1 and N_P2; logic threshold VTH_MEAS\n.param T_LASTOFF=5 T_CW0=20m T_CW1=78.1m T_VON0=1.5 N_P1=16 N_P2=80 VTH_MEAS=2.5\n* output grid T_STEP (with interp); T_END = last point; keep T_STEP / T_STOP / T_MAX equal to the .tran numbers\n.param T_STOP=6 T_STEP=1m T_MAX=1m T_ENDWIN=0.3\n.param T_END={T_STOP-2*T_STEP}"
+	(symbol
+		(lib_id "power:GND")
+		(at 160.02 72.39 0)
+		(unit 1)
+		(body_style 1)
 		(exclude_from_sim no)
-		(at 25.4 96.52 0)
-		(effects
-			(font
-				(size 1.27 1.27)
+		(in_bom no)
+		(on_board no)
+		(in_pos_files no)
+		(dnp no)
+		(uuid "da239abe-b3bd-5c6f-9ac6-4dbc279b5089")
+		(property "Reference" "#PWR103"
+			(at 160.02 78.74 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
 			)
-			(justify left top)
 		)
-		(uuid "c02c43a9-7f52-549d-9268-2d62712fbdf3")
+		(property "Value" "GND"
+			(at 160.02 76.2 0)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Footprint" ""
+			(at 160.02 72.39 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Datasheet" ""
+			(at 160.02 72.39 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Description" "Power symbol creates a global label with name \"GND\" , ground"
+			(at 160.02 72.39 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(pin "1"
+			(uuid "a2083d36-e11e-5991-aae9-06d0e8ab3aa5")
+		)
+		(instances
+			(project "pi_power_board"
+				(path "/476998b3-1d41-432b-8dbb-a9785d730e83/658a07f4-228a-5050-b50d-e60a11980d62"
+					(reference "#PWR103")
+					(unit 1)
+				)
+			)
+		)
 	)
-	(text ".options method=gear\n.save V(/BATT) V(/ACC_IN) V(/ACC_G) V(/HOLD_G) V(/VOUT) V(/VDD_TMR) V(/U5_OUT) V(/ACC_N) V(/+5V1) V(/U5_CTC)\n.tran 1m 6 0 1m uic\n* hold: last ACC / SW1 falling edge to VOUT falling through VB / 2\n.meas TRAN vout_fall FIND time WHEN V(/VOUT)={VB/2} TD={T_LASTOFF} FALL=1\n.meas TRAN hold PARAM='vout_fall - T_LASTOFF'\n.meas TRAN vout_fall_last FIND time WHEN V(/VOUT)={VB/2} FALL=LAST\n.meas TRAN vout_rise_last FIND time WHEN V(/VOUT)={VB/2} RISE=LAST\n* U5: end of the count, oscillator period on CTC (raw points: no interp), the hold with all N_CNT counts\n.meas TRAN u5_fall FIND time WHEN V(/U5_OUT)={VTH_MEAS} TD={T_LASTOFF} FALL=1\n.meas TRAN osc_t1 FIND time WHEN V(/U5_CTC)={VTH_MEAS} TD={T_LASTOFF} RISE={N_P1}\n.meas TRAN osc_t2 FIND time WHEN V(/U5_CTC)={VTH_MEAS} TD={T_LASTOFF} RISE={N_P2}\n.meas TRAN t_osc PARAM='(osc_t2 - osc_t1)/(N_P2 - N_P1)'\n.meas TRAN hold_est PARAM='hold + (N_CNT - N_CNT/U5_TAPDIV)*t_osc'\n* on / counting: VOUT never dips, VDD_TMR range, HOLD_G, J5\n.meas TRAN vout_min_on MIN V(/VOUT) FROM={T_VON0} TO={T_LASTOFF+T_CW1}\n.meas TRAN vtmr_cnt_min MIN V(/VDD_TMR) FROM={T_LASTOFF+T_CW0} TO={T_LASTOFF+T_CW1}\n.meas TRAN vtmr_cnt_max MAX V(/VDD_TMR) FROM={T_LASTOFF+T_CW0} TO={T_LASTOFF+T_CW1}\n.meas TRAN holdg_cnt_min MIN V(/HOLD_G) FROM={T_LASTOFF+T_CW0} TO={T_LASTOFF+T_CW1}\n.meas TRAN j5_on_max MAX V(/ACC_N) FROM={T_ON1+0.5} TO={T_OFF1}\n.meas TRAN j5_off_min MIN V(/ACC_N) FROM={T_LASTOFF+T_CW0} TO={T_LASTOFF+T_CW1}\n* end: VOUT / VDD_TMR / HOLD_G off in the last T_ENDWIN, no re-latch\n.meas TRAN vout_end_max MAX V(/VOUT) FROM={T_STOP-T_ENDWIN} TO={T_END}\n.meas TRAN vtmr_end_max MAX V(/VDD_TMR) FROM={T_STOP-T_ENDWIN} TO={T_END}\n.meas TRAN holdg_end_max MAX V(/HOLD_G) FROM={T_STOP-T_ENDWIN} TO={T_END}\n* battery hot-plug, key off: VOUT, VDD_TMR, HOLD_G before the first key-on\n.meas TRAN hp_vout_max MAX V(/VOUT) FROM=0 TO={min(min(T_ON1, T_SW_ON)-TEDGE, T_END)}\n.meas TRAN hp_vtmr_max MAX V(/VDD_TMR) FROM=0 TO={min(min(T_ON1, T_SW_ON)-TEDGE, T_END)}\n.meas TRAN hp_holdg_max MAX V(/HOLD_G) FROM=0 TO={min(min(T_ON1, T_SW_ON)-TEDGE, T_END)}"
+	(symbol
+		(lib_id "pipwr:SIM_2T")
+		(at 38.1 63.5 0)
+		(unit 1)
+		(body_style 1)
 		(exclude_from_sim no)
-		(at 152.4 96.52 0)
-		(effects
-			(font
-				(size 1.27 1.27)
+		(in_bom no)
+		(on_board no)
+		(in_pos_files no)
+		(dnp no)
+		(uuid "ee2b019d-c249-5bf1-9744-5676a1f74c58")
+		(property "Reference" "SB1"
+			(at 41.91 62.23 0)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify left)
 			)
-			(justify left top)
 		)
-		(uuid "98204e77-0972-563f-a4cd-980c8fe24acb")
+		(property "Value" "SIM_BATT battery + harness"
+			(at 41.91 64.77 0)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify left)
+			)
+		)
+		(property "Footprint" ""
+			(at 38.1 63.5 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Datasheet" ""
+			(at 38.1 63.5 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Description" "Simulation only (not a board part): SIM_BATT in lib/spice/sim_bench.lib"
+			(at 38.1 63.5 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Sim.Library" "${KIPRJMOD}/lib/spice/sim_bench.lib"
+			(at 38.1 63.5 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Sim.Name" "SIM_BATT"
+			(at 38.1 63.5 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Sim.Pins" "1=BATT 2=GND"
+			(at 38.1 63.5 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(pin "1"
+			(uuid "f00df36c-6f43-50e2-99a8-967de5fe9066")
+		)
+		(pin "2"
+			(uuid "b7656eb6-ee87-517a-a288-87694fd4c801")
+		)
+		(instances
+			(project "pi_power_board"
+				(path "/476998b3-1d41-432b-8dbb-a9785d730e83/658a07f4-228a-5050-b50d-e60a11980d62"
+					(reference "SB1")
+					(unit 1)
+				)
+			)
+		)
 	)
-	(embedded_fonts no)
 )
